@@ -1,2 +1,3 @@
 - Use `npm i` to get started.
+- Work on a separate branch and then PR.
 - Remember to always **pull and then push**.
