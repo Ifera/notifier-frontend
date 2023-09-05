@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import ApplicationCard from "./ApplicationCard";
+import ApplicationCardContainer from "./ApplicationCardContainer";
 
 const Application = () => {
   return (
@@ -12,7 +12,7 @@ const Application = () => {
         </Toolbar>
       </AppBar>
 
-      <ApplicationCard />
+      <ApplicationCardContainer />
     </>
   );
 };
