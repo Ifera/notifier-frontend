@@ -1,12 +1,18 @@
 import { Edit } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { ButtonProps, IconButton } from '@mui/material';
 
-const EditButton = () => {
+function EditButton(props: ButtonProps) {
   return (
-    <Button variant='contained'>
+    <IconButton
+      variant='contained'
+      color='primary'
+      size='medium'
+      edge='start'
+      {...props}
+    >
       <Edit />
-    </Button>
+    </IconButton>
   );
-};
+}
 
 export default EditButton;

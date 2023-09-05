@@ -1,12 +1,12 @@
 import { Delete } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { ButtonProps, IconButton } from '@mui/material';
 
-const DeleteButton = () => {
+function DeleteButton(props: ButtonProps) {
   return (
-    <Button variant='contained' color='error'>
+    <IconButton variant='contained' color='error' size='medium' {...props}>
       <Delete />
-    </Button>
+    </IconButton>
   );
-};
+}
 
 export default DeleteButton;
