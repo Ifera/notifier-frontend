@@ -4,7 +4,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-export default function ApplicationCard() {
+interface ApplicationCardProps {
+  title: string;
+  description: string;
+}
+
+function ApplicationCard({ title, description }: ApplicationCardProps) {
   return (
     <Card
       sx={{
@@ -15,12 +20,9 @@ export default function ApplicationCard() {
     >
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="h2">
-          Application
+          {title}
         </Typography>
-        <Typography>
-          This is a Application. You can use this section to describe the
-          content.
-        </Typography>
+        <Typography>{description}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Edit</Button>
@@ -30,3 +32,5 @@ export default function ApplicationCard() {
     </Card>
   );
 }
+
+export default ApplicationCard;
