@@ -3,7 +3,7 @@ import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
 import { MouseEvent } from 'react';
-import { ActionMap, EventRow, NotificationRow } from './interfaces';
+import { ActionMap, EventRow, NotificationRow } from './entities';
 
 function getColumns(type: string, action: ActionMap): GridColDef[] {
   return [
