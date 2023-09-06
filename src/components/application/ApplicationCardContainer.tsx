@@ -8,7 +8,6 @@ interface ApplicationCardContainerProps {
 }
 
 const ApplicationCardContainer = ({
-  cardId,
   index,
   cardsPerPage,
   children,

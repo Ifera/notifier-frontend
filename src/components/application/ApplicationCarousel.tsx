@@ -54,7 +54,6 @@ export default function ApplicationCarousel({
         >
           {isLoading
             ? skeletons.map((_, index) => (
-                // TODO: Refactor this to a Container Component
                 <ApplicationCardContainer
                   index={index}
                   cardsPerPage={cardsPerPage}

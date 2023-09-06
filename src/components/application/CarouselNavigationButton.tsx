@@ -1,5 +1,4 @@
 import { Grid, IconButton } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface CarouselNavigationButtonProps {

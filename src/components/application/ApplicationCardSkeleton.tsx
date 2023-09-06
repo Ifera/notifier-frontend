@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import { CardActions } from "@mui/material";
 
 export default function ApplicationCardSkeleton() {
+  const skeletons = Array.from(Array(3).keys());
   return (
     <Card
       sx={{
@@ -17,24 +18,15 @@ export default function ApplicationCardSkeleton() {
         <Skeleton animation="wave" height={20} width="60%" />
       </CardContent>
       <CardActions>
-        <Skeleton
-          animation="wave"
-          variant="rectangular"
-          height={36}
-          width={80}
-        />
-        <Skeleton
-          animation="wave"
-          variant="rectangular"
-          height={36}
-          width={80}
-        />
-        <Skeleton
-          animation="wave"
-          variant="rectangular"
-          height={36}
-          width={100}
-        />
+        {skeletons.map((skeleton) => (
+          <Skeleton
+            key={skeleton}
+            animation="wave"
+            height={40}
+            width="100%"
+            sx={{ m: 1 }}
+          />
+        ))}
       </CardActions>
     </Card>
   );
