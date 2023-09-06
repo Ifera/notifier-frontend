@@ -1,54 +1,67 @@
-// LoginForm.tsx
-import { SyntheticEvent, useState } from "react";
-import { FormControl, Button } from "@mui/material";
+import { SyntheticEvent } from "react";
+import { Button, Grid } from "@mui/material";
+import TextInput from "../../common/TextInput";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
-import TextInput from "../../common/TextInput";
 
-interface LoginFormProps {
-  onSubmit: (user: User) => void;
-}
-
-// TODO: Extract the User type Logic
-export interface User {
+export type User = {
   email: string;
   password: string;
+};
+
+interface LoginFormProps {
+  formData: User;
+  formErrors: { email: string; password: string };
+  onInputChange: (name: string, value: string) => void;
+  onSubmit: () => void;
 }
 
-const LoginForm = ({ onSubmit }: LoginFormProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({
+  formData,
+  formErrors,
+  onInputChange,
+  onSubmit,
+}: LoginFormProps) => {
+  const handleInputChange = (e: SyntheticEvent) => {
+    const inputElement = e.target as HTMLInputElement;
+    const { name, value } = inputElement;
+    onInputChange(name, value);
+  };
 
   const handleSubmit = () => {
-    onSubmit({ email, password });
+    onSubmit();
   };
 
   return (
-    <FormControl fullWidth>
+    <Grid container justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
       <TextInput
         label="Email"
         variant="outlined"
-        value={email}
-        onChange={(e: SyntheticEvent) => {
-          const target = e.target as HTMLInputElement;
-          setEmail(target.value);
-        }}
+        name="email"
+        value={formData.email}
+        onChange={handleInputChange}
         required
-        startIcon={<EmailIcon />}
+        InputProps={{
+          startAdornment: <EmailIcon />,
+        }}
+        error={formErrors.email !== ""}
+        helperText={formErrors.email}
         sx={{ mt: 2 }}
       />
 
       <TextInput
         label="Password"
         variant="outlined"
-        value={password}
-        onChange={(e: SyntheticEvent) => {
-          const target = e.target as HTMLInputElement;
-          setPassword(target.value);
-        }}
+        name="password"
+        value={formData.password}
+        onChange={handleInputChange}
         required
         type="password"
-        startIcon={<LockIcon />}
+        InputProps={{
+          startAdornment: <LockIcon />,
+        }}
+        error={formErrors.password !== ""}
+        helperText={formErrors.password}
         sx={{ mt: 2 }}
       />
 
@@ -57,12 +70,12 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
         color="primary"
         type="button"
         fullWidth
-        sx={{ mt: 2 }}
+        sx={{ mt: 4 }}
         onClick={handleSubmit}
       >
         Login
       </Button>
-    </FormControl>
+    </Grid>
   );
 };
 

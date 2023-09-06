@@ -5,7 +5,6 @@ interface TextInputProps {
   startIcon?: ReactNode;
   backgroundColor?: string;
   borderRadius?: number;
-  // Add the rest of the TextField props
   [x: string]: any;
 }
 
