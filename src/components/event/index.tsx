@@ -1,12 +1,35 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import DataGrid from '../../common/data-grid';
 import {
   ActionMap,
   EventRow,
   NotificationRow,
-} from '../../common/data-grid/interfaces';
+} from '../../common/data-grid/entities';
+import useEvents from '../../hooks/useEvents';
+import { Alert } from '@mui/material';
 
-function Event() {
+interface EventProps {
+  application: string | number;
+}
+
+function Event({ application }: EventProps) {
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const { data, isLoading, error } = useEvents({
+    application,
+    pageNumber, // TODO: implement remaining query params
+  });
+
+  if (error) {
+    return (
+      <Alert severity='error'>An error occurred while loading the events</Alert>
+    );
+  }
+
+  const onPageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
+  };
+
   const onClickEdit = (e: MouseEvent, row: EventRow | NotificationRow) => {};
 
   const onClickDelete = (e: MouseEvent, row: EventRow | NotificationRow) => {};
@@ -24,27 +47,28 @@ function Event() {
     onClickSwitch,
   };
 
-  const events = [
-    'on_create_user',
-    'on_update_user',
-    'on_login',
-    'on_logout',
-    'on_enter',
-    'on_exit',
-    'on_message',
-    'on_expiry',
-    'on_open',
-  ];
+  const rows = !data
+    ? []
+    : data.results.map((event) => {
+        const row = {
+          id: event.id,
+          event: event.name,
+          description: event.description,
+        };
 
-  const rows = events.map<EventRow>((event, index) => {
-    return {
-      id: index,
-      event,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    };
-  });
+        return row;
+      });
 
-  return <DataGrid type='Event' action={action} rowss={rows} />;
+  return (
+    <DataGrid
+      type='Event'
+      action={action}
+      isLoading={isLoading}
+      totalRowCount={data?.total_count || 0}
+      rows={(rows as EventRow[]) || []}
+      onPageChange={onPageChange}
+    />
+  );
 }
 
 export default Event;

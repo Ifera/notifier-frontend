@@ -6,7 +6,7 @@ function Dashboard() {
   return (
     <>
       <Container>
-        <Event />
+        <Event application={1} />
         {/* <Box mt={2}>
           <NotificationType />
         </Box> */}

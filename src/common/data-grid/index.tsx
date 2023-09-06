@@ -1,72 +1,46 @@
 import { useEffect, useState } from 'react';
 import {
   DataGrid as DataGridX,
-  GridColumnVisibilityModel,
+  GridPaginationModel,
   useGridApiRef,
 } from '@mui/x-data-grid';
-import { createFakeServer } from '@mui/x-data-grid-generator';
 
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
-import { DataGridProps } from './interfaces';
+import { DataGridProps } from './entities';
 import { getColumns } from './funcs';
 
-const { useQuery } = createFakeServer({}, { useCursorPagination: false });
-
-function DataGrid({ type, action, rowss = [] }: DataGridProps) {
-  const [columnVisibilityModel, setColumnVisibilityModel] =
-    useState<GridColumnVisibilityModel>({
-      [type]: true,
-      description: false,
-      action: true,
-    });
-
+function DataGrid({
+  type,
+  action,
+  isLoading,
+  totalRowCount,
+  rows,
+  onPageChange,
+}: DataGridProps) {
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
 
-  // ----------------- TODO: IMPLEMENT LOGIC
-  let { isLoading, rows, pageInfo } = useQuery(paginationModel);
-
-  rows = rows.map((row, index) => {
-    return {
-      id: index,
-      event: row.commodity,
-      description: row.id,
-    };
-  });
-  // -----------------
-
-  const [rowCountState, setRowCountState] = useState(
-    pageInfo?.totalRowCount || 0
-  );
+  const [rowCountState, setRowCountState] = useState(totalRowCount);
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
 
   useEffect(() => {
-    if (isMobile) {
-      setColumnVisibilityModel({
-        ...columnVisibilityModel,
-        description: false,
-      });
-    } else {
-      setColumnVisibilityModel({
-        ...columnVisibilityModel,
-        description: true,
-      });
-    }
-
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
 
   useEffect(() => {
     setRowCountState((prevRowCountState) =>
-      pageInfo?.totalRowCount !== undefined
-        ? pageInfo?.totalRowCount
-        : prevRowCountState
+      totalRowCount !== undefined ? totalRowCount : prevRowCountState
     );
-  }, [pageInfo?.totalRowCount, setRowCountState]);
+  }, [totalRowCount, setRowCountState]);
+
+  const handlePageChange = (model: GridPaginationModel) => {
+    onPageChange(model.page + 1); // updates the page state in the parent component
+    setPaginationModel(model);
+  };
 
   return (
     <>
@@ -82,13 +56,17 @@ function DataGrid({ type, action, rowss = [] }: DataGridProps) {
               paginationModel,
             },
             columns: {
-              columnVisibilityModel,
+              columnVisibilityModel: {
+                [type.toLowerCase()]: true,
+                description: true,
+                action: true,
+              },
             },
           }}
           paginationMode='server'
           paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={[5]} // TODO: make this be configurable.. maybe? [5, 10]
+          onPaginationModelChange={handlePageChange}
+          pageSizeOptions={[5]}
           checkboxSelection
           sx={{
             // remove the focus outline
