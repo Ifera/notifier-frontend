@@ -1,19 +1,16 @@
 import Grid from "@mui/material/Grid";
-import ApplicationCard from "./ApplicationCard";
-import ApplicationCardSkeleton from "./ApplicationCardSkeleton";
-import ApplicationCardContainer from "./ApplicationCardContainer";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import IconButton from "@mui/material/IconButton";
-import Slide from "@mui/material/Slide";
+import ApplicationCard from "./card/ApplicationCard";
+import ApplicationCardSkeleton from "./card/ApplicationCardSkeleton";
+import ApplicationCardContainer from "./card/ApplicationCardContainer";
 import { CardDataItem } from ".";
+import { Container, Pagination } from "@mui/material";
 
 interface ApplicationCarouselProps {
   currentPage: number;
   cardData: CardDataItem[];
   cardsPerPage: number;
-  onNextClick?: (newPage: number) => void;
-  onPrevClick?: (newPage: number) => void;
+  totalCount: number;
+  onPageChange?: (newPage: number) => void;
   isLoading?: boolean;
 }
 
@@ -21,8 +18,8 @@ export default function ApplicationCarousel({
   currentPage,
   cardData,
   cardsPerPage,
-  onNextClick,
-  onPrevClick,
+  totalCount,
+  onPageChange,
   isLoading,
 }: ApplicationCarouselProps) {
   const startIndex = currentPage * cardsPerPage;
@@ -32,59 +29,51 @@ export default function ApplicationCarousel({
   const skeletons = [1, 2, 3];
 
   return (
-    <Grid container spacing={2} justifyContent="center">
-      {/* TODO: Refactor this to a CarouselNavigationButton Component */}
-      <Grid item xs={1}>
-        <IconButton
-          aria-label="previous"
-          onClick={() => onPrevClick && onPrevClick(currentPage - 1)}
-          disabled={currentPage === 0}
-        >
-          <ArrowBackIcon />
-        </IconButton>
+    <Container sx={{ py: 8 }} maxWidth="md">
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+        flexDirection={{ sm: "column", md: "row" }}
+        mb={4}
+      >
+        {isLoading
+          ? skeletons.map((_, index) => (
+              <ApplicationCardContainer
+                key={index}
+                index={index}
+                cardsPerPage={cardsPerPage}
+              >
+                <ApplicationCardSkeleton />
+              </ApplicationCardContainer>
+            ))
+          : visibleCards.map((card, index) => (
+              <ApplicationCardContainer
+                key={card.id}
+                cardId={card.id}
+                index={index}
+                cardsPerPage={cardsPerPage}
+              >
+                <ApplicationCard
+                  title={card.title}
+                  description={card.description}
+                />
+              </ApplicationCardContainer>
+            ))}
       </Grid>
-      <Grid item xs={10}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            overflow: "hidden",
-          }}
-        >
-          {isLoading
-            ? skeletons.map((_, index) => (
-                <ApplicationCardContainer
-                  index={index}
-                  cardsPerPage={cardsPerPage}
-                >
-                  <ApplicationCardSkeleton />
-                </ApplicationCardContainer>
-              ))
-            : visibleCards.map((card, index) => (
-                <ApplicationCardContainer
-                  index={index}
-                  cardsPerPage={cardsPerPage}
-                >
-                  <ApplicationCard
-                    title={card.title}
-                    description={card.description}
-                  />
-                </ApplicationCardContainer>
-              ))}
-        </div>
-      </Grid>
-      <Grid item xs={1}>
-        <IconButton
-          aria-label="next"
-          onClick={() => onNextClick && onNextClick(currentPage + 1)}
-          disabled={
-            currentPage === Math.ceil(cardData.length / cardsPerPage) - 1
+
+      <Grid container justifyContent="center" alignItems="center">
+        <Pagination
+          count={Math.ceil(totalCount / cardsPerPage)}
+          page={currentPage + 1}
+          onChange={(event, newPage) =>
+            onPageChange && onPageChange(newPage - 1)
           }
-        >
-          <ArrowForwardIcon />
-        </IconButton>
+          size="small"
+          color="primary"
+        />
       </Grid>
-    </Grid>
+    </Container>
   );
 }

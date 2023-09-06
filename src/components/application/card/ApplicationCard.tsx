@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,13 +10,7 @@ interface ApplicationCardProps {
 
 function ApplicationCard({ title, description }: ApplicationCardProps) {
   return (
-    <Card
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <>
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="h2">
           {title}
@@ -29,7 +22,7 @@ function ApplicationCard({ title, description }: ApplicationCardProps) {
         <Button size="small">Delete</Button>
         <Button size="small">Deactivate</Button>
       </CardActions>
-    </Card>
+    </>
   );
 }
 

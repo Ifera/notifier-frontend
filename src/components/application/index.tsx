@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Box, Toolbar, Typography } from "@mui/material";
 import ApplicationCarousel from "./ApplicationCarousel";
 
-// Define your CardDataItem type
 export interface CardDataItem {
   id: number;
   title: string;
@@ -74,14 +73,8 @@ function Application() {
     }, 2000);
   }, []);
 
-  const handlePrevClick = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-  };
-
-  const handleNextClick = () => {
-    setCurrentPage((prevPage) =>
-      Math.min(prevPage + 1, Math.ceil(cardData.length / cardsPerPage) - 1)
-    );
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
   };
 
   return (
@@ -93,8 +86,8 @@ function Application() {
       <ApplicationCarousel
         cardData={cardData}
         currentPage={currentPage}
-        onPrevClick={handlePrevClick}
-        onNextClick={handleNextClick}
+        totalCount={cardData.length}
+        onPageChange={handlePageChange}
         cardsPerPage={cardsPerPage}
         isLoading={isLoading}
       />
