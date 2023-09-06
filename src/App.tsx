@@ -1,12 +1,11 @@
-import "./App.css";
-// import Application from "./components/application";
 import LoginPage from "./pages/LoginPage";
+import Dashboard from './pages/Dashboard';
+import './App.css';
 
 function App() {
   return (
     <>
-      {/* <Application /> */}
-      <LoginPage />
+      <Dashboard />
     </>
   );
 }
