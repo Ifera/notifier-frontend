@@ -7,9 +7,9 @@ function Dashboard() {
     <>
       <Container>
         <Event />
-        <Box mt={2}>
+        {/* <Box mt={2}>
           <NotificationType />
-        </Box>
+        </Box> */}
       </Container>
     </>
   );

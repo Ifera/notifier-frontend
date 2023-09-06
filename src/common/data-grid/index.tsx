@@ -1,50 +1,45 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DataGrid as DataGridX,
-  GridColDef,
   GridColumnVisibilityModel,
-  GridRowParams,
   useGridApiRef,
 } from '@mui/x-data-grid';
+import { createFakeServer } from '@mui/x-data-grid-generator';
 
-import { Switch } from '@mui/material';
-
-import EditButton from '../../common/buttons/EditButton';
-import DeleteButton from '../../common/buttons/DeleteButton';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
+import { DataGridProps } from './interfaces';
+import { getColumns } from './funcs';
 
-interface BaseRow {
-  id: number;
-  description: string;
-}
+const { useQuery } = createFakeServer({}, { useCursorPagination: false });
 
-export interface EventRow extends BaseRow {
-  event: string;
-}
-
-export interface NotificationRow extends BaseRow {
-  notification: string;
-}
-
-interface ActionProps {
-  onClickEdit: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-  onClickDelete: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-  onClickSwitch: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-}
-
-interface DataGridProps {
-  type: 'Event' | 'Notification';
-  action: ActionProps;
-  rows: EventRow[] | NotificationRow[];
-}
-
-function DataGrid({ type, action, rows = [] }: DataGridProps) {
+function DataGrid({ type, action, rowss = [] }: DataGridProps) {
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>({
       [type]: true,
       description: false,
       action: true,
     });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+
+  // ----------------- TODO: IMPLEMENT LOGIC
+  let { isLoading, rows, pageInfo } = useQuery(paginationModel);
+
+  rows = rows.map((row, index) => {
+    return {
+      id: index,
+      event: row.commodity,
+      description: row.id,
+    };
+  });
+  // -----------------
+
+  const [rowCountState, setRowCountState] = useState(
+    pageInfo?.totalRowCount || 0
+  );
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
@@ -65,49 +60,13 @@ function DataGrid({ type, action, rows = [] }: DataGridProps) {
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
 
-  const columns: GridColDef[] = [
-    { field: type.toLowerCase(), headerName: type, minWidth: 100, flex: 1 },
-    {
-      field: 'description',
-      headerName: 'Description',
-      sortable: false,
-      minWidth: 600,
-      flex: 1,
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      minWidth: 150,
-      sortable: false,
-      align: 'left',
-      flex: 1,
-      renderCell: ({
-        row,
-      }: Partial<GridRowParams<EventRow | NotificationRow>>) => {
-        const onClick = (e: MouseEvent, t: 'edit' | 'delete' | 'switch') => {
-          e.stopPropagation();
-
-          if (!row) return;
-
-          const actionMap = {
-            edit: action.onClickEdit,
-            delete: action.onClickDelete,
-            switch: action.onClickSwitch,
-          };
-
-          actionMap[t](e, row);
-        };
-
-        return (
-          <>
-            <EditButton onClick={(e) => onClick(e, 'edit')} />
-            <DeleteButton onClick={(e) => onClick(e, 'delete')} />
-            <Switch defaultChecked onClick={(e) => onClick(e, 'switch')} />
-          </>
-        );
-      },
-    },
-  ];
+  useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      pageInfo?.totalRowCount !== undefined
+        ? pageInfo?.totalRowCount
+        : prevRowCountState
+    );
+  }, [pageInfo?.totalRowCount, setRowCountState]);
 
   return (
     <>
@@ -115,18 +74,24 @@ function DataGrid({ type, action, rows = [] }: DataGridProps) {
         <DataGridX
           apiRef={apiRef}
           rows={rows}
-          columns={columns}
+          columns={getColumns(type, action)}
+          rowCount={rowCountState}
+          loading={isLoading}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel,
             },
             columns: {
               columnVisibilityModel,
             },
           }}
-          pageSizeOptions={[5, 10]}
+          paginationMode='server'
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[5]} // TODO: make this be configurable.. maybe? [5, 10]
           checkboxSelection
           sx={{
+            // remove the focus outline
             '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
               outline: 'none !important',
             },

@@ -1,5 +1,10 @@
 import { MouseEvent } from 'react';
-import DataGrid, { EventRow, NotificationRow } from '../../common/data-grid';
+import DataGrid from '../../common/data-grid';
+import {
+  ActionMap,
+  EventRow,
+  NotificationRow,
+} from '../../common/data-grid/interfaces';
 
 function Event() {
   const onClickEdit = (e: MouseEvent, row: EventRow | NotificationRow) => {};
@@ -13,7 +18,7 @@ function Event() {
     console.log(r, t.checked);
   };
 
-  const action = {
+  const action: ActionMap = {
     onClickEdit,
     onClickDelete,
     onClickSwitch,
@@ -39,7 +44,7 @@ function Event() {
     };
   });
 
-  return <DataGrid type='Event' action={action} rows={rows} />;
+  return <DataGrid type='Event' action={action} rowss={rows} />;
 }
 
 export default Event;
