@@ -70,7 +70,7 @@ export default function ApplicationCarousel({
           onChange={(event, newPage) =>
             onPageChange && onPageChange(newPage - 1)
           }
-          size="small"
+          size="medium"
           color="primary"
         />
       </Grid>
