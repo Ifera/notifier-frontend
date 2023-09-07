@@ -7,6 +7,8 @@ interface BaseQuery {
   sortOrder?: number;
 }
 
+export interface ApplicationQuery extends BaseQuery {}
+
 export interface EventQuery extends BaseQuery {
   application: string | number;
 }
