@@ -34,6 +34,10 @@ const useEditEvent = (query: EventQuery) => {
         };
       });
     },
+
+    onError() {
+      queryClient.invalidateQueries(queryKey);
+    },
   });
 };
 

@@ -18,6 +18,10 @@ const useDeleteEvent = (query: EventQuery) => {
     onSuccess() {
       queryClient.invalidateQueries(['events']);
     },
+
+    onError() {
+      queryClient.invalidateQueries(['events']);
+    },
   });
 };
 
