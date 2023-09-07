@@ -1,7 +1,7 @@
 import { Card, Grid, Slide } from "@mui/material";
 
 interface ApplicationCardContainerProps {
-  cardId?: number;
+  cardId?: string | number;
   index: number;
   cardsPerPage: number;
   currentIndex: number;

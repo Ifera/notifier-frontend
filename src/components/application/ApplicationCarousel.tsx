@@ -2,16 +2,16 @@ import Grid from "@mui/material/Grid";
 import ApplicationCard from "./card/ApplicationCard";
 import ApplicationCardSkeleton from "./card/ApplicationCardSkeleton";
 import ApplicationCardContainer from "./card/ApplicationCardContainer";
-import { CardDataItem } from ".";
+import { Application } from "../../entities/Application";
 import { Container, Pagination } from "@mui/material";
 
 interface ApplicationCarouselProps {
   currentPage: number;
-  cardData: CardDataItem[];
+  cardData: Application[];
   cardsPerPage: number;
   totalCount: number;
   currentIndex: number;
-  onCardClick: (cardId: number) => void;
+  onCardClick: (cardId: string | number) => void;
   onPageChange?: (newPage: number) => void;
   isLoading?: boolean;
 }
@@ -30,6 +30,7 @@ export default function ApplicationCarousel({
   const endIndex = startIndex + cardsPerPage;
   const visibleCards = cardData.slice(startIndex, endIndex);
 
+  // TODO: Make this Dynamic Maybe
   const skeletons = [1, 2, 3];
 
   return (
@@ -62,7 +63,7 @@ export default function ApplicationCarousel({
               >
                 <ApplicationCard
                   cardId={card.id}
-                  title={card.title}
+                  title={card.name}
                   description={card.description}
                   onCardClick={onCardClick}
                 />

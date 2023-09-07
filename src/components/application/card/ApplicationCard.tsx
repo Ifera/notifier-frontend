@@ -5,10 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 interface ApplicationCardProps {
-  cardId: number;
+  cardId: string | number;
   title: string;
   description: string;
-  onCardClick: (cardId: number) => void;
+  onCardClick: (cardId: string | number) => void;
 }
 
 function ApplicationCard({
@@ -26,9 +26,9 @@ function ApplicationCard({
         <Typography>{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Edit</Button>
+        {/* <Button size="small">Edit</Button>
         <Button size="small">Delete</Button>
-        <Button size="small">Deactivate</Button>
+        <Button size="small">Deactivate</Button> */}
       </CardActions>
     </CardActionArea>
   );
