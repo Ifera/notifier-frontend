@@ -1,20 +1,16 @@
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import Event from "../components/event";
 import Application from "../components/application";
-import Logo from "../assets/icon.svg";
+
+import { useState } from "react";
 
 function Dashboard() {
+  const [eventId, setEventId] = useState("");
   return (
     <>
-      <AppBar position="static">
-        <Toolbar color="primary">
-          <img src={Logo}></img>
-        </Toolbar>
-      </AppBar>
-
       <Container>
-        <Application />
-        {/* <Event application={1} /> */}
+        <Application setEventId={eventId} />
+        {eventId && <Event application={eventId} />}
         {/* <Box mt={2}>
           <NotificationType />
         </Box> */}

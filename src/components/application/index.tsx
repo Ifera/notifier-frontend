@@ -5,7 +5,7 @@ import useApplications from "../../hooks/useApplications";
 
 const cardsPerPage = 3;
 
-function Application() {
+function Application(props) {
   const [currentPage, setCurrentPage] = useState(0);
   const dummyCardData = {
     current_page: 1,
@@ -87,7 +87,7 @@ function Application() {
   };
 
   const handleCardClick = (cardId: string | number) => {
-    console.log(`Clicked card ${cardId}`);
+    props.setEventId(cardId);
   };
 
   return (
