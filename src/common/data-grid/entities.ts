@@ -1,8 +1,7 @@
-import { MouseEvent } from 'react';
-
 interface BaseRow {
   id: number | string;
   description: string;
+  is_active: boolean;
 }
 
 export interface EventRow extends BaseRow {
@@ -14,7 +13,7 @@ export interface NotificationRow extends BaseRow {
 }
 
 export interface ActionMap {
-  onClickEdit: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-  onClickDelete: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-  onClickSwitch: (e: MouseEvent, row: EventRow | NotificationRow) => void;
+  onClickEdit: (id: number | string) => void;
+  onClickDelete: (id: number | string) => void;
+  onClickSwitch: (id: number | string, value: boolean) => void;
 }

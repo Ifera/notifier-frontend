@@ -7,3 +7,5 @@ export interface Event {
   modified_at: string;
   application: number | string;
 }
+
+export interface PEvent extends Partial<Event> {}

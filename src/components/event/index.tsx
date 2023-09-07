@@ -1,12 +1,11 @@
-import { MouseEvent, useState } from 'react';
-import DataGrid from '../../common/data-grid';
-import {
-  ActionMap,
-  EventRow,
-  NotificationRow,
-} from '../../common/data-grid/entities';
-import useEvents from '../../hooks/useEvents';
 import { Alert } from '@mui/material';
+import { useState } from 'react';
+import DataGrid from '../../common/data-grid';
+import { ActionMap, EventRow } from '../../common/data-grid/entities';
+import { EventQuery } from '../../entities';
+import useDeleteEvent from '../../hooks/useDeleteEvent';
+import useEditEvent from '../../hooks/useEditEvent';
+import useEvents from '../../hooks/useEvents';
 
 interface EventProps {
   application: string | number;
@@ -15,10 +14,12 @@ interface EventProps {
 function Event({ application }: EventProps) {
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { data, isLoading, error } = useEvents({
+  const query: EventQuery = {
     application,
-    pageNumber, // TODO: implement remaining query params
-  });
+    pageNumber,
+  };
+
+  const { data, isLoading, error } = useEvents(query);
 
   if (error) {
     return (
@@ -26,19 +27,36 @@ function Event({ application }: EventProps) {
     );
   }
 
+  const editEvent = useEditEvent(query);
+  const delEvent = useDeleteEvent(query);
+
+  if (editEvent.error) {
+    return (
+      <Alert severity='error'>An error occurred while updating the event</Alert>
+    );
+  }
+
+  if (delEvent.error) {
+    return (
+      <Alert severity='error'>An error occurred while deleting the event</Alert>
+    );
+  }
+
   const onPageChange = (pageNumber: number) => {
     setPageNumber(pageNumber);
   };
 
-  const onClickEdit = (e: MouseEvent, row: EventRow | NotificationRow) => {};
+  const onClickEdit = (id: number | string) => {};
 
-  const onClickDelete = (e: MouseEvent, row: EventRow | NotificationRow) => {};
+  const onClickDelete = (id: number | string) => {
+    delEvent.mutate({ id });
+  };
 
-  const onClickSwitch = (e: MouseEvent, row: EventRow | NotificationRow) => {
-    const t = e.target as HTMLInputElement;
-    const r = row as EventRow;
-
-    console.log(r, t.checked);
+  const onClickSwitch = (id: number | string, value: boolean) => {
+    editEvent.mutate({
+      id,
+      is_active: value,
+    });
   };
 
   const action: ActionMap = {
@@ -54,6 +72,7 @@ function Event({ application }: EventProps) {
           id: event.id,
           event: event.name,
           description: event.description,
+          is_active: event.is_active,
         };
 
         return row;

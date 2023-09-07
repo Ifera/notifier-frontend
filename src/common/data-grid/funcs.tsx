@@ -1,13 +1,22 @@
 import { Switch } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { useQueryClient } from '@tanstack/react-query';
+import { MouseEvent } from 'react';
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
-import { MouseEvent } from 'react';
 import { ActionMap, EventRow, NotificationRow } from './entities';
 
 function getColumns(type: string, action: ActionMap): GridColDef[] {
+  const queryClient = useQueryClient();
+
   return [
-    { field: type.toLowerCase(), headerName: type, minWidth: 100, flex: 1 },
+    {
+      field: type.toLowerCase(),
+      headerName: type,
+      minWidth: 100,
+      flex: 1,
+      hideable: false,
+    },
     {
       field: 'description',
       headerName: 'Description',
@@ -22,28 +31,37 @@ function getColumns(type: string, action: ActionMap): GridColDef[] {
       sortable: false,
       align: 'left',
       flex: 1,
+      hideable: false,
       renderCell: ({
         row,
       }: Partial<GridRowParams<EventRow | NotificationRow>>) => {
-        const onClick = (e: MouseEvent, t: 'edit' | 'delete' | 'switch') => {
+        if (!row) return null;
+
+        const onClick = (e: MouseEvent, type: 'edit' | 'delete' | 'switch') => {
           e.stopPropagation();
 
-          if (!row) return;
+          if (type === 'switch') {
+            const t = e.target as HTMLInputElement;
+            action.onClickSwitch(row.id, t.checked);
+            return;
+          }
 
           const actionMap = {
             edit: action.onClickEdit,
             delete: action.onClickDelete,
-            switch: action.onClickSwitch,
           };
 
-          actionMap[t](e, row);
+          actionMap[type](row.id);
         };
 
         return (
           <>
             <EditButton onClick={(e) => onClick(e, 'edit')} />
             <DeleteButton onClick={(e) => onClick(e, 'delete')} />
-            <Switch defaultChecked onClick={(e) => onClick(e, 'switch')} />
+            <Switch
+              onClick={(e) => onClick(e, 'switch')}
+              checked={row.is_active}
+            />
           </>
         );
       },
