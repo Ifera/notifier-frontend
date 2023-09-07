@@ -1,4 +1,4 @@
-interface BaseQuery {
+export interface BaseQuery {
   like?: string;
   pageSize?: number;
   pageNumber?: number;

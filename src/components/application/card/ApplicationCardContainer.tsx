@@ -1,7 +1,7 @@
 import { Card, Grid, Slide } from "@mui/material";
 
 interface ApplicationCardContainerProps {
-  cardId?: number;
+  cardId?: string | number;
   index: number;
   cardsPerPage: number;
   children: React.ReactNode;
@@ -25,7 +25,7 @@ const ApplicationCardContainer = ({
         item
         key={cardId === undefined ? index : cardId}
         xs={12}
-        sm={6}
+        sm={8}
         md={4}
       >
         <Card

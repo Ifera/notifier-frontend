@@ -3,6 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import { CardActions } from "@mui/material";
 
 export default function ApplicationCardSkeleton() {
+  // TODO: Map this with page size field
   const skeletons = Array.from(Array(3).keys());
   return (
     <>
