@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import { EventQuery } from '../entities';
-import { Event } from '../entities/Event';
-import { FetchResponse } from '../services/apiClient';
+import { Event, EventQuery, FetchResponse } from '../interfaces';
 import eventService from '../services/eventService';
 
 const useEvents = (query: EventQuery) => {

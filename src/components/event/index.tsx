@@ -1,11 +1,10 @@
 import { Alert } from '@mui/material';
 import { useState } from 'react';
 import DataGrid from '../../common/data-grid';
-import { ActionMap, EventRow } from '../../common/data-grid/entities';
-import { EventQuery } from '../../entities';
 import useDeleteEvent from '../../hooks/useDeleteEvent';
 import useEditEvent from '../../hooks/useEditEvent';
 import useEvents from '../../hooks/useEvents';
+import { ActionMap, EventQuery } from '../../interfaces';
 
 interface EventProps {
   application: string | number;
@@ -28,7 +27,7 @@ function Event({ application }: EventProps) {
   }
 
   const editEvent = useEditEvent(query);
-  const delEvent = useDeleteEvent(query);
+  const delEvent = useDeleteEvent();
 
   if (editEvent.error) {
     return (
@@ -65,26 +64,13 @@ function Event({ application }: EventProps) {
     onClickSwitch,
   };
 
-  const rows: EventRow[] = !data
-    ? []
-    : data.results.map((event) => {
-        const row = {
-          id: event.id,
-          event: event.name,
-          description: event.description,
-          is_active: event.is_active,
-        };
-
-        return row;
-      });
-
   return (
     <DataGrid
       type='Event'
       action={action}
       isLoading={isLoading}
       totalRowCount={data?.total_count || 0}
-      rows={rows}
+      rows={data?.results || []}
       onPageChange={onPageChange}
     />
   );

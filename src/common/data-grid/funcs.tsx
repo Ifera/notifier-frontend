@@ -1,17 +1,14 @@
 import { Switch } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
-import { useQueryClient } from '@tanstack/react-query';
 import { MouseEvent } from 'react';
+import { ActionMap, Event, NotificationType } from '../../interfaces';
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
-import { ActionMap, EventRow, NotificationRow } from './entities';
 
 function getColumns(type: string, action: ActionMap): GridColDef[] {
-  const queryClient = useQueryClient();
-
   return [
     {
-      field: type.toLowerCase(),
+      field: 'name',
       headerName: type,
       minWidth: 100,
       flex: 1,
@@ -34,7 +31,7 @@ function getColumns(type: string, action: ActionMap): GridColDef[] {
       hideable: false,
       renderCell: ({
         row,
-      }: Partial<GridRowParams<EventRow | NotificationRow>>) => {
+      }: Partial<GridRowParams<Event | NotificationType>>) => {
         if (!row) return null;
 
         const onClick = (e: MouseEvent, type: 'edit' | 'delete' | 'switch') => {

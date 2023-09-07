@@ -1,4 +1,4 @@
-import Preview from "../components/notification-types/preview/Preview";
+import Preview from '../components/notification-types/preview/Preview';
 
 const NotificationPreview = () => {
   return <Preview />;

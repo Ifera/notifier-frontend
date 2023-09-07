@@ -1,8 +1,7 @@
-import { CardActionArea } from "@mui/material";
-import Button from "@mui/material/Button";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import { CardActionArea } from '@mui/material';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 interface ApplicationCardProps {
   cardId: string | number;
@@ -20,7 +19,7 @@ function ApplicationCard({
   return (
     <CardActionArea onClick={() => onCardClick(cardId)}>
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h5" component="h2">
+        <Typography gutterBottom variant='h5' component='h2'>
           {title}
         </Typography>
         <Typography>{description}</Typography>

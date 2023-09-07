@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
 import {
   DataGrid as DataGridX,
   GridPaginationModel,
   useGridApiRef,
 } from '@mui/x-data-grid';
+import { useEffect, useState } from 'react';
 
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
+import { ActionMap, Event, NotificationType } from '../../interfaces';
 import { getColumns } from './funcs';
-import { ActionMap, EventRow, NotificationRow } from './entities';
 
 interface DataGridProps {
   type: 'Event' | 'Notification';
   action: ActionMap;
   isLoading: boolean;
   totalRowCount: number;
-  rows: EventRow[] | NotificationRow[];
+  rows: Event[] | NotificationType[];
   onPageChange: (pageNumber: number) => void;
 }
 

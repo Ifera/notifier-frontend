@@ -1,11 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-
-export interface FetchResponse<T> {
-  current_page: number;
-  last_page: number;
-  total_count: number;
-  results: T[];
-}
+import { FetchResponse } from '../interfaces';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api',

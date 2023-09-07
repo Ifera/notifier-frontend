@@ -1,11 +1,9 @@
-import React from "react"; // Add React import
-import Grid from "@mui/material/Grid";
-import ApplicationCard from "./card/ApplicationCard";
-import ApplicationCardSkeleton from "./card/ApplicationCardSkeleton";
-import ApplicationCardContainer from "./card/ApplicationCardContainer";
-import { Application } from "../../entities/Application";
-import { Container, Pagination } from "@mui/material";
-import { FetchResponse } from "../../services/api-client";
+import { Container, Pagination } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { Application, FetchResponse } from '../../interfaces';
+import ApplicationCard from './card/ApplicationCard';
+import ApplicationCardContainer from './card/ApplicationCardContainer';
+import ApplicationCardSkeleton from './card/ApplicationCardSkeleton';
 
 interface ApplicationCarouselProps {
   data: FetchResponse<Application>;
@@ -27,7 +25,7 @@ export default function ApplicationCarousel({
 
   return (
     <Container sx={{ py: 8 }}>
-      <Grid container spacing={4} justifyContent="center" alignItems="center">
+      <Grid container spacing={4} justifyContent='center' alignItems='center'>
         {isLoading ? (
           // Use parentheses for the entire expression
           skeletons.map((_, index) => (
@@ -59,8 +57,8 @@ export default function ApplicationCarousel({
             ))}
             <Grid
               container
-              justifyContent="center"
-              alignItems="center"
+              justifyContent='center'
+              alignItems='center'
               sx={{ mt: 2 }}
             >
               <Pagination
@@ -69,8 +67,8 @@ export default function ApplicationCarousel({
                 onChange={(event, newPage) =>
                   onPageChange && onPageChange(newPage)
                 }
-                size="medium"
-                color="primary"
+                size='medium'
+                color='primary'
               />
             </Grid>
           </>

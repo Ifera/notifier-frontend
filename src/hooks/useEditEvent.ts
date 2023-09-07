@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 
-import { EventQuery } from '../entities';
-import { Event, PEvent } from '../entities/Event';
-import { FetchResponse } from '../services/apiClient';
+import { Event, EventQuery, FetchResponse, PEvent } from '../interfaces';
 import eventService from '../services/eventService';
 
 const useEditEvent = (query: EventQuery) => {
