@@ -6,8 +6,17 @@ import {
 } from '@mui/x-data-grid';
 
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
-import { DataGridProps } from './entities';
 import { getColumns } from './funcs';
+import { ActionMap, EventRow, NotificationRow } from './entities';
+
+interface DataGridProps {
+  type: 'Event' | 'Notification';
+  action: ActionMap;
+  isLoading: boolean;
+  totalRowCount: number;
+  rows: EventRow[] | NotificationRow[];
+  onPageChange: (pageNumber: number) => void;
+}
 
 function DataGrid({
   type,
@@ -22,20 +31,12 @@ function DataGrid({
     pageSize: 5,
   });
 
-  const [rowCountState, setRowCountState] = useState(totalRowCount);
-
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
 
   useEffect(() => {
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
-
-  useEffect(() => {
-    setRowCountState((prevRowCountState) =>
-      totalRowCount !== undefined ? totalRowCount : prevRowCountState
-    );
-  }, [totalRowCount, setRowCountState]);
 
   const handlePageChange = (model: GridPaginationModel) => {
     onPageChange(model.page + 1); // updates the page state in the parent component
@@ -49,7 +50,7 @@ function DataGrid({
           apiRef={apiRef}
           rows={rows}
           columns={getColumns(type, action)}
-          rowCount={rowCountState}
+          rowCount={totalRowCount}
           loading={isLoading}
           initialState={{
             pagination: {

@@ -47,7 +47,7 @@ function Event({ application }: EventProps) {
     onClickSwitch,
   };
 
-  const rows = !data
+  const rows: EventRow[] = !data
     ? []
     : data.results.map((event) => {
         const row = {
@@ -65,7 +65,7 @@ function Event({ application }: EventProps) {
       action={action}
       isLoading={isLoading}
       totalRowCount={data?.total_count || 0}
-      rows={(rows as EventRow[]) || []}
+      rows={rows}
       onPageChange={onPageChange}
     />
   );

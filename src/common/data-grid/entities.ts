@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 
 interface BaseRow {
-  id: number;
+  id: number | string;
   description: string;
 }
 
@@ -17,13 +17,4 @@ export interface ActionMap {
   onClickEdit: (e: MouseEvent, row: EventRow | NotificationRow) => void;
   onClickDelete: (e: MouseEvent, row: EventRow | NotificationRow) => void;
   onClickSwitch: (e: MouseEvent, row: EventRow | NotificationRow) => void;
-}
-
-export interface DataGridProps {
-  type: 'Event' | 'Notification';
-  action: ActionMap;
-  isLoading: boolean;
-  totalRowCount: number;
-  rows: EventRow[] | NotificationRow[];
-  onPageChange: (pageNumber: number) => void;
 }
