@@ -4,7 +4,6 @@ interface ApplicationCardContainerProps {
   cardId?: string | number;
   index: number;
   cardsPerPage: number;
-  currentIndex: number;
   children: React.ReactNode;
 }
 
@@ -12,13 +11,12 @@ const ApplicationCardContainer = ({
   cardId,
   index,
   cardsPerPage,
-  currentIndex,
   children,
 }: ApplicationCardContainerProps) => {
   return (
     <Slide
       key={index}
-      direction={index < currentIndex ? "left" : "right"}
+      direction="right"
       in={index < cardsPerPage}
       mountOnEnter
       unmountOnExit
@@ -27,7 +25,7 @@ const ApplicationCardContainer = ({
         item
         key={cardId === undefined ? index : cardId}
         xs={12}
-        sm={6}
+        sm={8}
         md={4}
       >
         <Card
