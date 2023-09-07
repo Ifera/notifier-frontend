@@ -10,6 +10,8 @@ interface ApplicationCarouselProps {
   cardData: CardDataItem[];
   cardsPerPage: number;
   totalCount: number;
+  currentIndex: number;
+  onCardClick: (cardId: number) => void;
   onPageChange?: (newPage: number) => void;
   isLoading?: boolean;
 }
@@ -19,6 +21,8 @@ export default function ApplicationCarousel({
   cardData,
   cardsPerPage,
   totalCount,
+  currentIndex,
+  onCardClick,
   onPageChange,
   isLoading,
 }: ApplicationCarouselProps) {
@@ -29,13 +33,12 @@ export default function ApplicationCarousel({
   const skeletons = [1, 2, 3];
 
   return (
-    <Container sx={{ py: 8 }} maxWidth="md">
+    <Container sx={{ py: 8 }}>
       <Grid
         container
-        spacing={2}
+        spacing={4}
         justifyContent="center"
         alignItems="center"
-        flexDirection={{ sm: "column", md: "row" }}
         mb={4}
       >
         {isLoading
@@ -43,6 +46,7 @@ export default function ApplicationCarousel({
               <ApplicationCardContainer
                 key={index}
                 index={index}
+                currentIndex={currentIndex}
                 cardsPerPage={cardsPerPage}
               >
                 <ApplicationCardSkeleton />
@@ -53,11 +57,14 @@ export default function ApplicationCarousel({
                 key={card.id}
                 cardId={card.id}
                 index={index}
+                currentIndex={currentIndex}
                 cardsPerPage={cardsPerPage}
               >
                 <ApplicationCard
+                  cardId={card.id}
                   title={card.title}
                   description={card.description}
+                  onCardClick={onCardClick}
                 />
               </ApplicationCardContainer>
             ))}
