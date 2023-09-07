@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Layout from "../pages/Layout";
 import LoginPage from "../pages/LoginPage";
-import Notification from "../pages/Notification";
+import NotificationPreview from "../pages/NotificationPreview";
 
 const router = createBrowserRouter([
   {
@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     // errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: "notification", element: <Notification /> },
+      { path: "notification-preview", element: <NotificationPreview /> },
     ],
   },
   { path: "login", element: <LoginPage /> },

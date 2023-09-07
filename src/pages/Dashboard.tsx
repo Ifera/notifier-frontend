@@ -1,4 +1,4 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import Event from "../components/event";
 import Application from "../components/application";
 
@@ -9,10 +9,10 @@ function Dashboard() {
   return (
     <>
       <Container>
-        <Application setEventId={eventId} />
+        <Application setEventId={setEventId} />
         {eventId && <Event application={eventId} />}
         {/* <Box mt={2}>
-          <NotificationType />
+          <NotificationTyspe />
         </Box> */}
       </Container>
     </>
