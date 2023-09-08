@@ -1,6 +1,6 @@
-import { ChangeEvent, useState } from "react";
-import TextInput from "./TextInput";
-import { Box, Button } from "@mui/material";
+import { Box, Button } from '@mui/material';
+import { ChangeEvent } from 'react';
+import TextInput from './TextInput';
 
 interface PreviewFormProps {
   values: {
@@ -26,21 +26,21 @@ function PreviewForm({ values, onSubmit }: PreviewFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <TextInput
-        label="Name"
-        name="name"
+        label='Name'
+        name='name'
         value={values.name}
         onChange={handleChange}
       />
       <TextInput
-        label="Description"
-        name="description"
+        label='Description'
+        name='description'
         value={values.description}
         onChange={handleChange}
       />
       {values.subject !== undefined && values.subject !== undefined ? (
         <TextInput
-          label="Subject"
-          name="subject"
+          label='Subject'
+          name='subject'
           value={values.subject}
           onChange={handleChange}
         />
@@ -49,14 +49,14 @@ function PreviewForm({ values, onSubmit }: PreviewFormProps) {
       {values.body !== undefined && values.body !== undefined ? (
         <TextInput
           multiline={true}
-          label="Body"
-          name="body"
+          label='Body'
+          name='body'
           value={values.body}
           onChange={handleChange}
         />
       ) : null}
       <Box py={4}>
-        <Button variant="contained" color="primary" type="submit">
+        <Button variant='contained' color='primary' type='submit'>
           Submit
         </Button>
       </Box>

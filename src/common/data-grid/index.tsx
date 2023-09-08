@@ -17,7 +17,7 @@ import {
   NotificationTypeQuery,
 } from '../../interfaces';
 import APIClient from '../../services/apiClient';
-import EditDialog from '../edit/EditDialog';
+import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import { getColumns } from './funcs';
 
 interface DataGridProps {
@@ -43,7 +43,12 @@ function DataGrid({
 
   onPageChange,
 }: DataGridProps) {
-  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
+    open: false,
+    type,
+    data: null,
+    onClose: () => {},
+  });
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -60,15 +65,6 @@ function DataGrid({
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
 
-  const handlePageChange = (model: GridPaginationModel) => {
-    onPageChange(model.page + 1); // updates the page state in the parent component
-    setPaginationModel(model);
-  };
-
-  const handleClose = () => {
-    setOpenEditDialog(false);
-  };
-
   if (editHook.error) {
     return (
       <Alert severity='error'>An error occurred while updating the event</Alert>
@@ -81,18 +77,25 @@ function DataGrid({
     );
   }
 
-  const columns = getColumns(
-    type,
-    editHook,
-    delHook,
-    setOpenEditDialog,
-    action
-  );
+  const handlePageChange = (model: GridPaginationModel) => {
+    onPageChange(model.page + 1); // updates the page state in the parent component
+    setPaginationModel(model);
+  };
+
+  const handleClose = () => {
+    setDialogProps({ ...dialogProps, open: false, data: null });
+  };
+
+  const handleClickEdit = (data: Event | NotificationType) => {
+    setDialogProps({ ...dialogProps, open: true, data });
+  };
+
+  const columns = getColumns(type, editHook, delHook, handleClickEdit, action);
 
   return (
     <>
       <div style={{ height: '380px' }}>
-        <EditDialog open={openEditDialog} onClose={handleClose} />
+        <EditDialog {...dialogProps} onClose={handleClose} />
 
         <DataGridX
           apiRef={apiRef}

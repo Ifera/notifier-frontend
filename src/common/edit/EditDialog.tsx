@@ -1,40 +1,47 @@
-import Button from '@mui/material/Button';
+import { Box, IconButton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import { Event, NotificationType } from '../../interfaces';
+import PreviewForm from '../PreviewForm';
 
-interface EditDialogProps {
+import CloseIcon from '@mui/icons-material/Close';
+
+export interface EditDialogProps {
   open: boolean;
+  type: 'Event' | 'Notification';
+  data: Event | NotificationType | null;
   onClose: () => void;
 }
 
-function EditDialog({ open, onClose }: EditDialogProps) {
+function EditDialog({ open, type, data, onClose }: EditDialogProps) {
+  if (!data) return null;
+
+  const values = {
+    name: data.name,
+    description: data.description,
+  };
+
+  const onSubmit = (values: any) => {
+    console.log(values);
+  };
+
   return (
     <div>
-      <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
+        <DialogTitle>
+          <Box display='flex' alignItems='center'>
+            <Box flexGrow={1}>{type} Edit</Box>
+            <Box>
+              <IconButton onClick={onClose} edge='end'>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin='dense'
-            id='name'
-            label='Email Address'
-            type='email'
-            fullWidth
-            variant='standard'
-          />
+          <PreviewForm values={values} onSubmit={onSubmit} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={onClose}>Subscribe</Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
