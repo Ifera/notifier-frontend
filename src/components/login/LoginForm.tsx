@@ -36,35 +36,23 @@ const LoginForm = ({
     <Grid container justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
       <TextInput
         label="Email"
-        variant="outlined"
         name="email"
         value={formData.email}
         onChange={handleInputChange}
-        required
-        InputProps={{
-          startAdornment: <EmailIcon />,
-        }}
+        startIcon={<EmailIcon />}
         error={formErrors.email !== ""}
         helperText={formErrors.email}
-        sx={{ mt: 2 }}
       />
-
       <TextInput
         label="Password"
-        variant="outlined"
         name="password"
         value={formData.password}
         onChange={handleInputChange}
-        required
         type="password"
-        InputProps={{
-          startAdornment: <LockIcon />,
-        }}
+        startIcon={<LockIcon />}
         error={formErrors.password !== ""}
         helperText={formErrors.password}
-        sx={{ mt: 2 }}
       />
-
       <Button
         variant="contained"
         color="primary"
