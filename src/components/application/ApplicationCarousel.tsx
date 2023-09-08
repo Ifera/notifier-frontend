@@ -64,9 +64,10 @@ export default function ApplicationCarousel({
               <Pagination
                 count={Math.ceil(data.total_count / cardsPerPage)}
                 page={data.current_page}
-                onChange={(event, newPage) =>
-                  onPageChange && onPageChange(newPage)
-                }
+                onChange={(event, newPage) => {
+                  console.log(newPage);
+                  onPageChange && onPageChange(newPage);
+                }}
                 size='medium'
                 color='primary'
               />

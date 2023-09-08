@@ -3,8 +3,8 @@ import { useState } from 'react';
 import DataGrid from '../../common/data-grid';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
-import useEvents from '../../hooks/useEvents';
-import { ActionMap, EventQuery } from '../../interfaces';
+import useGetAll from '../../hooks/useGetAll';
+import { ActionMap, EventQuery, Event as IEvent } from '../../interfaces';
 import eventService from '../../services/eventService';
 
 interface EventProps {
@@ -19,7 +19,7 @@ function Event({ application }: EventProps) {
     pageNumber,
   };
 
-  const { data, isLoading, error } = useEvents(query);
+  const { data, isLoading, error } = useGetAll(eventService, query);
 
   if (error) {
     return (
@@ -71,7 +71,7 @@ function Event({ application }: EventProps) {
       action={action}
       isLoading={isLoading}
       totalRowCount={data?.total_count || 0}
-      rows={data?.results || []}
+      rows={(data?.results as IEvent[]) || []}
       onPageChange={onPageChange}
     />
   );

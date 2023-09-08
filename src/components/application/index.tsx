@@ -1,21 +1,28 @@
-import { useState } from "react";
-import { Alert, Box } from "@mui/material";
-import ApplicationCarousel from "./ApplicationCarousel";
-import useApplications from "../../hooks/useApplications";
+import { Alert, Box } from '@mui/material';
+import { useState } from 'react';
+import useGetAll from '../../hooks/useGetAll';
+import { FetchResponse, Application as IApplication } from '../../interfaces';
+import applicationService from '../../services/applicationService';
+import ApplicationCarousel from './ApplicationCarousel';
 
 // TODO: MOVE TO CONFIG FILE
 const cardsPerPage = 3;
 
-function Application(props) {
+interface ApplicationProps {
+  setEventId: (eventId: string | number) => void;
+}
+
+function Application({ setEventId }: ApplicationProps) {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { data, isLoading, error } = useApplications({
+  const { data, isLoading, error } = useGetAll(applicationService, {
     pageNumber: currentPage,
+    pageSize: cardsPerPage,
   });
 
   if (error)
     return (
-      <Alert severity="error">
+      <Alert severity='error'>
         An error occurred while loading the applications
       </Alert>
     );
@@ -25,13 +32,13 @@ function Application(props) {
   };
 
   const handleCardClick = (cardId: string | number) => {
-    props.setEventId(cardId);
+    setEventId(cardId);
   };
 
   return (
     <Box>
       <ApplicationCarousel
-        data={data}
+        data={data as FetchResponse<IApplication>}
         cardsPerPage={cardsPerPage}
         onCardClick={handleCardClick}
         onPageChange={onPageChange}
