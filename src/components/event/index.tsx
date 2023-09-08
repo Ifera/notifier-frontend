@@ -1,7 +1,7 @@
 import { Alert } from '@mui/material';
 import { useState } from 'react';
 import DataGrid from '../../common/data-grid';
-import useDeleteEvent from '../../hooks/useDeleteEvent';
+import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
 import useEvents from '../../hooks/useEvents';
 import { ActionMap, EventQuery } from '../../interfaces';
@@ -28,7 +28,7 @@ function Event({ application }: EventProps) {
   }
 
   const editEvent = useEdit(eventService, query);
-  const delEvent = useDeleteEvent();
+  const delEvent = useDelete(eventService);
 
   if (editEvent.error) {
     return (
