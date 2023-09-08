@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import TextField from "@mui/material/TextField";
+import TextInput from "../TextInput";
+import { Box, Button, Grid, FormControl } from "@mui/material"; // Import Form from Material-UI
 
 interface PreviewFormProps {
   initialValues: {
@@ -24,14 +26,14 @@ function PreviewForm({ initialValues, onSubmit }: PreviewFormProps) {
   };
 
   return (
-    <div>
-      <TextField
+    <FormControl onSubmit={handleSubmit} sx={{ width: "100%" }}>
+      <TextInput
         label="Name"
         name="name"
         value={values.name}
         onChange={handleChange}
       />
-      <TextField
+      <TextInput
         label="Description"
         name="description"
         value={values.description}
@@ -39,14 +41,19 @@ function PreviewForm({ initialValues, onSubmit }: PreviewFormProps) {
       />
       {values.body && (
         <TextField
+          multiline={true}
           label="Body"
           name="body"
           value={values.body}
           onChange={handleChange}
         />
       )}
-      <button onClick={handleSubmit}>Submit</button>
-    </div>
+      <Box py={4}>
+        <Button variant="contained" color="primary" type="submit">
+          Submit
+        </Button>
+      </Box>
+    </FormControl>
   );
 }
 
