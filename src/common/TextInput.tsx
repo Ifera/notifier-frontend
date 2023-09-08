@@ -29,7 +29,7 @@ const TextInput = ({
       </label>
       <TextField
         id={inputId}
-        {...(multiline && { multiline: true, rows: 4 })}
+        {...(multiline && { multiline: true, rows: 6 })}
         fullWidth
         InputProps={{
           startAdornment: startIcon && (
@@ -39,7 +39,7 @@ const TextInput = ({
             width: "100%",
             background: "#F5FAFF",
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#fff",
+              borderColor: "#98CDFF",
             },
 
             "&:hover .MuiOutlinedInput-notchedOutline": {

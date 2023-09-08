@@ -11,7 +11,7 @@ function Dashboard() {
     <>
       <Container>
         <Application setEventId={setEventId} />
-        // TODO: IMPROVE THE LOGIC
+        {/* TODO: IMPROVE THE LOGIC */}
         {eventId && <Event application={eventId} />}
         {/* <Box mt={2}>
           <NotificationTyspe />

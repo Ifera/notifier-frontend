@@ -1,32 +1,30 @@
 import { ChangeEvent, useState } from "react";
-import TextField from "@mui/material/TextField";
 import TextInput from "./TextInput";
-import { Box, Button, FormControl } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 interface PreviewFormProps {
-  initialValues: {
+  values: {
     name: string;
     description: string;
+    subject?: string;
     body?: string;
   };
   onSubmit: (values: any) => void;
 }
 
-function PreviewForm({ initialValues, onSubmit }: PreviewFormProps) {
-  const [values, setValues] = useState(initialValues);
-
+function PreviewForm({ values, onSubmit }: PreviewFormProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    onSubmit({ ...values, [name]: value });
   };
 
-  const handleSubmit = () => {
-    console.log("values");
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onSubmit(values);
   };
 
   return (
-    <FormControl onSubmit={handleSubmit} sx={{ width: "100%" }}>
+    <form onSubmit={handleSubmit}>
       <TextInput
         label="Name"
         name="name"
@@ -39,21 +37,30 @@ function PreviewForm({ initialValues, onSubmit }: PreviewFormProps) {
         value={values.description}
         onChange={handleChange}
       />
-      {values.body && (
-        <TextField
+      {values.subject !== undefined && values.subject !== undefined ? (
+        <TextInput
+          label="Subject"
+          name="subject"
+          value={values.subject}
+          onChange={handleChange}
+        />
+      ) : null}
+
+      {values.body !== undefined && values.body !== undefined ? (
+        <TextInput
           multiline={true}
           label="Body"
           name="body"
           value={values.body}
           onChange={handleChange}
         />
-      )}
+      ) : null}
       <Box py={4}>
         <Button variant="contained" color="primary" type="submit">
           Submit
         </Button>
       </Box>
-    </FormControl>
+    </form>
   );
 }
 
