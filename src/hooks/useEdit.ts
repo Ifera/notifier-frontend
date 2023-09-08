@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { FetchResponse, PProperties, Properties, Query } from '../interfaces';
 import APIClient from '../services/apiClient';
 
-function useEdit(service: APIClient<Properties>, query: Query) {
+const useEdit = (service: APIClient<Properties>, query: Query) => {
   const queryClient = useQueryClient();
   const queryKey = [...service.queryKey, query];
 
@@ -37,6 +37,6 @@ function useEdit(service: APIClient<Properties>, query: Query) {
       queryClient.invalidateQueries(queryKey);
     },
   });
-}
+};
 
 export default useEdit;
