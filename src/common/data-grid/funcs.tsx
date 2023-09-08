@@ -17,6 +17,8 @@ function getColumns(
   type: string,
   useEdit: UseMutationResult<Properties, Error, PProperties>,
   useDel: UseMutationResult<string, Error, PProperties>,
+  setOpenEditDialog: (open: boolean) => void,
+
   action?: ActionMap
 ): GridColDef[] {
   return [
@@ -75,10 +77,12 @@ function getColumns(
             return;
           }
 
-          if (action?.onClickEdit) {
-            // TODO: open edit modal
+          if (type === 'edit') {
+            setOpenEditDialog(true);
 
-            action.onClickEdit(row.id);
+            if (action?.onClickEdit) {
+              action.onClickEdit(row.id);
+            }
 
             return;
           }

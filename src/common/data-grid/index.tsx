@@ -17,6 +17,7 @@ import {
   NotificationTypeQuery,
 } from '../../interfaces';
 import APIClient from '../../services/apiClient';
+import EditDialog from '../edit/EditDialog';
 import { getColumns } from './funcs';
 
 interface DataGridProps {
@@ -42,6 +43,8 @@ function DataGrid({
 
   onPageChange,
 }: DataGridProps) {
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
@@ -62,6 +65,10 @@ function DataGrid({
     setPaginationModel(model);
   };
 
+  const handleClose = () => {
+    setOpenEditDialog(false);
+  };
+
   if (editHook.error) {
     return (
       <Alert severity='error'>An error occurred while updating the event</Alert>
@@ -74,13 +81,23 @@ function DataGrid({
     );
   }
 
+  const columns = getColumns(
+    type,
+    editHook,
+    delHook,
+    setOpenEditDialog,
+    action
+  );
+
   return (
     <>
       <div style={{ height: '380px' }}>
+        <EditDialog open={openEditDialog} onClose={handleClose} />
+
         <DataGridX
           apiRef={apiRef}
           rows={rows}
-          columns={getColumns(type, editHook, delHook, action)}
+          columns={columns}
           rowCount={totalRowCount}
           loading={isLoading}
           initialState={{
