@@ -9,10 +9,10 @@ import ApplicationCarousel from './ApplicationCarousel';
 const cardsPerPage = 3;
 
 interface ApplicationProps {
-  setEventId: (eventId: string | number) => void;
+  onEventIdChange: (id: string | number) => void;
 }
 
-function Application({ setEventId }: ApplicationProps) {
+function Application({ onEventIdChange }: ApplicationProps) {
   const [currentPage, setCurrentPage] = useState(0);
 
   const { data, isLoading, error } = useGetAll(applicationService, {
@@ -32,7 +32,7 @@ function Application({ setEventId }: ApplicationProps) {
   };
 
   const handleCardClick = (cardId: string | number) => {
-    setEventId(cardId);
+    onEventIdChange(cardId);
   };
 
   return (

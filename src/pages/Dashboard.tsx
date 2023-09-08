@@ -1,16 +1,21 @@
-import { Container } from "@mui/material";
-import Application from "../components/application";
-import Event from "../components/event";
+import { Container } from '@mui/material';
+import Application from '../components/application';
+import Event from '../components/event';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 function Dashboard() {
-  const [eventId, setEventId] = useState("");
+  const [eventId, setEventId] = useState<string | number>('');
+
+  const handleEventIdChange = (id: string | number) => {
+    setEventId(id);
+  };
 
   return (
     <>
       <Container>
-        <Application setEventId={setEventId} />
+        <Application onEventIdChange={handleEventIdChange} />
+
         {/* TODO: IMPROVE THE LOGIC */}
         {eventId && <Event application={eventId} />}
         {/* <Box mt={2}>
