@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import PreviewForm from "../../../common/preview-form";
+import PreviewForm from "../../../common/PreviewForm";
 
 const initialValues = {
   name: "",

@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import TextField from "@mui/material/TextField";
-import TextInput from "../TextInput";
-import { Box, Button, Grid, FormControl } from "@mui/material"; // Import Form from Material-UI
+import TextInput from "./TextInput";
+import { Box, Button, FormControl } from "@mui/material";
 
 interface PreviewFormProps {
   initialValues: {
