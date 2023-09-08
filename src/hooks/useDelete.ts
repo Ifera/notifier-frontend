@@ -4,6 +4,7 @@ import APIClient from '../services/apiClient';
 
 function useDelete(service: APIClient<Properties>) {
   const queryClient = useQueryClient();
+  const queryKey = [...service.queryKey];
 
   return useMutation<string, Error, PProperties>({
     mutationFn: (obj: PProperties) => {
@@ -14,11 +15,11 @@ function useDelete(service: APIClient<Properties>) {
     },
 
     onSuccess() {
-      queryClient.invalidateQueries(['events']);
+      queryClient.invalidateQueries(queryKey);
     },
 
     onError() {
-      queryClient.invalidateQueries(['events']);
+      queryClient.invalidateQueries(queryKey);
     },
   });
 }
