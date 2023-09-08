@@ -44,6 +44,9 @@ export interface NotificationType extends BaseProperties {
 
 export interface PNotificationType extends Partial<NotificationType> {}
 
+export type Properties = Application | Event | NotificationType;
+export type PProperties = PApplication | PEvent | PNotificationType;
+
 // ----------------------------------------------
 
 export interface FetchResponse<T> {
