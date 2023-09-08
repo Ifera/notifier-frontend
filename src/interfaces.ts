@@ -17,6 +17,8 @@ export interface NotificationTypeQuery extends BaseQuery {
   event: string | number;
 }
 
+export type Query = ApplicationQuery | EventQuery | NotificationTypeQuery;
+
 // ----------------------------------------------
 
 interface BaseProperties {

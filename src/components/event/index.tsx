@@ -2,9 +2,10 @@ import { Alert } from '@mui/material';
 import { useState } from 'react';
 import DataGrid from '../../common/data-grid';
 import useDeleteEvent from '../../hooks/useDeleteEvent';
-import useEditEvent from '../../hooks/useEditEvent';
+import useEdit from '../../hooks/useEdit';
 import useEvents from '../../hooks/useEvents';
 import { ActionMap, EventQuery } from '../../interfaces';
+import eventService from '../../services/eventService';
 
 interface EventProps {
   application: string | number;
@@ -26,7 +27,7 @@ function Event({ application }: EventProps) {
     );
   }
 
-  const editEvent = useEditEvent(query);
+  const editEvent = useEdit(eventService, query);
   const delEvent = useDeleteEvent();
 
   if (editEvent.error) {

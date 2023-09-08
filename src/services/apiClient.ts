@@ -8,9 +8,11 @@ const axiosInstance = axios.create({
 
 class APIClient<T> {
   endpoint: string;
+  queryKey: string[];
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
+    this.queryKey = endpoint.split('/').filter((s) => s !== '');
   }
 
   getAll = (config: AxiosRequestConfig) => {

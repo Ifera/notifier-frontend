@@ -16,7 +16,7 @@ const useEvents = (query: EventQuery) => {
         },
       }),
     keepPreviousData: true,
-    staleTime: ms('10s'),
+    staleTime: ms('5s'),
   });
 };
 
