@@ -46,32 +46,23 @@ function Event({ application }: EventProps) {
     setPageNumber(pageNumber);
   };
 
-  const onClickEdit = (id: number | string) => {};
-
-  const onClickDelete = (id: number | string) => {
-    delEvent.mutate({ id });
-  };
-
-  const onClickSwitch = (id: number | string, value: boolean) => {
-    editEvent.mutate({
-      id,
-      is_active: value,
-    });
+  const onClickEdit = (id: number | string) => {
+    console.log('edit', id);
   };
 
   const action: ActionMap = {
     onClickEdit,
-    onClickDelete,
-    onClickSwitch,
   };
 
   return (
     <DataGrid
       type='Event'
-      action={action}
+      service={eventService}
+      query={query}
       isLoading={isLoading}
       totalRowCount={data?.total_count || 0}
       rows={(data?.results as IEvent[]) || []}
+      action={action}
       onPageChange={onPageChange}
     />
   );

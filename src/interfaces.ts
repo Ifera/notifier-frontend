@@ -61,7 +61,7 @@ export interface FetchResponse<T> {
 // ----------------------------------------------
 
 export interface ActionMap {
-  onClickEdit: (id: number | string) => void;
-  onClickDelete: (id: number | string) => void;
-  onClickSwitch: (id: number | string, value: boolean) => void;
+  onClickEdit?: (id: number | string) => void;
+  onClickDelete?: (id: number | string) => void;
+  onClickSwitch?: (id: number | string, value: boolean) => void;
 }

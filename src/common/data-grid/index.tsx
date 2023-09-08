@@ -1,3 +1,4 @@
+import { Alert } from '@mui/material';
 import {
   DataGrid as DataGridX,
   GridPaginationModel,
@@ -6,24 +7,39 @@ import {
 import { useEffect, useState } from 'react';
 
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
-import { ActionMap, Event, NotificationType } from '../../interfaces';
+import useDelete from '../../hooks/useDelete';
+import useEdit from '../../hooks/useEdit';
+import {
+  ActionMap,
+  Event,
+  EventQuery,
+  NotificationType,
+  NotificationTypeQuery,
+} from '../../interfaces';
+import APIClient from '../../services/apiClient';
 import { getColumns } from './funcs';
 
 interface DataGridProps {
   type: 'Event' | 'Notification';
-  action: ActionMap;
+  service: APIClient<Event | NotificationType>;
+  query: EventQuery | NotificationTypeQuery;
   isLoading: boolean;
   totalRowCount: number;
   rows: Event[] | NotificationType[];
+  action?: ActionMap;
+
   onPageChange: (pageNumber: number) => void;
 }
 
 function DataGrid({
   type,
-  action,
+  service,
+  query,
   isLoading,
   totalRowCount,
   rows,
+  action,
+
   onPageChange,
 }: DataGridProps) {
   const [paginationModel, setPaginationModel] = useState({
@@ -34,6 +50,9 @@ function DataGrid({
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
 
+  const editHook = useEdit(service, query);
+  const delHook = useDelete(service);
+
   useEffect(() => {
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
@@ -43,13 +62,25 @@ function DataGrid({
     setPaginationModel(model);
   };
 
+  if (editHook.error) {
+    return (
+      <Alert severity='error'>An error occurred while updating the event</Alert>
+    );
+  }
+
+  if (delHook.error) {
+    return (
+      <Alert severity='error'>An error occurred while deleting the event</Alert>
+    );
+  }
+
   return (
     <>
       <div style={{ height: '380px' }}>
         <DataGridX
           apiRef={apiRef}
           rows={rows}
-          columns={getColumns(type, action)}
+          columns={getColumns(type, editHook, delHook, action)}
           rowCount={totalRowCount}
           loading={isLoading}
           initialState={{

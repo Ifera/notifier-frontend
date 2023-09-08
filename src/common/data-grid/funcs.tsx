@@ -1,11 +1,24 @@
 import { Switch } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { UseMutationResult } from '@tanstack/react-query';
 import { MouseEvent } from 'react';
-import { ActionMap, Event, NotificationType } from '../../interfaces';
+
+import {
+  ActionMap,
+  Event,
+  NotificationType,
+  PProperties,
+  Properties,
+} from '../../interfaces';
 import DeleteButton from '../buttons/DeleteButton';
 import EditButton from '../buttons/EditButton';
 
-function getColumns(type: string, action: ActionMap): GridColDef[] {
+function getColumns(
+  type: string,
+  useEdit: UseMutationResult<Properties, Error, PProperties>,
+  useDel: UseMutationResult<string, Error, PProperties>,
+  action?: ActionMap
+): GridColDef[] {
   return [
     {
       field: 'name',
@@ -39,16 +52,36 @@ function getColumns(type: string, action: ActionMap): GridColDef[] {
 
           if (type === 'switch') {
             const t = e.target as HTMLInputElement;
-            action.onClickSwitch(row.id, t.checked);
+
+            useEdit.mutate({
+              id: row.id,
+              is_active: t.checked,
+            });
+
+            if (action?.onClickSwitch) {
+              action.onClickSwitch(row.id, t.checked);
+            }
+
             return;
           }
 
-          const actionMap = {
-            edit: action.onClickEdit,
-            delete: action.onClickDelete,
-          };
+          if (type === 'delete') {
+            useDel.mutate({ id: row.id });
 
-          actionMap[type](row.id);
+            if (action?.onClickDelete) {
+              action.onClickDelete(row.id);
+            }
+
+            return;
+          }
+
+          if (action?.onClickEdit) {
+            // TODO: open edit modal
+
+            action.onClickEdit(row.id);
+
+            return;
+          }
         };
 
         return (
