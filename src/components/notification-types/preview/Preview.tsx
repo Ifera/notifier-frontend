@@ -12,11 +12,11 @@ const onSubmit = (values: any) => {
 
 const Preview = () => {
   return (
-    <Grid container p={12}>
-      <Grid item xs={12} sm={6} p={12}>
+    <Grid container p={{ xs: 2, sm: 2, md: 10 }}>
+      <Grid item xs={12} sm={6} p={{ xs: 2, sm: 4 }}>
         <PreviewForm initialValues={initialValues} onSubmit={onSubmit} />
       </Grid>
-      <Grid item xs={12} sm={6} p={12}>
+      <Grid item xs={12} sm={6} p={{ xs: 2, sm: 4 }}>
         <h1>Preview</h1>
       </Grid>
     </Grid>

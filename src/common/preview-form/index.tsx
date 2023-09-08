@@ -21,7 +21,7 @@ function PreviewForm({ initialValues, onSubmit }: PreviewFormProps) {
   };
 
   const handleSubmit = () => {
-    console.log(values);
+    console.log("values");
     onSubmit(values);
   };
 
