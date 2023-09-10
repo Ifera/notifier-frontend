@@ -12,13 +12,13 @@ interface ValueProps {
 interface PreviewFormProps {
   values: ValueProps;
   onSubmit: (values: ValueProps) => void;
-  onChange: (values: ValueProps) => void;
+  onChange?: (values: ValueProps) => void;
 }
 
 function PreviewForm({ values, onSubmit, onChange }: PreviewFormProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    onChange({ ...values, [name]: value });
+    if (onChange) onChange({ ...values, [name]: value });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
