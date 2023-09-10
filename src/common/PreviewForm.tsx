@@ -2,20 +2,23 @@ import { Box, Button } from '@mui/material';
 import { ChangeEvent } from 'react';
 import TextInput from './TextInput';
 
-interface PreviewFormProps {
-  values: {
-    name: string;
-    description: string;
-    subject?: string;
-    body?: string;
-  };
-  onSubmit: (values: any) => void;
+interface ValueProps {
+  name: string;
+  description: string;
+  subject?: string;
+  body?: string;
 }
 
-function PreviewForm({ values, onSubmit }: PreviewFormProps) {
+interface PreviewFormProps {
+  values: ValueProps;
+  onSubmit: (values: ValueProps) => void;
+  onChange: (values: ValueProps) => void;
+}
+
+function PreviewForm({ values, onSubmit, onChange }: PreviewFormProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    onSubmit({ ...values, [name]: value });
+    onChange({ ...values, [name]: value });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
