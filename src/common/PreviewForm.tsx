@@ -28,33 +28,36 @@ function PreviewForm({ values, onSubmit }: PreviewFormProps) {
       <TextInput
         label='Name'
         name='name'
-        value={values.name}
+        defaultValue={values.name}
         onChange={handleChange}
       />
+
       <TextInput
         label='Description'
         name='description'
-        value={values.description}
+        defaultValue={values.description}
         onChange={handleChange}
       />
-      {values.subject !== undefined && values.subject !== undefined ? (
+
+      {values.subject !== undefined && values.body !== undefined ? (
         <TextInput
           label='Subject'
           name='subject'
-          value={values.subject}
+          defaultValue={values.subject}
           onChange={handleChange}
         />
       ) : null}
 
-      {values.body !== undefined && values.body !== undefined ? (
+      {values.subject !== undefined && values.body !== undefined ? (
         <TextInput
           multiline={true}
           label='Body'
           name='body'
-          value={values.body}
+          defaultValue={values.body}
           onChange={handleChange}
         />
       ) : null}
+
       <Box py={4}>
         <Button variant='contained' color='primary' type='submit'>
           Submit
