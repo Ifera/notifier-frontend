@@ -1,24 +1,30 @@
 import { Box, Button } from '@mui/material';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import TextInput from './TextInput';
 
-interface ValueProps {
+export interface ValueProps {
   name: string;
   description: string;
   subject?: string;
   body?: string;
 }
 
-interface PreviewFormProps {
-  values: ValueProps;
+export interface PreviewFormProps {
+  defaultValues: ValueProps;
   onSubmit: (values: ValueProps) => void;
   onChange?: (values: ValueProps) => void;
 }
 
-function PreviewForm({ values, onSubmit, onChange }: PreviewFormProps) {
+function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
+  const [values, setValues] = useState(defaultValues);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    if (onChange) onChange({ ...values, [name]: value });
+    const newValues = { ...values, [name]: value };
+
+    setValues(newValues);
+
+    if (onChange) onChange(newValues);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,32 +37,34 @@ function PreviewForm({ values, onSubmit, onChange }: PreviewFormProps) {
       <TextInput
         label='Name'
         name='name'
-        defaultValue={values.name}
+        defaultValue={defaultValues.name}
         onChange={handleChange}
       />
 
       <TextInput
         label='Description'
         name='description'
-        defaultValue={values.description}
+        defaultValue={defaultValues.description}
         onChange={handleChange}
       />
 
-      {values.subject !== undefined && values.body !== undefined ? (
+      {defaultValues.subject !== undefined &&
+      defaultValues.body !== undefined ? (
         <TextInput
           label='Subject'
           name='subject'
-          defaultValue={values.subject}
+          defaultValue={defaultValues.subject}
           onChange={handleChange}
         />
       ) : null}
 
-      {values.subject !== undefined && values.body !== undefined ? (
+      {defaultValues.subject !== undefined &&
+      defaultValues.body !== undefined ? (
         <TextInput
           multiline={true}
           label='Body'
           name='body'
-          defaultValue={values.body}
+          defaultValue={defaultValues.body}
           onChange={handleChange}
         />
       ) : null}
