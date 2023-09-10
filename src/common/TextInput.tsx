@@ -1,13 +1,15 @@
-import { TextField, InputAdornment, Box, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import {
+  Box,
+  InputAdornment,
+  TextField,
+  TextFieldProps,
+  Typography,
+} from '@mui/material';
+import { ReactNode } from 'react';
 
-interface TextInputProps {
-  multiline?: boolean;
-  label: string;
+export type TextInputProps = TextFieldProps & {
   startIcon?: ReactNode;
-
-  [x: string]: any;
-}
+};
 
 const TextInput = ({
   multiline,
@@ -21,8 +23,8 @@ const TextInput = ({
     <Box>
       <label htmlFor={inputId}>
         <Typography
-          sx={{ fontSize: 15, textAlign: "left", my: 1 }}
-          color="#071B2F"
+          sx={{ fontSize: 15, textAlign: 'left', my: 1 }}
+          color='#071B2F'
         >
           {label}
         </Typography>
@@ -33,17 +35,17 @@ const TextInput = ({
         fullWidth
         InputProps={{
           startAdornment: startIcon && (
-            <InputAdornment position="start">{startIcon}</InputAdornment>
+            <InputAdornment position='start'>{startIcon}</InputAdornment>
           ),
           sx: {
-            width: "100%",
-            background: "#F5FAFF",
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#98CDFF",
+            width: '100%',
+            background: '#F5FAFF',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#98CDFF',
             },
 
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#98CDFF",
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#98CDFF',
             },
           },
         }}
