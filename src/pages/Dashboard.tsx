@@ -3,6 +3,7 @@ import Application from '../components/application';
 import Event from '../components/event';
 
 import { useState } from 'react';
+import ToolBar from '../common/toolbar';
 import NotificationType from '../components/notification-types';
 import { ID, NullableID } from '../interfaces';
 
@@ -33,6 +34,7 @@ function Dashboard() {
   return (
     <>
       <Container>
+        <ToolBar />
         <Application onAppSelect={handleAppSelect} />
 
         {selectedApp && (
