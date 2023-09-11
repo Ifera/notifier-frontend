@@ -15,6 +15,7 @@ import {
   EventQuery,
   NotificationType,
   NotificationTypeQuery,
+  Properties,
 } from '../../interfaces';
 import APIClient from '../../services/apiClient';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
@@ -39,7 +40,6 @@ function DataGrid({
   isLoading,
   totalRowCount,
   rows,
-  action,
 
   onPageChange,
 }: DataGridProps) {
@@ -79,11 +79,11 @@ function DataGrid({
     setDialogProps({ ...dialogProps, open: false, data: null });
   };
 
-  const handleClickEdit = (data: Event | NotificationType) => {
+  const handleClickEdit = (data: Properties) => {
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
-  const columns = getColumns(type, editHook, delHook, handleClickEdit, action);
+  const columns = getColumns(type, editHook, delHook, handleClickEdit);
 
   return (
     <>

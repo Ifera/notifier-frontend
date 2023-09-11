@@ -4,24 +4,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { UseMutationResult } from '@tanstack/react-query';
-import {
-  Event,
-  NotificationType,
-  PProperties,
-  Properties,
-} from '../../interfaces';
+import { PProperties, Properties } from '../../interfaces';
 import { parseError } from '../../utils';
 import PreviewForm, { ValueProps } from '../PreviewForm';
 
 export interface EditDialogProps {
   open: boolean;
-  type: 'Event' | 'Notification';
-  data: Event | NotificationType | null;
+  type: 'App' | 'Event' | 'Notification';
+  data: Properties | null;
   editHook?: UseMutationResult<Properties, Error, PProperties>;
 
   // callback functions
   onClose?: () => void;
-  onSubmit?: (data: Event | NotificationType, values: ValueProps) => void;
+  onSubmit?: (data: Properties, values: ValueProps) => void;
 }
 
 function EditDialog({
