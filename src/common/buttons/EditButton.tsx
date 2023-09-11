@@ -3,13 +3,7 @@ import { ButtonProps, IconButton } from '@mui/material';
 
 function EditButton(props: ButtonProps) {
   return (
-    <IconButton
-      variant='contained'
-      color='primary'
-      size='medium'
-      edge='start'
-      {...props}
-    >
+    <IconButton color='primary' size='medium' edge='start' {...props}>
       <Edit />
     </IconButton>
   );
