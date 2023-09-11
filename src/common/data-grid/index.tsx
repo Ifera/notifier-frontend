@@ -6,6 +6,7 @@ import {
 } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 
+import { AxiosError } from 'axios';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
@@ -17,7 +18,8 @@ import {
   NotificationTypeQuery,
 } from '../../interfaces';
 import APIClient from '../../services/apiClient';
-import EditDialog, { EditDialogProps } from '../edit/EditDialog';
+import { ValueProps } from '../PreviewForm';
+import EditDialog, { EditDialogProps, EditResponse } from '../edit/EditDialog';
 import { getColumns } from './funcs';
 
 interface DataGridProps {
@@ -47,7 +49,11 @@ function DataGrid({
     open: false,
     type,
     data: null,
-    onClose: () => {},
+  });
+
+  const [editResponse, setEditResponse] = useState<EditResponse>({
+    success: false,
+    error: null,
   });
 
   const [paginationModel, setPaginationModel] = useState({
@@ -65,12 +71,6 @@ function DataGrid({
     apiRef.current.setColumnVisibility('description', !isMobile);
   }, [isMobile, apiRef]);
 
-  if (editHook.error) {
-    return (
-      <Alert severity='error'>An error occurred while updating the event</Alert>
-    );
-  }
-
   if (delHook.error) {
     return (
       <Alert severity='error'>An error occurred while deleting the event</Alert>
@@ -84,10 +84,38 @@ function DataGrid({
 
   const handleClose = () => {
     setDialogProps({ ...dialogProps, open: false, data: null });
+    setEditResponse({ success: false, error: null });
   };
 
   const handleClickEdit = (data: Event | NotificationType) => {
     setDialogProps({ ...dialogProps, open: true, data });
+  };
+
+  const handleEditDialogSubmit = (
+    data: Event | NotificationType,
+    values: ValueProps
+  ) => {
+    editHook.mutate({
+      id: data.id,
+      name: values.name,
+      description: values.description,
+    });
+
+    if (editHook.isSuccess) {
+      setEditResponse({ success: true, error: null });
+      return;
+    }
+
+    if (editHook.isError) {
+      const err = editHook.error as AxiosError;
+
+      setEditResponse({
+        success: false,
+        error: (err.response?.data as string) || 'An error occurred',
+      });
+
+      return;
+    }
   };
 
   const columns = getColumns(type, editHook, delHook, handleClickEdit, action);
@@ -95,7 +123,12 @@ function DataGrid({
   return (
     <>
       <div style={{ height: '380px' }}>
-        <EditDialog {...dialogProps} onClose={handleClose} />
+        <EditDialog
+          {...dialogProps}
+          onClose={handleClose}
+          onSubmit={handleEditDialogSubmit}
+          response={editResponse}
+        />
 
         <DataGridX
           apiRef={apiRef}

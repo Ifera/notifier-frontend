@@ -16,7 +16,7 @@ const useEdit = (service: APIClient<Properties>, query: Query) => {
       return service.patch(obj.id, _.omit(obj, 'id'));
     },
 
-    onSuccess(savedEvent: Properties, editedEvent: PProperties) {
+    onSuccess(saved: Properties, edited: PProperties) {
       queryClient.setQueryData<FetchResponse<Properties>>(queryKey, (res) => {
         if (!res) return;
 
@@ -25,9 +25,7 @@ const useEdit = (service: APIClient<Properties>, query: Query) => {
         return {
           ...res,
           results: [
-            ...results.map((event) =>
-              event.id === editedEvent.id ? savedEvent : event
-            ),
+            ...results.map((event) => (event.id === edited.id ? saved : event)),
           ],
         };
       });
