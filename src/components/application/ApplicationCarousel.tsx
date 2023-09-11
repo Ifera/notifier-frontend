@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import {
   Application,
   FetchResponse,
+  ID,
   UseDeleteHookResult,
   UseEditHookResult,
 } from '../../interfaces';
@@ -16,7 +17,7 @@ interface ApplicationCarouselProps {
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
   isLoading?: boolean;
-  onCardClick: (cardId: string | number) => void;
+  onCardClick: (cardId: ID) => void;
   onPageChange?: (newPage: number) => void;
   onClickEditBtn?: (data: Application) => void;
 }

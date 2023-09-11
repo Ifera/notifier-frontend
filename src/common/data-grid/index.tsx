@@ -1,131 +1,90 @@
 import { Alert } from '@mui/material';
+import { GridRowParams } from '@mui/x-data-grid';
+import { useState } from 'react';
+import useGetAll from '../../hooks/useGetAll';
 import {
-  DataGrid as DataGridX,
-  GridPaginationModel,
-  useGridApiRef,
-} from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-
-import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
-import useDelete from '../../hooks/useDelete';
-import useEdit from '../../hooks/useEdit';
-import {
-  ActionMap,
+  BaseQuery,
   Event,
   EventQuery,
+  ID,
   NotificationType,
   NotificationTypeQuery,
-  Properties,
 } from '../../interfaces';
-import APIClient from '../../services/apiClient';
-import EditDialog, { EditDialogProps } from '../edit/EditDialog';
-import { getColumns } from './funcs';
+import BaseDataGrid, { BaseDataGridProps } from './BaseDataGrid';
 
-interface DataGridProps {
-  type: 'Event' | 'Notification';
-  service: APIClient<Event | NotificationType>;
-  query: EventQuery | NotificationTypeQuery;
-  isLoading: boolean;
-  totalRowCount: number;
-  rows: Event[] | NotificationType[];
-  action?: ActionMap;
-
-  onPageChange: (pageNumber: number) => void;
+interface DataGridProps extends Pick<BaseDataGridProps, 'type' | 'service'> {
+  id: ID;
+  onSelect: (id: ID) => void;
 }
 
 function DataGrid({
+  id,
   type,
   service,
-  query,
-  isLoading,
-  totalRowCount,
-  rows,
 
-  onPageChange,
+  onSelect,
 }: DataGridProps) {
-  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
-    open: false,
-    type,
-    data: null,
-  });
+  const [pageNumber, setPageNumber] = useState(1);
 
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 5,
-  });
+  let query: BaseQuery = {
+    pageNumber,
+  };
 
-  const isMobile = useCheckMobileScreen();
-  const apiRef = useGridApiRef();
+  if (type === 'Event') {
+    query = {
+      ...query,
+      application: id,
+    } as EventQuery;
+  }
 
-  const editHook = useEdit(service, query);
-  const delHook = useDelete(service);
+  if (type === 'Notification') {
+    query = {
+      ...query,
+      event: id,
+    } as NotificationTypeQuery;
+  }
 
-  useEffect(() => {
-    apiRef.current.setColumnVisibility('description', !isMobile);
-  }, [isMobile, apiRef]);
+  const { data, isLoading, error } = useGetAll(service, query);
 
-  if (delHook.error) {
+  if (error) {
     return (
-      <Alert severity='error'>An error occurred while deleting the event</Alert>
+      <Alert severity='error'>
+        An error occurred while loading the {type.toLowerCase()}s
+      </Alert>
     );
   }
 
-  const handlePageChange = (model: GridPaginationModel) => {
-    onPageChange(model.page + 1); // updates the page state in the parent component
-    setPaginationModel(model);
+  const onPageChange = (pageNumber: number) => {
+    setPageNumber(pageNumber);
   };
 
-  const handleClose = () => {
-    setDialogProps({ ...dialogProps, open: false, data: null });
-  };
+  const handleRowClick = (params: GridRowParams) => {
+    let data = null;
 
-  const handleClickEdit = (data: Properties) => {
-    setDialogProps({ ...dialogProps, open: true, data });
-  };
+    if (type === 'Event') {
+      data = params.row as Event;
+    }
 
-  const columns = getColumns(type, editHook, delHook, handleClickEdit);
+    if (type === 'Notification') {
+      data = params.row as NotificationType;
+    }
+
+    if (!data) return; // not possible
+
+    onSelect(data.id);
+  };
 
   return (
-    <>
-      <div style={{ height: '380px' }}>
-        <EditDialog
-          {...dialogProps}
-          onClose={handleClose}
-          editHook={editHook}
-        />
-
-        <DataGridX
-          apiRef={apiRef}
-          rows={rows}
-          columns={columns}
-          rowCount={totalRowCount}
-          loading={isLoading}
-          initialState={{
-            pagination: {
-              paginationModel,
-            },
-            columns: {
-              columnVisibilityModel: {
-                [type.toLowerCase()]: true,
-                description: true,
-                action: true,
-              },
-            },
-          }}
-          paginationMode='server'
-          paginationModel={paginationModel}
-          onPaginationModelChange={handlePageChange}
-          pageSizeOptions={[5]}
-          checkboxSelection
-          sx={{
-            // remove the focus outline
-            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-              outline: 'none !important',
-            },
-          }}
-        />
-      </div>
-    </>
+    <BaseDataGrid
+      type={type}
+      service={service}
+      query={query as EventQuery | NotificationTypeQuery}
+      isLoading={isLoading}
+      totalRowCount={data?.total_count || 0}
+      rows={(data?.results as Event[] | NotificationType[]) || []}
+      onPageChange={onPageChange}
+      onRowClick={handleRowClick}
+    />
   );
 }
 

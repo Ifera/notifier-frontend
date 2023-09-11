@@ -8,6 +8,7 @@ import {
   ApplicationQuery,
   FetchResponse,
   Application as IApplication,
+  ID,
 } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 import ApplicationCarousel from './ApplicationCarousel';
@@ -16,10 +17,10 @@ import ApplicationCarousel from './ApplicationCarousel';
 const cardsPerPage = 3;
 
 interface ApplicationProps {
-  onEventIdChange: (id: string | number) => void;
+  onAppSelect: (id: ID) => void;
 }
 
-function Application({ onEventIdChange }: ApplicationProps) {
+function Application({ onAppSelect }: ApplicationProps) {
   const [currentPage, setCurrentPage] = useState(0);
 
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
@@ -57,8 +58,8 @@ function Application({ onEventIdChange }: ApplicationProps) {
     setCurrentPage(newPage);
   };
 
-  const handleCardClick = (cardId: string | number) => {
-    onEventIdChange(cardId);
+  const handleCardClick = (cardId: ID) => {
+    onAppSelect(cardId);
   };
 
   const handleEditDialogClose = () => {

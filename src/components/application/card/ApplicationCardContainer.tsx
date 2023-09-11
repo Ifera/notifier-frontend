@@ -1,7 +1,8 @@
 import { Card, Grid, Slide } from '@mui/material';
+import { ID } from '../../../interfaces';
 
 interface ApplicationCardContainerProps {
-  cardId?: string | number;
+  cardId?: ID;
   index: number;
   cardsPerPage: number;
   children: React.ReactNode;

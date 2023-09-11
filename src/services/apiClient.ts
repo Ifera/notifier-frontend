@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { FetchResponse } from '../interfaces';
+import { FetchResponse, ID } from '../interfaces';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api',
@@ -21,19 +21,19 @@ class APIClient<T> {
       .then((res) => res.data);
   };
 
-  get = (id: number | string) => {
+  get = (id: ID) => {
     return axiosInstance
       .get<T>(this.endpoint + '/' + id)
       .then((res) => res.data);
   };
 
-  patch = (id: number | string, data: Partial<T>) => {
+  patch = (id: ID, data: Partial<T>) => {
     return axiosInstance
       .patch<T>(this.endpoint + '/' + id, data)
       .then((res) => res.data);
   };
 
-  delete = (id: number | string) => {
+  delete = (id: ID) => {
     return axiosInstance
       .delete(this.endpoint + '/' + id)
       .then((res) => res.data);

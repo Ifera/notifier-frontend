@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import ActionButtons from '../../../common/buttons/ActionButtons';
 import {
   Application,
+  ID,
   UseDeleteHookResult,
   UseEditHookResult,
 } from '../../../interfaces';
@@ -13,7 +14,7 @@ interface ApplicationCardProps {
   application: Application;
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
-  onCardClick: (cardId: string | number) => void;
+  onCardClick: (cardId: ID) => void;
   onClickEditBtn?: (data: Application) => void;
 }
 

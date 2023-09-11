@@ -2,7 +2,14 @@ import useDelete from './hooks/useDelete';
 import useEdit from './hooks/useEdit';
 import useGetAll from './hooks/useGetAll';
 
-interface BaseQuery {
+// ----------------------------------------------
+
+export type ID = number | string;
+export type NullableID = ID | null;
+
+// ----------------------------------------------
+
+export interface BaseQuery {
   like?: string;
   pageSize?: number;
   pageNumber?: number;
@@ -14,11 +21,11 @@ interface BaseQuery {
 export interface ApplicationQuery extends BaseQuery {}
 
 export interface EventQuery extends BaseQuery {
-  application: string | number;
+  application: ID;
 }
 
 export interface NotificationTypeQuery extends BaseQuery {
-  event: string | number;
+  event: ID;
 }
 
 export type Query = ApplicationQuery | EventQuery | NotificationTypeQuery;
@@ -26,7 +33,7 @@ export type Query = ApplicationQuery | EventQuery | NotificationTypeQuery;
 // ----------------------------------------------
 
 interface BaseProperties {
-  id: number | string;
+  id: ID;
   name: string;
   description: string;
   is_active: boolean;
@@ -39,13 +46,13 @@ export interface Application extends BaseProperties {}
 export interface PApplication extends Partial<Application> {}
 
 export interface Event extends BaseProperties {
-  application: number | string;
+  application: ID;
 }
 
 export interface PEvent extends Partial<Event> {}
 
 export interface NotificationType extends BaseProperties {
-  event: number | string;
+  event: ID;
 }
 
 export interface PNotificationType extends Partial<NotificationType> {}
@@ -65,9 +72,9 @@ export interface FetchResponse<T> {
 // ----------------------------------------------
 
 export interface ActionMap {
-  onClickEdit?: (id: number | string) => void;
-  onClickDelete?: (id: number | string) => void;
-  onClickSwitch?: (id: number | string, value: boolean) => void;
+  onClickEdit?: (id: ID) => void;
+  onClickDelete?: (id: ID) => void;
+  onClickSwitch?: (id: ID, value: boolean) => void;
 }
 
 // ----------------------------------------------
@@ -75,3 +82,5 @@ export interface ActionMap {
 export type UseEditHookResult = ReturnType<typeof useEdit>;
 export type UseDeleteHookResult = ReturnType<typeof useDelete>;
 export type UseGetAllHookResult = ReturnType<typeof useGetAll>;
+
+// ----------------------------------------------
