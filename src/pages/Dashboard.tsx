@@ -3,6 +3,7 @@ import Application from '../components/application';
 import Event from '../components/event';
 
 import { useState } from 'react';
+import ToolBar from '../common/toolbar';
 
 function Dashboard() {
   const [eventId, setEventId] = useState<string | number>('');
@@ -14,6 +15,7 @@ function Dashboard() {
   return (
     <>
       <Container>
+        <ToolBar />
         <Application onEventIdChange={handleEventIdChange} />
 
         {/* TODO: IMPROVE THE LOGIC */}
