@@ -1,3 +1,7 @@
+import useDelete from './hooks/useDelete';
+import useEdit from './hooks/useEdit';
+import useGetAll from './hooks/useGetAll';
+
 interface BaseQuery {
   like?: string;
   pageSize?: number;
@@ -65,3 +69,9 @@ export interface ActionMap {
   onClickDelete?: (id: number | string) => void;
   onClickSwitch?: (id: number | string, value: boolean) => void;
 }
+
+// ----------------------------------------------
+
+export type UseEditHookResult = ReturnType<typeof useEdit>;
+export type UseDeleteHookResult = ReturnType<typeof useDelete>;
+export type UseGetAllHookResult = ReturnType<typeof useGetAll>;

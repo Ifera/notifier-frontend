@@ -3,8 +3,7 @@ import { Alert, Box, IconButton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { UseMutationResult } from '@tanstack/react-query';
-import { PProperties, Properties } from '../../interfaces';
+import { Properties, UseEditHookResult } from '../../interfaces';
 import { parseError } from '../../utils';
 import PreviewForm, { ValueProps } from '../PreviewForm';
 
@@ -12,7 +11,7 @@ export interface EditDialogProps {
   open: boolean;
   type: 'App' | 'Event' | 'Notification';
   data: Properties | null;
-  editHook?: UseMutationResult<Properties, Error, PProperties>;
+  editHook?: UseEditHookResult;
 
   // callback functions
   onClose?: () => void;

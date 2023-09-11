@@ -1,4 +1,4 @@
-import { CardActionArea } from '@mui/material';
+import { Button, CardActionArea } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -17,19 +17,21 @@ function ApplicationCard({
   onCardClick,
 }: ApplicationCardProps) {
   return (
-    <CardActionArea onClick={() => onCardClick(cardId)}>
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant='h5' component='h2'>
-          {title}
-        </Typography>
-        <Typography>{description}</Typography>
-      </CardContent>
+    <>
+      <CardActionArea onClick={() => onCardClick(cardId)}>
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Typography gutterBottom variant='h5' component='h2'>
+            {title}
+          </Typography>
+          <Typography>{description}</Typography>
+        </CardContent>
+      </CardActionArea>
       <CardActions>
-        {/* <Button size="small">Edit</Button>
-        <Button size="small">Delete</Button>
-        <Button size="small">Deactivate</Button> */}
+        <Button size='small'>Edit</Button>
+        <Button size='small'>Delete</Button>
+        <Button size='small'>Deactivate</Button>
       </CardActions>
-    </CardActionArea>
+    </>
   );
 }
 

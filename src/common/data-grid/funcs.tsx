@@ -1,14 +1,18 @@
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 
-import useDelete from '../../hooks/useDelete';
-import useEdit from '../../hooks/useEdit';
-import { Event, NotificationType, Properties } from '../../interfaces';
+import {
+  Event,
+  NotificationType,
+  Properties,
+  UseDeleteHookResult,
+  UseEditHookResult,
+} from '../../interfaces';
 import ActionButtons from '../buttons/ActionButtons';
 
 function getColumns(
   type: string,
-  editHook: ReturnType<typeof useEdit>,
-  delHook: ReturnType<typeof useDelete>,
+  editHook: UseEditHookResult,
+  delHook: UseDeleteHookResult,
   onClickEdit: (data: Properties) => void
 ): GridColDef[] {
   return [

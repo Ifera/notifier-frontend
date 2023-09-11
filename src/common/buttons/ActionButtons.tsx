@@ -1,15 +1,17 @@
 import { Switch } from '@mui/material';
 import { MouseEvent } from 'react';
-import useDelete from '../../hooks/useDelete';
-import useEdit from '../../hooks/useEdit';
-import { Properties } from '../../interfaces';
+import {
+  Properties,
+  UseDeleteHookResult,
+  UseEditHookResult,
+} from '../../interfaces';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 
 interface ActionButtonsProps {
   data: Properties;
-  editHook: ReturnType<typeof useEdit>;
-  delHook: ReturnType<typeof useDelete>;
+  editHook: UseEditHookResult;
+  delHook: UseDeleteHookResult;
 
   // callback functions
   onClickEdit?: (data: Properties) => void;
