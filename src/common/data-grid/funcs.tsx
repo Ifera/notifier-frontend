@@ -1,5 +1,11 @@
-import { GridColDef, GridRowParams } from '@mui/x-data-grid';
+import {
+  GridColDef,
+  GridRowParams,
+  GridToolbarContainer,
+} from '@mui/x-data-grid';
 
+import { Delete } from '@mui/icons-material';
+import { IconButton, Typography } from '@mui/material';
 import {
   Event,
   NotificationType,
@@ -9,7 +15,7 @@ import {
 } from '../../interfaces';
 import ActionButtons from '../buttons/ActionButtons';
 
-function getColumns(
+export function getColumns(
   type: string,
   editHook: UseEditHookResult,
   delHook: UseDeleteHookResult,
@@ -56,4 +62,18 @@ function getColumns(
   ];
 }
 
-export { getColumns };
+export const CustomToolbar = (onClickDelete: () => void) => {
+  return (
+    <GridToolbarContainer>
+      <IconButton color='error' size='small' onClick={onClickDelete}>
+        <Delete sx={{ fontSize: '16px', marginRight: '4px' }} />
+        <Typography
+          variant='body1'
+          sx={{ fontSize: '0.8125rem', fontWeight: '500' }}
+        >
+          DELETE
+        </Typography>
+      </IconButton>
+    </GridToolbarContainer>
+  );
+};

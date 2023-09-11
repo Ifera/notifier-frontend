@@ -4,13 +4,14 @@ import {
   GridCallbackDetails,
   GridPaginationModel,
   GridRowParams,
+  GridRowSelectionModel,
   MuiEvent,
   useGridApiRef,
 } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
-
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import useDelete from '../../hooks/useDelete';
+import useDeleteAll from '../../hooks/useDeleteAll';
 import useEdit from '../../hooks/useEdit';
 import {
   ActionMap,
@@ -22,7 +23,7 @@ import {
 } from '../../interfaces';
 import APIClient from '../../services/apiClient';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
-import { getColumns } from './funcs';
+import { CustomToolbar, getColumns } from './funcs';
 
 export interface BaseDataGridProps {
   type: 'Event' | 'Notification';
@@ -63,11 +64,16 @@ function BaseDataGrid({
     pageSize: 5,
   });
 
+  const [selectedRows, setSelectedRows] = useState<
+    Event[] | NotificationType[]
+  >([]);
+
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
 
   const editHook = useEdit(service, query);
   const delHook = useDelete(service);
+  const delAllHook = useDeleteAll(service);
 
   useEffect(() => {
     apiRef.current.setColumnVisibility('description', !isMobile);
@@ -76,6 +82,14 @@ function BaseDataGrid({
   if (delHook.error) {
     return (
       <Alert severity='error'>An error occurred while deleting the event</Alert>
+    );
+  }
+
+  if (delAllHook.error) {
+    return (
+      <Alert severity='error'>
+        An error occurred while deleting the events
+      </Alert>
     );
   }
 
@@ -92,11 +106,22 @@ function BaseDataGrid({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
+  const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
+    const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
+    setSelectedRows(selectedRowsData as Event[] | NotificationType[]);
+  };
+
+  const handleClickDeleteMultiple = () => {
+    delAllHook.mutate(selectedRows.map((row) => row.id));
+
+    setSelectedRows([]);
+  };
+
   const columns = getColumns(type, editHook, delHook, handleClickEdit);
 
   return (
     <>
-      <div style={{ height: '380px' }}>
+      <div style={{ height: selectedRows.length > 0 ? '400px' : '380px' }}>
         <EditDialog
           {...dialogProps}
           onClose={handleClose}
@@ -126,12 +151,20 @@ function BaseDataGrid({
           onPaginationModelChange={handlePageChange}
           onRowClick={onRowClick}
           pageSizeOptions={[5]}
+          onRowSelectionModelChange={handleRowSelectionModelChange}
           checkboxSelection
+          disableRowSelectionOnClick
           sx={{
             // remove the focus outline
             '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
               outline: 'none !important',
             },
+          }}
+          slots={{
+            toolbar:
+              selectedRows.length > 0
+                ? () => CustomToolbar(handleClickDeleteMultiple)
+                : null,
           }}
         />
       </div>

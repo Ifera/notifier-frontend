@@ -1,4 +1,5 @@
 import useDelete from './hooks/useDelete';
+import useDeleteAll from './hooks/useDeleteAll';
 import useEdit from './hooks/useEdit';
 import useGetAll from './hooks/useGetAll';
 
@@ -81,6 +82,7 @@ export interface ActionMap {
 
 export type UseEditHookResult = ReturnType<typeof useEdit>;
 export type UseDeleteHookResult = ReturnType<typeof useDelete>;
+export type UseDeleteAllHookResult = ReturnType<typeof useDeleteAll>;
 export type UseGetAllHookResult = ReturnType<typeof useGetAll>;
 
 // ----------------------------------------------

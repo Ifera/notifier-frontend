@@ -38,6 +38,12 @@ class APIClient<T> {
       .delete(this.endpoint + '/' + id)
       .then((res) => res.data);
   };
+
+  deleteAll = (ids: ID[]) => {
+    return axiosInstance
+      .delete(this.endpoint, { data: { ids } })
+      .then((res) => res.data);
+  };
 }
 
 export default APIClient;
