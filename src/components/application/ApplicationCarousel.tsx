@@ -8,17 +8,17 @@ import ApplicationCardSkeleton from './card/ApplicationCardSkeleton';
 interface ApplicationCarouselProps {
   data: FetchResponse<Application>;
   cardsPerPage: number;
+  isLoading?: boolean;
   onCardClick: (cardId: string | number) => void;
   onPageChange?: (newPage: number) => void;
-  isLoading?: boolean;
 }
 
-export default function ApplicationCarousel({
+function ApplicationCarousel({
   data,
   cardsPerPage,
+  isLoading,
   onCardClick,
   onPageChange,
-  isLoading,
 }: ApplicationCarouselProps) {
   // TODO: Make this Dynamic Maybe
   const skeletons = [1, 2, 3];
@@ -27,7 +27,6 @@ export default function ApplicationCarousel({
     <Container sx={{ py: 8 }}>
       <Grid container spacing={4} justifyContent='center' alignItems='center'>
         {isLoading ? (
-          // Use parentheses for the entire expression
           skeletons.map((_, index) => (
             <ApplicationCardContainer
               key={index}
@@ -38,23 +37,18 @@ export default function ApplicationCarousel({
             </ApplicationCardContainer>
           ))
         ) : (
-          // Use parentheses for the entire expression
           <>
-            {data.results.map((card, index) => (
+            {data.results.map((app, index) => (
               <ApplicationCardContainer
-                key={card.id}
-                cardId={card.id}
+                key={app.id}
+                cardId={app.id}
                 index={index}
                 cardsPerPage={cardsPerPage}
               >
-                <ApplicationCard
-                  cardId={card.id}
-                  title={card.name}
-                  description={card.description}
-                  onCardClick={onCardClick}
-                />
+                <ApplicationCard application={app} onCardClick={onCardClick} />
               </ApplicationCardContainer>
             ))}
+
             <Grid
               container
               justifyContent='center'
@@ -65,7 +59,6 @@ export default function ApplicationCarousel({
                 count={Math.ceil(data.total_count / cardsPerPage)}
                 page={data.current_page}
                 onChange={(event, newPage) => {
-                  console.log(newPage);
                   onPageChange && onPageChange(newPage);
                 }}
                 size='medium'
@@ -78,3 +71,5 @@ export default function ApplicationCarousel({
     </Container>
   );
 }
+
+export default ApplicationCarousel;

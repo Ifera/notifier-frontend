@@ -2,28 +2,22 @@ import { Button, CardActionArea } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { Application } from '../../../interfaces';
 
 interface ApplicationCardProps {
-  cardId: string | number;
-  title: string;
-  description: string;
+  application: Application;
   onCardClick: (cardId: string | number) => void;
 }
 
-function ApplicationCard({
-  cardId,
-  title,
-  description,
-  onCardClick,
-}: ApplicationCardProps) {
+function ApplicationCard({ application, onCardClick }: ApplicationCardProps) {
   return (
     <>
-      <CardActionArea onClick={() => onCardClick(cardId)}>
+      <CardActionArea onClick={() => onCardClick(application.id)}>
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant='h5' component='h2'>
-            {title}
+            {application.name}
           </Typography>
-          <Typography>{description}</Typography>
+          <Typography>{application.description}</Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>

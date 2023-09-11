@@ -1,4 +1,4 @@
-import { Card, Grid, Slide } from "@mui/material";
+import { Card, Grid, Slide } from '@mui/material';
 
 interface ApplicationCardContainerProps {
   cardId?: string | number;
@@ -16,7 +16,7 @@ const ApplicationCardContainer = ({
   return (
     <Slide
       key={index}
-      direction="right"
+      direction='right'
       in={index < cardsPerPage}
       mountOnEnter
       unmountOnExit
@@ -30,9 +30,9 @@ const ApplicationCardContainer = ({
       >
         <Card
           sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
             minWidth: 275,
           }}
         >
