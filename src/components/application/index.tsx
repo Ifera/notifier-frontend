@@ -1,5 +1,6 @@
 import { Alert, Box } from '@mui/material';
 import { useState } from 'react';
+import EditDialog, { EditDialogProps } from '../../common/edit/EditDialog';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
 import useGetAll from '../../hooks/useGetAll';
@@ -20,6 +21,12 @@ interface ApplicationProps {
 
 function Application({ onEventIdChange }: ApplicationProps) {
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
+    open: false,
+    type: 'App',
+    data: null,
+  });
 
   const query: ApplicationQuery = {
     pageNumber: currentPage,
@@ -54,14 +61,31 @@ function Application({ onEventIdChange }: ApplicationProps) {
     onEventIdChange(cardId);
   };
 
+  const handleEditDialogClose = () => {
+    setDialogProps({ ...dialogProps, open: false, data: null });
+  };
+
+  const handleClickEditBtn = (data: IApplication) => {
+    setDialogProps({ ...dialogProps, open: true, data });
+  };
+
   return (
     <Box>
+      <EditDialog
+        {...dialogProps}
+        onClose={handleEditDialogClose}
+        editHook={editHook}
+      />
+
       <ApplicationCarousel
         data={data as FetchResponse<IApplication>}
         cardsPerPage={cardsPerPage}
+        editHook={editHook}
+        delHook={delHook}
         isLoading={isLoading}
         onCardClick={handleCardClick}
         onPageChange={onPageChange}
+        onClickEditBtn={handleClickEditBtn}
       />
     </Box>
   );

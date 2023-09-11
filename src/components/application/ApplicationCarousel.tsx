@@ -1,6 +1,11 @@
 import { Container, Pagination } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Application, FetchResponse } from '../../interfaces';
+import {
+  Application,
+  FetchResponse,
+  UseDeleteHookResult,
+  UseEditHookResult,
+} from '../../interfaces';
 import ApplicationCard from './card/ApplicationCard';
 import ApplicationCardContainer from './card/ApplicationCardContainer';
 import ApplicationCardSkeleton from './card/ApplicationCardSkeleton';
@@ -8,17 +13,24 @@ import ApplicationCardSkeleton from './card/ApplicationCardSkeleton';
 interface ApplicationCarouselProps {
   data: FetchResponse<Application>;
   cardsPerPage: number;
+  editHook: UseEditHookResult;
+  delHook: UseDeleteHookResult;
   isLoading?: boolean;
   onCardClick: (cardId: string | number) => void;
   onPageChange?: (newPage: number) => void;
+  onClickEditBtn?: (data: Application) => void;
 }
 
 function ApplicationCarousel({
   data,
   cardsPerPage,
+  editHook,
+  delHook,
   isLoading,
+
   onCardClick,
   onPageChange,
+  onClickEditBtn,
 }: ApplicationCarouselProps) {
   // TODO: Make this Dynamic Maybe
   const skeletons = [1, 2, 3];
@@ -45,7 +57,13 @@ function ApplicationCarousel({
                 index={index}
                 cardsPerPage={cardsPerPage}
               >
-                <ApplicationCard application={app} onCardClick={onCardClick} />
+                <ApplicationCard
+                  application={app}
+                  editHook={editHook}
+                  delHook={delHook}
+                  onCardClick={onCardClick}
+                  onClickEditBtn={onClickEditBtn}
+                />
               </ApplicationCardContainer>
             ))}
 

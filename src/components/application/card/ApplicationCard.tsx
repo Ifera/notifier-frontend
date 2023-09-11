@@ -1,15 +1,29 @@
-import { Button, CardActionArea } from '@mui/material';
+import { Box, CardActionArea } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Application } from '../../../interfaces';
+import ActionButtons from '../../../common/buttons/ActionButtons';
+import {
+  Application,
+  UseDeleteHookResult,
+  UseEditHookResult,
+} from '../../../interfaces';
 
 interface ApplicationCardProps {
   application: Application;
+  editHook: UseEditHookResult;
+  delHook: UseDeleteHookResult;
   onCardClick: (cardId: string | number) => void;
+  onClickEditBtn?: (data: Application) => void;
 }
 
-function ApplicationCard({ application, onCardClick }: ApplicationCardProps) {
+function ApplicationCard({
+  application,
+  editHook,
+  delHook,
+  onCardClick,
+  onClickEditBtn,
+}: ApplicationCardProps) {
   return (
     <>
       <CardActionArea onClick={() => onCardClick(application.id)}>
@@ -21,9 +35,14 @@ function ApplicationCard({ application, onCardClick }: ApplicationCardProps) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size='small'>Edit</Button>
-        <Button size='small'>Delete</Button>
-        <Button size='small'>Deactivate</Button>
+        <Box ml={1}>
+          <ActionButtons
+            data={application}
+            editHook={editHook}
+            delHook={delHook}
+            onClickEdit={onClickEditBtn}
+          />
+        </Box>
       </CardActions>
     </>
   );
