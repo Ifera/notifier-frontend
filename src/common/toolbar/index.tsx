@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import useAdd from '../../hooks/useAdd';
+import { ApplicationQuery } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import SortPopover from './SortPopover';
@@ -21,23 +22,29 @@ const sortOptions = [
   },
   {
     label: 'Created Date',
-    value: 'createdDate',
+    value: 'created_at',
   },
   {
-    label: 'Description',
-    value: 'description',
+    label: 'Modified Date',
+    value: 'modified_at',
+  },
+  {
+    label: 'Active',
+    value: 'is_active',
   },
 ];
 
 interface ToolBarProps {
   title: string;
+  query: ApplicationQuery;
+  setQuery: React.Dispatch<React.SetStateAction<ApplicationQuery>>;
 }
 
-export default function ToolBar({ title }: ToolBarProps) {
+export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState(1);
   const [selectedSortOption, setSelectedSortOption] = useState<string | null>(
     null
   );
@@ -57,16 +64,27 @@ export default function ToolBar({ title }: ToolBarProps) {
 
   const handleSortChange = (value: string) => {
     if (selectedSortOption === value) {
+      delete query.sortBy;
+      setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(null);
     } else {
+      query.sortBy = value;
+      setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(value);
-      setSortDirection('asc');
     }
     setSortAnchorEl(null);
   };
 
-  const handleSortDirectionChange = (newDirection: string) => {
-    setSortDirection(newDirection);
+  const handleSortDirectionChange = (newDirection: number) => {
+    if (newDirection === sortDirection) {
+      delete query.sortOrder;
+      setQuery({ ...query, pageNumber: 1 });
+      setSortDirection(1);
+    } else {
+      query.sortOrder = newDirection;
+      setQuery({ ...query, pageNumber: 1 });
+      setSortDirection(newDirection);
+    }
   };
 
   const handleMobileMenuClose = () => {

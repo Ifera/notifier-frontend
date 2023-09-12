@@ -11,10 +11,10 @@ interface SortPopoverProps {
   anchorEl: HTMLElement | null;
   handleCloseSort: () => void;
   sortOptions: { label: string; value: string }[];
-  sortDirection: string;
+  sortDirection: number;
   selectedSortOption: string;
   handleSortChange: (value: string) => void;
-  handleSortDirectionChange: (newDirection: string) => void;
+  handleSortDirectionChange: (newDirection: number) => void;
 }
 
 function SortPopover({
@@ -28,8 +28,8 @@ function SortPopover({
   handleSortDirectionChange,
 }: SortPopoverProps) {
   const toggleButtons = [
-    { value: 'asc', label: 'ASC' },
-    { value: 'desc', label: 'DESC' },
+    { value: 1, label: 'ASC' },
+    { value: -1, label: 'DESC' },
   ];
 
   return (

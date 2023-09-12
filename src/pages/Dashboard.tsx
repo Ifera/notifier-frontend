@@ -5,12 +5,20 @@ import Event from '../components/event';
 import { useState } from 'react';
 import ToolBar from '../common/toolbar';
 import NotificationType from '../components/notification-types';
-import { ID, NullableID } from '../interfaces';
+import { ApplicationQuery, ID, NullableID } from '../interfaces';
+
+const cardsPerPage = 3;
 
 function Dashboard() {
+  const [currentPage, setCurrentPage] = useState(0);
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
+
+  const [query, setQuery] = useState<ApplicationQuery>({
+    pageNumber: currentPage,
+    pageSize: cardsPerPage,
+  });
 
   const oldAppId = selectedApp;
 
@@ -34,8 +42,13 @@ function Dashboard() {
   return (
     <>
       <Container>
-        <ToolBar title='Applications' />
-        <Application onAppSelect={handleAppSelect} />
+        <ToolBar title='Applications' query={query} setQuery={setQuery} />
+        <Application
+          onAppSelect={handleAppSelect}
+          query={query}
+          cardsPerPage={cardsPerPage}
+          setCurrentPage={setCurrentPage}
+        />
 
         {selectedApp && (
           <Event application={selectedApp} onEventSelect={handleEventSelect} />

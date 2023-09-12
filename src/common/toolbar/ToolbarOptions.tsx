@@ -7,7 +7,7 @@ interface ToolbarOptionsProps {
   setSortAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   sortOptions: { label: string; value: string }[];
   selectedSortOption: string | null;
-  sortDirection: string;
+  sortDirection: number;
   onClickAddBtn: () => void;
 }
 

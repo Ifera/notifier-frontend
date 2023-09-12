@@ -13,27 +13,25 @@ import {
 import applicationService from '../../services/applicationService';
 import ApplicationCarousel from './ApplicationCarousel';
 
-// TODO: MOVE TO CONFIG FILE
-const cardsPerPage = 3;
-
 interface ApplicationProps {
+  query: ApplicationQuery;
+  cardsPerPage: number;
+  setCurrentPage: (page: number) => void;
   onAppSelect: (id: ID) => void;
 }
 
-function Application({ onAppSelect }: ApplicationProps) {
-  const [currentPage, setCurrentPage] = useState(0);
-
+function Application({
+  query,
+  cardsPerPage,
+  onAppSelect,
+  setCurrentPage,
+}: ApplicationProps) {
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
     type: 'App',
     operation: 'Edit',
     data: null,
   });
-
-  const query: ApplicationQuery = {
-    pageNumber: currentPage,
-    pageSize: cardsPerPage,
-  };
 
   const { data, isLoading, error } = useGetAll(applicationService, query);
 
@@ -56,6 +54,7 @@ function Application({ onAppSelect }: ApplicationProps) {
   }
 
   const onPageChange = (newPage: number) => {
+    query.pageNumber = newPage;
     setCurrentPage(newPage);
   };
 

@@ -8,7 +8,7 @@ import { IconButton, Typography } from '@mui/material';
 interface SortProps {
   sortOptions: { label: string; value: string }[];
   selectedSortOption: string;
-  sortDirection: string;
+  sortDirection: number;
   setSortAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
@@ -23,7 +23,7 @@ function Sort({
     : 'Sort By';
 
   const directionIcon =
-    sortDirection === 'asc' ? (
+    sortDirection === 1 ? (
       <ArrowUpward sx={{ fontSize: '1rem' }} />
     ) : (
       <ArrowDownward sx={{ fontSize: '1rem' }} />
