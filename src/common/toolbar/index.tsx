@@ -8,6 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import useAdd from '../../hooks/useAdd';
+import { ApplicationQuery } from '../../interfaces';
+import applicationService from '../../services/applicationService';
+import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import SortPopover from './SortPopover';
 import ToolbarOptions from './ToolbarOptions';
 
@@ -26,22 +30,33 @@ const sortOptions = [
   },
 ];
 
-export default function ToolBar() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+interface ToolBarProps {
+  title: string;
+}
+
+export default function ToolBar({ title }: ToolBarProps) {
+  const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
   const [sortDirection, setSortDirection] = useState('asc');
   const [selectedSortOption, setSelectedSortOption] = useState<string | null>(
     null
   );
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
+    open: false,
+    type: 'App',
+    operation: 'Add',
+    data: null,
+  });
 
-  const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // TODO: FIX THIS
+  const query: ApplicationQuery = {};
+
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const addHook = useAdd(applicationService, query);
 
   const handleCloseSort = () => {
-    setAnchorEl(null);
+    setSortAnchorEl(null);
   };
 
   const handleSortChange = (value: string) => {
@@ -51,11 +66,7 @@ export default function ToolBar() {
       setSelectedSortOption(value);
       setSortDirection('asc');
     }
-    setAnchorEl(null);
-  };
-
-  const handleAddNew = () => {
-    console.log('Add new');
+    setSortAnchorEl(null);
   };
 
   const handleSortDirectionChange = (newDirection: string) => {
@@ -69,13 +80,22 @@ export default function ToolBar() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleEditDialogClose = () => {
+    setDialogProps({ ...dialogProps, open: false, data: null });
+  };
+
+  const handleClickAddBtn = () => {
+    setDialogProps({ ...dialogProps, open: true, data: null });
+  };
+
   const renderToolbarOptions = () => (
     <ToolbarOptions
+      setSortAnchorEl={setSortAnchorEl}
       sortOptions={sortOptions}
       selectedSortOption={selectedSortOption}
       sortDirection={sortDirection}
-      handleSortClick={handleSortClick}
-      handleAddNew={handleAddNew}
+      onClickAddBtn={handleClickAddBtn}
     />
   );
 
@@ -100,10 +120,15 @@ export default function ToolBar() {
     </Menu>
   );
 
-  const openSort = Boolean(anchorEl);
+  const openSort = Boolean(sortAnchorEl);
 
   return (
     <>
+      <EditDialog
+        {...dialogProps}
+        onClose={handleEditDialogClose}
+        addHook={addHook}
+      />
       <Toolbar
         sx={{
           mt: 2,
@@ -116,7 +141,7 @@ export default function ToolBar() {
         }}
       >
         <Typography variant='h6' component='div' sx={{ flex: 1 }}>
-          Applications
+          {title}
         </Typography>
         <IconButton
           onClick={handleMobileMenuOpen}
@@ -132,7 +157,7 @@ export default function ToolBar() {
 
       <SortPopover
         open={openSort}
-        anchorEl={anchorEl}
+        anchorEl={sortAnchorEl}
         handleCloseSort={handleCloseSort}
         sortOptions={sortOptions}
         sortDirection={sortDirection}

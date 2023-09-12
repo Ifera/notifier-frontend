@@ -34,7 +34,7 @@ function Dashboard() {
   return (
     <>
       <Container>
-        <ToolBar />
+        <ToolBar title='Applications' />
         <Application onAppSelect={handleAppSelect} />
 
         {selectedApp && (

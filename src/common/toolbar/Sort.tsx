@@ -9,14 +9,14 @@ interface SortProps {
   sortOptions: { label: string; value: string }[];
   selectedSortOption: string;
   sortDirection: string;
-  handleSortClick: (event: React.MouseEvent<HTMLElement>) => void;
+  setSortAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
 function Sort({
   sortOptions,
   selectedSortOption,
   sortDirection,
-  handleSortClick,
+  setSortAnchorEl,
 }: SortProps) {
   const selectedOptionLabel = selectedSortOption
     ? sortOptions.find((option) => option.value === selectedSortOption)?.label
@@ -28,6 +28,10 @@ function Sort({
     ) : (
       <ArrowDownward sx={{ fontSize: '1rem' }} />
     );
+
+  const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
+    setSortAnchorEl(event.currentTarget);
+  };
 
   return (
     <IconButton onClick={handleSortClick}>

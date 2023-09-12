@@ -26,6 +26,7 @@ function Application({ onAppSelect }: ApplicationProps) {
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
     type: 'App',
+    operation: 'Edit',
     data: null,
   });
 

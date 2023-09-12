@@ -3,14 +3,20 @@ import { Alert, Box, IconButton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Properties, UseEditHookResult } from '../../interfaces';
+import {
+  Properties,
+  UseAddHookResult,
+  UseEditHookResult,
+} from '../../interfaces';
 import { parseError } from '../../utils';
 import PreviewForm, { ValueProps } from '../PreviewForm';
 
 export interface EditDialogProps {
   open: boolean;
   type: 'App' | 'Event' | 'Notification';
+  operation: 'Edit' | 'Add';
   data: Properties | null;
+  addHook?: UseAddHookResult;
   editHook?: UseEditHookResult;
 
   // callback functions
@@ -21,30 +27,41 @@ export interface EditDialogProps {
 function EditDialog({
   open,
   type,
+  operation,
   data,
+  addHook,
   editHook,
   onClose,
   onSubmit,
 }: EditDialogProps) {
-  if (!data) return null;
+  if (!data && !addHook) return null;
 
   const defaultValues: ValueProps = {
-    name: data.name,
-    description: data.description,
+    name: data?.name || '',
+    description: data?.description || '',
   };
 
   const handleClose = () => {
+    if (addHook) addHook.reset();
     if (editHook) editHook.reset();
     if (onClose) onClose();
   };
 
   const handleSubmit = (values: ValueProps) => {
     // noop if values are the same as defaultValues or data is null
-    if (values === defaultValues || data === null) return;
+
+    if (
+      (editHook && values === defaultValues) ||
+      (editHook && data === null) ||
+      values === null
+    )
+      return;
+
+    if (addHook) addHook.mutate(values);
 
     if (editHook)
       editHook.mutate({
-        id: data.id,
+        id: data?.id,
         name: values.name,
         description: values.description,
       });
@@ -57,7 +74,9 @@ function EditDialog({
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle>
           <Box display='flex' alignItems='center'>
-            <Box flexGrow={1}>{type} Edit</Box>
+            <Box flexGrow={1}>
+              {type} {operation}
+            </Box>
             <Box>
               <IconButton onClick={handleClose} edge='end'>
                 <CloseIcon />
