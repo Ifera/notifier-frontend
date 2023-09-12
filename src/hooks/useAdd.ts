@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { FetchResponse, PProperties, Properties, Query } from '../interfaces';
+import { FetchResponse, PProperties, Properties } from '../interfaces';
 import APIClient from '../services/apiClient';
 
-const useAdd = (service: APIClient<Properties>, query: Query) => {
+const useAdd = (service: APIClient<Properties>) => {
   const queryClient = useQueryClient();
-  const queryKey = [...service.queryKey, query];
+  const queryKey = [...service.queryKey];
 
   return useMutation<Properties, Error, PProperties>({
     mutationFn: (obj: PProperties) => {

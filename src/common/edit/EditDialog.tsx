@@ -21,7 +21,7 @@ export interface EditDialogProps {
 
   // callback functions
   onClose?: () => void;
-  onSubmit?: (data: Properties, values: ValueProps) => void;
+  onSubmit?: (data: Properties | null, values: ValueProps) => void;
 }
 
 function EditDialog({
@@ -49,7 +49,6 @@ function EditDialog({
 
   const handleSubmit = (values: ValueProps) => {
     // noop if values are the same as defaultValues or data is null
-
     if (
       (editHook && values === defaultValues) ||
       (editHook && data === null) ||
@@ -69,6 +68,18 @@ function EditDialog({
     if (onSubmit) onSubmit(data, values);
   };
 
+  function renderSuccessMessage(type: string, operation: string) {
+    return (
+      <Alert severity='success'>
+        {type} {operation} successfully
+      </Alert>
+    );
+  }
+
+  function renderErrorMessage(error: any) {
+    return <Alert severity='error'>{parseError(error)}</Alert>;
+  }
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
@@ -85,14 +96,13 @@ function EditDialog({
           </Box>
         </DialogTitle>
         <DialogContent>
-          {editHook && editHook.isSuccess ? (
-            <Alert severity='success'>{type} edited successfully</Alert>
-          ) : null}
+          {addHook && addHook.isSuccess && renderSuccessMessage(type, 'added')}
+          {addHook && addHook.isError && renderErrorMessage(addHook.error)}
+          {editHook &&
+            editHook.isSuccess &&
+            renderSuccessMessage(type, 'edited')}
 
-          {editHook && editHook.isError ? (
-            <Alert severity='error'>{parseError(editHook.error)}</Alert>
-          ) : null}
-
+          {editHook && editHook.isError && renderErrorMessage(editHook.error)}
           <PreviewForm defaultValues={defaultValues} onSubmit={handleSubmit} />
         </DialogContent>
       </Dialog>

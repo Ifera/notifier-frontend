@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import useAdd from '../../hooks/useAdd';
-import { ApplicationQuery } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import SortPopover from './SortPopover';
@@ -49,11 +48,8 @@ export default function ToolBar({ title }: ToolBarProps) {
     data: null,
   });
 
-  // TODO: FIX THIS
-  const query: ApplicationQuery = {};
-
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const addHook = useAdd(applicationService, query);
+  const addHook = useAdd(applicationService);
 
   const handleCloseSort = () => {
     setSortAnchorEl(null);
