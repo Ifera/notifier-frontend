@@ -15,16 +15,16 @@ import ApplicationCarousel from './ApplicationCarousel';
 
 interface ApplicationProps {
   query: ApplicationQuery;
+  setQuery: React.Dispatch<React.SetStateAction<ApplicationQuery>>;
   cardsPerPage: number;
-  setCurrentPage: (page: number) => void;
   onAppSelect: (id: ID) => void;
 }
 
 function Application({
   query,
+  setQuery,
   cardsPerPage,
   onAppSelect,
-  setCurrentPage,
 }: ApplicationProps) {
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
@@ -54,8 +54,7 @@ function Application({
   }
 
   const onPageChange = (newPage: number) => {
-    query.pageNumber = newPage;
-    setCurrentPage(newPage);
+    setQuery({ ...query, pageNumber: newPage });
   };
 
   const handleCardClick = (cardId: ID) => {
@@ -69,6 +68,14 @@ function Application({
   const handleClickEditBtn = (data: IApplication) => {
     setDialogProps({ ...dialogProps, open: true, data });
   };
+
+  if (!data?.results.length) {
+    return (
+      <Box mt={2}>
+        <Alert severity='info'>There are no applications to display</Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box>

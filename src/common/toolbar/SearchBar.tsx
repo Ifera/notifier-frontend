@@ -38,7 +38,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function SearchBar() {
+interface SearchBarProps {
+  onSearchChange: (value: string) => void;
+}
+
+function SearchBar({ onSearchChange }: SearchBarProps) {
   return (
     <SearchWrapper>
       <SearchIconWrapper>
@@ -47,6 +51,7 @@ function SearchBar() {
       <StyledInputBase
         placeholder='Search…'
         inputProps={{ 'aria-label': 'search' }}
+        onChange={(event) => onSearchChange(event.target.value)}
       />
     </SearchWrapper>
   );

@@ -21,7 +21,11 @@ const Preview = () => {
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>
-        <PreviewForm defaultValues={initialValues} onSubmit={onSubmit} />
+        <PreviewForm
+          defaultValues={initialValues}
+          onSubmit={onSubmit}
+          setDefaultValues={setInitialValues}
+        />
       </Grid>
 
       <Grid item xs={12} md={6} px={4} py={2}>

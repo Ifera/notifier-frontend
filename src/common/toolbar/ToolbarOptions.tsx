@@ -9,6 +9,7 @@ interface ToolbarOptionsProps {
   selectedSortOption: string | null;
   sortDirection: number;
   onClickAddBtn: () => void;
+  onSearchChange: (value: string) => void;
 }
 
 const ToolbarOptions = ({
@@ -17,10 +18,11 @@ const ToolbarOptions = ({
   selectedSortOption,
   sortDirection,
   onClickAddBtn,
+  onSearchChange,
 }: ToolbarOptionsProps) => {
   return (
     <>
-      <SearchBar />
+      <SearchBar onSearchChange={onSearchChange} />
       <Sort
         sortOptions={sortOptions}
         selectedSortOption={selectedSortOption || ''}

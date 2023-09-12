@@ -10,13 +10,12 @@ import { ApplicationQuery, ID, NullableID } from '../interfaces';
 const cardsPerPage = 3;
 
 function Dashboard() {
-  const [currentPage, setCurrentPage] = useState(0);
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
 
   const [query, setQuery] = useState<ApplicationQuery>({
-    pageNumber: currentPage,
+    pageNumber: 0,
     pageSize: cardsPerPage,
   });
 
@@ -46,8 +45,8 @@ function Dashboard() {
         <Application
           onAppSelect={handleAppSelect}
           query={query}
+          setQuery={setQuery}
           cardsPerPage={cardsPerPage}
-          setCurrentPage={setCurrentPage}
         />
 
         {selectedApp && (

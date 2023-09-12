@@ -75,6 +75,16 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
     setSortAnchorEl(null);
   };
 
+  const handleSearchChange = (search: string) => {
+    if (search === '') {
+      delete query.like;
+      setQuery({ ...query, pageNumber: 1 });
+      return;
+    }
+    query.like = search;
+    setQuery({ ...query, pageNumber: 1 });
+  };
+
   const handleSortDirectionChange = (newDirection: number) => {
     if (newDirection === sortDirection) {
       delete query.sortOrder;
@@ -110,6 +120,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
       selectedSortOption={selectedSortOption}
       sortDirection={sortDirection}
       onClickAddBtn={handleClickAddBtn}
+      onSearchChange={handleSearchChange}
     />
   );
 
