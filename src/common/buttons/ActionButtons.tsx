@@ -1,5 +1,5 @@
 import { Switch } from '@mui/material';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import {
   Properties,
   UseDeleteHookResult,
@@ -27,21 +27,42 @@ function ActionButtons({
   onClickDelete,
   onClickSwitch,
 }: ActionButtonsProps) {
+  const [switchStatus, setSwitchStatus] = useState(false);
+  const [delBtnStatus, setDelBtnStatus] = useState(false);
+
   const handleClickEdit = () => {
     if (onClickEdit) onClickEdit(data);
   };
 
   const handleClickDelete = () => {
-    delHook.mutate({ id: data.id });
+    setDelBtnStatus(true);
+
+    delHook.mutate(
+      { id: data.id },
+      {
+        onSettled: () => {
+          setDelBtnStatus(false);
+        },
+      }
+    );
 
     if (onClickDelete) onClickDelete(data);
   };
 
   const handleClickSwitch = (value: boolean) => {
-    editHook.mutate({
-      id: data.id,
-      is_active: value,
-    });
+    setSwitchStatus(true);
+
+    editHook.mutate(
+      {
+        id: data.id,
+        is_active: value,
+      },
+      {
+        onSettled: () => {
+          setSwitchStatus(false);
+        },
+      }
+    );
 
     if (onClickSwitch) onClickSwitch(data, value);
   };
@@ -73,8 +94,16 @@ function ActionButtons({
   return (
     <>
       <EditButton onClick={(e) => onClick(e, 'edit')} />
-      <DeleteButton onClick={(e) => onClick(e, 'delete')} />
-      <Switch onClick={(e) => onClick(e, 'switch')} checked={data.is_active} />
+      <DeleteButton
+        onClick={(e) => onClick(e, 'delete')}
+        disabled={delBtnStatus}
+      />
+      <Switch
+        key={data.id}
+        onClick={(e) => onClick(e, 'switch')}
+        checked={data.is_active}
+        disabled={switchStatus}
+      />
     </>
   );
 }
