@@ -7,8 +7,8 @@ import TextInput from './TextInput';
 export interface ValueProps {
   name: string;
   description: string;
-  subject?: string;
-  body?: string;
+  template_subject?: string;
+  template_body?: string;
 }
 
 export interface PreviewFormProps {
@@ -28,9 +28,11 @@ function PreviewForm({
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const newValues = { ...values, [name]: value };
+    const newValues = {
+      ...values,
+      [name]: value,
+    };
     setValues(newValues);
-
     if (onChange) onChange(newValues);
   };
 
@@ -44,8 +46,12 @@ function PreviewForm({
         const descriptionError = error.errors.find(
           (e) => e.path[0] === 'description'
         );
-        const subjectError = error.errors.find((e) => e.path[0] === 'subject');
-        const bodyError = error.errors.find((e) => e.path[0] === 'body');
+        const subjectError = error.errors.find(
+          (e) => e.path[0] === 'template_subject'
+        );
+        const bodyError = error.errors.find(
+          (e) => e.path[0] === 'template_body'
+        );
 
         const errorMessage =
           nameError?.message ||
@@ -83,25 +89,23 @@ function PreviewForm({
         onChange={handleChange}
       />
 
-      {defaultValues.subject !== undefined &&
-      defaultValues.body !== undefined ? (
-        <TextInput
-          label='Subject'
-          name='subject'
-          defaultValue={defaultValues.subject}
-          onChange={handleChange}
-        />
-      ) : null}
-
-      {defaultValues.subject !== undefined &&
-      defaultValues.body !== undefined ? (
-        <TextInput
-          multiline={true}
-          label='Body'
-          name='body'
-          defaultValue={defaultValues.body}
-          onChange={handleChange}
-        />
+      {defaultValues.template_subject !== undefined &&
+      defaultValues.template_body !== undefined ? (
+        <>
+          <TextInput
+            label='Subject'
+            name='template_subject'
+            defaultValue={defaultValues.template_subject}
+            onChange={handleChange}
+          />
+          <TextInput
+            multiline={true}
+            label='Body'
+            name='template_body'
+            defaultValue={defaultValues.template_body}
+            onChange={handleChange}
+          />
+        </>
       ) : null}
 
       <Box py={4}>
