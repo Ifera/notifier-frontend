@@ -1,5 +1,5 @@
 import { AppBar, Toolbar } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import Logo from '../assets/icon.svg';
 
 const Layout = () => {
@@ -7,7 +7,9 @@ const Layout = () => {
     <>
       <AppBar position='static'>
         <Toolbar color='primary'>
-          <img src={Logo}></img>
+          <Link to='/'>
+            <img src={Logo} alt='logo' />
+          </Link>
         </Toolbar>
       </AppBar>
 
