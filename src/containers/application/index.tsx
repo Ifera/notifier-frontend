@@ -1,28 +1,37 @@
+import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolBar from '../../common/toolbar';
 import Application from '../../components/application';
-import { APPS_CARDS_PER_PAGE } from '../../constants';
-import { ApplicationQuery, ID } from '../../interfaces';
+import { APPS_PAGE_SIZE } from '../../constants';
+import { ID, Query } from '../../interfaces';
+import applicationService from '../../services/applicationService';
 
 interface ApplicationContainerProps {
   onAppSelect: (id: ID) => void;
 }
 
 function ApplicationContainer({ onAppSelect }: ApplicationContainerProps) {
-  const [query, setQuery] = useState<ApplicationQuery>({
-    pageNumber: 0,
-    pageSize: APPS_CARDS_PER_PAGE,
+  const [query, setQuery] = useState<Query>({
+    pageNumber: 1,
+    pageSize: APPS_PAGE_SIZE,
   });
 
   return (
     <>
-      <ToolBar title='Applications' query={query} setQuery={setQuery} />
-      <Application
-        onAppSelect={onAppSelect}
+      <ToolBar
+        type='App'
         query={query}
         setQuery={setQuery}
-        cardsPerPage={APPS_CARDS_PER_PAGE}
+        service={applicationService}
       />
+      <Box mt={5}>
+        <Application
+          onAppSelect={onAppSelect}
+          query={query}
+          setQuery={setQuery}
+          cardsPerPage={APPS_PAGE_SIZE}
+        />
+      </Box>
     </>
   );
 }

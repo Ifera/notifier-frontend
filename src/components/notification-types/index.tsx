@@ -1,21 +1,21 @@
 import DataGrid from '../../common/data-grid';
-import { ID } from '../../interfaces';
+import { ID, NotificationTypeQuery } from '../../interfaces';
 import notificationService from '../../services/notificationService';
 
 interface NotificationTypeProps {
-  event: ID;
+  query: NotificationTypeQuery;
   onNotificationSelect: (id: ID) => void;
 }
 
 function NotificationType({
-  event,
+  query,
   onNotificationSelect,
 }: NotificationTypeProps) {
   return (
     <DataGrid
-      id={event}
       type='Notification'
       service={notificationService}
+      query={query}
       onSelect={onNotificationSelect}
     />
   );

@@ -1,9 +1,9 @@
 import { Box, Container } from '@mui/material';
-import Event from '../components/event';
 
 import { useState } from 'react';
-import NotificationType from '../components/notification-types';
 import ApplicationContainer from '../containers/application';
+import EventContainer from '../containers/event';
+import NotificationTypeContainer from '../containers/notification';
 import { ID, NullableID } from '../interfaces';
 
 function Dashboard() {
@@ -36,13 +36,16 @@ function Dashboard() {
         <ApplicationContainer onAppSelect={handleAppSelect} />
 
         {selectedApp && (
-          <Event application={selectedApp} onEventSelect={handleEventSelect} />
+          <EventContainer
+            selectedApp={selectedApp}
+            onEventSelect={handleEventSelect}
+          />
         )}
 
         {selectedEvent && (
-          <Box my={5}>
-            <NotificationType
-              event={selectedEvent}
+          <Box my={4}>
+            <NotificationTypeContainer
+              selectedEvent={selectedEvent}
               onNotificationSelect={handleNotifiSelect}
             />
           </Box>

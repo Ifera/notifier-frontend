@@ -37,7 +37,7 @@ function ApplicationCarousel({
   const skeletons = [1, 2, 3];
 
   return (
-    <Container sx={{ py: 8 }}>
+    <Container>
       <Grid container spacing={4} justifyContent='center' alignItems='center'>
         {isLoading ? (
           skeletons.map((_, index) => (
