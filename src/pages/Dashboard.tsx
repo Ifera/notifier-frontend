@@ -1,23 +1,15 @@
 import { Box, Container } from '@mui/material';
-import Application from '../components/application';
 import Event from '../components/event';
 
 import { useState } from 'react';
-import ToolBar from '../common/toolbar';
 import NotificationType from '../components/notification-types';
-import { ApplicationQuery, ID, NullableID } from '../interfaces';
-
-const cardsPerPage = 3;
+import ApplicationContainer from '../containers/application';
+import { ID, NullableID } from '../interfaces';
 
 function Dashboard() {
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
-
-  const [query, setQuery] = useState<ApplicationQuery>({
-    pageNumber: 0,
-    pageSize: cardsPerPage,
-  });
 
   const oldAppId = selectedApp;
 
@@ -41,13 +33,7 @@ function Dashboard() {
   return (
     <>
       <Container>
-        <ToolBar title='Applications' query={query} setQuery={setQuery} />
-        <Application
-          onAppSelect={handleAppSelect}
-          query={query}
-          setQuery={setQuery}
-          cardsPerPage={cardsPerPage}
-        />
+        <ApplicationContainer onAppSelect={handleAppSelect} />
 
         {selectedApp && (
           <Event application={selectedApp} onEventSelect={handleEventSelect} />
