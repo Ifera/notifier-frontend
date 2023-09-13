@@ -9,6 +9,7 @@ import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 
 interface ActionButtonsProps {
+  type: 'App' | 'Event' | 'Notification';
   data: Properties;
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
@@ -20,6 +21,7 @@ interface ActionButtonsProps {
 }
 
 function ActionButtons({
+  type,
   data,
   editHook,
   delHook,

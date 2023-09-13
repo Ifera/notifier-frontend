@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material';
+import { Alert, Box, Container } from '@mui/material';
 
 import { useState } from 'react';
 import ApplicationContainer from '../containers/application';
@@ -32,25 +32,39 @@ function Dashboard() {
 
   return (
     <>
-      <Container>
-        <ApplicationContainer onAppSelect={handleAppSelect} />
+      <Box mb={5}>
+        <Container>
+          <ApplicationContainer onAppSelect={handleAppSelect} />
 
-        {selectedApp && (
-          <EventContainer
-            selectedApp={selectedApp}
-            onEventSelect={handleEventSelect}
-          />
-        )}
+          {!selectedApp && (
+            <Alert severity='info' sx={{ mt: 4 }}>
+              Please select an application to display the events.
+            </Alert>
+          )}
 
-        {selectedEvent && (
-          <Box my={4}>
-            <NotificationTypeContainer
-              selectedEvent={selectedEvent}
-              onNotificationSelect={handleNotifiSelect}
+          {selectedApp && (
+            <EventContainer
+              selectedApp={selectedApp}
+              onEventSelect={handleEventSelect}
             />
-          </Box>
-        )}
-      </Container>
+          )}
+
+          {selectedApp && !selectedEvent && (
+            <Alert severity='info' sx={{ mt: 4 }}>
+              Please select an event to display the notification types.
+            </Alert>
+          )}
+
+          {selectedEvent && (
+            <Box my={4}>
+              <NotificationTypeContainer
+                selectedEvent={selectedEvent}
+                onNotificationSelect={handleNotifiSelect}
+              />
+            </Box>
+          )}
+        </Container>
+      </Box>
     </>
   );
 }
