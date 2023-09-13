@@ -21,11 +21,11 @@ const sortOptions = [
     value: 'name',
   },
   {
-    label: 'Created Date',
+    label: 'Date Created',
     value: 'created_at',
   },
   {
-    label: 'Modified Date',
+    label: 'Date Modified',
     value: 'modified_at',
   },
   {
@@ -44,6 +44,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
+
   const [sortDirection, setSortDirection] = useState(1);
   const [selectedSortOption, setSelectedSortOption] = useState<string | null>(
     null
@@ -72,6 +73,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
       setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(value);
     }
+
     setSortAnchorEl(null);
   };
 
@@ -81,6 +83,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
       setQuery({ ...query, pageNumber: 1 });
       return;
     }
+
     query.like = search;
     setQuery({ ...query, pageNumber: 1 });
   };
@@ -154,18 +157,19 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
         onClose={handleEditDialogClose}
         addHook={addHook}
       />
+
       <Toolbar
+        variant='dense'
         sx={{
-          mt: 2,
+          mt: 4,
           background: '#F5FAFF',
-          border: '1px solid #98CDFF',
-          borderRadius: '5px',
+          boxShadow: '0px 4px 4px rgba(152, 205, 255, 0.5)',
+          borderRadius: 2,
           color: 'black',
-          boxShadow: 'none',
           alignItems: 'center',
         }}
       >
-        <Typography variant='h6' component='div' sx={{ flex: 1 }}>
+        <Typography variant='h6' sx={{ flex: 1, fontSize: '18px' }}>
           {title}
         </Typography>
         <IconButton
@@ -174,10 +178,17 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
         >
           <MenuIcon />
         </IconButton>
-        <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'flex' },
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           {renderToolbarOptions()}
         </Box>
       </Toolbar>
+
       {renderMobileMenu}
 
       <SortPopover

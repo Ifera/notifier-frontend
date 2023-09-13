@@ -20,7 +20,7 @@ function Sort({
 }: SortProps) {
   const selectedOptionLabel = selectedSortOption
     ? sortOptions.find((option) => option.value === selectedSortOption)?.label
-    : 'Sort By';
+    : 'Name';
 
   const directionIcon =
     sortDirection === 1 ? (
@@ -34,9 +34,9 @@ function Sort({
   };
 
   return (
-    <IconButton onClick={handleSortClick}>
+    <IconButton onClick={handleSortClick} sx={{ borderRadius: 2 }}>
       <SortIcon />
-      <Typography p={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
+      <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
         {selectedOptionLabel} {directionIcon}
       </Typography>
     </IconButton>
