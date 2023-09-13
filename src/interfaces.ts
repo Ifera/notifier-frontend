@@ -55,6 +55,9 @@ export interface PEvent extends Partial<Event> {}
 
 export interface NotificationType extends BaseProperties {
   event: ID;
+  template_subject: string;
+  template_body: string;
+  tags: string[];
 }
 
 export interface PNotificationType extends Partial<NotificationType> {}

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Alert, Box, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
 import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
 
@@ -9,13 +9,20 @@ const Preview = () => {
     subject: '',
     body: '',
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = (values: ValueProps) => {
     setInitialValues(values);
   };
 
+  // onSuccess, set the errorMessage to null and set the successMessage to the
+
   const onChange = (values: ValueProps) => {
     setInitialValues(values);
+  };
+
+  const onError = (errorMessage: string) => {
+    setErrorMessage(errorMessage);
   };
 
   return (
@@ -24,10 +31,13 @@ const Preview = () => {
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>
+        {/* Add a success message here */}
+        {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
         <PreviewForm
           defaultValues={initialValues}
           onSubmit={onSubmit}
           onChange={onChange}
+          onError={onError}
         />
       </Grid>
 
