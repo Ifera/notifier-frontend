@@ -57,6 +57,7 @@ function BaseDataGrid({
     open: false,
     type,
     data: null,
+    operation: 'Edit',
   });
 
   const [paginationModel, setPaginationModel] = useState({
