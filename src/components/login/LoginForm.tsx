@@ -1,8 +1,8 @@
-import { SyntheticEvent } from "react";
-import { Button, Grid } from "@mui/material";
-import TextInput from "../../common/TextInput";
-import EmailIcon from "@mui/icons-material/Email";
-import LockIcon from "@mui/icons-material/Lock";
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+import { Alert, Button, Grid } from '@mui/material';
+import { SyntheticEvent } from 'react';
+import TextInput from '../../common/TextInput';
 
 export type User = {
   email: string;
@@ -28,42 +28,52 @@ const LoginForm = ({
     onInputChange(name, value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
     onSubmit();
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
-      <TextInput
-        label="Email"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        startIcon={<EmailIcon />}
-        error={formErrors.email !== ""}
-        helperText={formErrors.email}
-      />
-      <TextInput
-        label="Password"
-        name="password"
-        value={formData.password}
-        onChange={handleInputChange}
-        type="password"
-        startIcon={<LockIcon />}
-        error={formErrors.password !== ""}
-        helperText={formErrors.password}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        type="button"
-        fullWidth
-        sx={{ mt: 4 }}
-        onClick={handleSubmit}
+    <form onSubmit={handleSubmit}>
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        sx={{ mb: 2 }}
       >
-        Login
-      </Button>
-    </Grid>
+        {(formErrors.email || formErrors.password) && (
+          <Alert severity='error' sx={{ my: 2 }}>
+            {formErrors.email || formErrors.password}
+          </Alert>
+        )}
+
+        <TextInput
+          label='Email'
+          name='email'
+          value={formData.email}
+          onChange={handleInputChange}
+          startIcon={<EmailIcon />}
+        />
+        <TextInput
+          label='Password'
+          name='password'
+          value={formData.password}
+          onChange={handleInputChange}
+          type='password'
+          startIcon={<LockIcon />}
+        />
+        <Button
+          variant='contained'
+          color='primary'
+          type='submit'
+          fullWidth
+          sx={{ mt: 4, mx: 3 }}
+          onClick={handleSubmit}
+        >
+          Login
+        </Button>
+      </Grid>
+    </form>
   );
 };
 
