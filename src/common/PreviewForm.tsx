@@ -11,24 +11,16 @@ export interface ValueProps {
 
 export interface PreviewFormProps {
   defaultValues: ValueProps;
-  setDefaultValues?: (values: ValueProps) => void;
   onSubmit: (values: ValueProps) => void;
   onChange?: (values: ValueProps) => void;
 }
 
-function PreviewForm({
-  defaultValues,
-  setDefaultValues,
-  onSubmit,
-  onChange,
-}: PreviewFormProps) {
+function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const newValues = { ...values, [name]: value };
-
-    setDefaultValues && setDefaultValues(newValues);
     setValues(newValues);
 
     if (onChange) onChange(newValues);

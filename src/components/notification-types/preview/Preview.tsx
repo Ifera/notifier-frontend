@@ -11,7 +11,10 @@ const Preview = () => {
   });
 
   const onSubmit = (values: ValueProps) => {
-    console.log(values);
+    setInitialValues(values);
+  };
+
+  const onChange = (values: ValueProps) => {
     setInitialValues(values);
   };
 
@@ -24,7 +27,7 @@ const Preview = () => {
         <PreviewForm
           defaultValues={initialValues}
           onSubmit={onSubmit}
-          setDefaultValues={setInitialValues}
+          onChange={onChange}
         />
       </Grid>
 
