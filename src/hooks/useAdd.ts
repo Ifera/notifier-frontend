@@ -21,7 +21,7 @@ const useAdd = (service: APIClient<Properties>) => {
         return {
           ...res,
           results: [
-            ...results.map((event) => (event.id === edited.id ? saved : event)),
+            ...results.map((res) => (res.id === edited.id ? saved : res)),
           ],
         };
       });
