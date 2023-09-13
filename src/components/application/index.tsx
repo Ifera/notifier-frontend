@@ -70,10 +70,10 @@ function Application({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
-  if (!data?.results.length) {
+  if (!data?.results.length && query.like) {
     return (
-      <Alert severity='info' sx={{ marginTop: 2 }}>
-        There are no applications to display
+      <Alert severity='warning' sx={{ marginTop: 2 }}>
+        No such application exists
       </Alert>
     );
   }
