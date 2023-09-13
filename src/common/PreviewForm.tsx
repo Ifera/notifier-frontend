@@ -1,4 +1,4 @@
-import { Alert, Box, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { ZodError } from 'zod';
 import { dataSchema } from '../validation/schema';
@@ -13,18 +13,18 @@ export interface ValueProps {
 
 export interface PreviewFormProps {
   defaultValues: ValueProps;
+  onError: (message: string) => void;
   onSubmit: (values: ValueProps) => void;
   onChange?: (values: ValueProps) => void;
 }
 
-function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
+function PreviewForm({
+  defaultValues,
+  onError,
+  onSubmit,
+  onChange,
+}: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
-  const [errors, setErrors] = useState<ValueProps>({
-    name: '',
-    description: '',
-    subject: '',
-    body: '',
-  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -36,16 +36,7 @@ function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
 
   const validateForm = () => {
     try {
-      // const schema = dataSchema.partial();
-
       dataSchema.parse(values);
-
-      setErrors({
-        name: '',
-        description: '',
-        subject: '',
-        body: '',
-      });
       return true;
     } catch (error) {
       if (error instanceof ZodError) {
@@ -56,12 +47,15 @@ function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
         const subjectError = error.errors.find((e) => e.path[0] === 'subject');
         const bodyError = error.errors.find((e) => e.path[0] === 'body');
 
-        setErrors({
-          name: nameError ? nameError.message : '',
-          description: descriptionError ? descriptionError.message : '',
-          subject: subjectError ? subjectError.message : '',
-          body: bodyError ? bodyError.message : '',
-        });
+        const errorMessage =
+          nameError?.message ||
+          descriptionError?.message ||
+          subjectError?.message ||
+          bodyError?.message ||
+          "Couldn't validate form";
+
+        onError(errorMessage);
+
         return false;
       }
     }
@@ -75,12 +69,6 @@ function PreviewForm({ defaultValues, onSubmit, onChange }: PreviewFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {errors.name || errors.description || errors.subject || errors.body ? (
-        <Alert severity='error' sx={{ my: 2 }}>
-          {errors.name || errors.description || errors.subject || errors.body}
-        </Alert>
-      ) : null}
-
       <TextInput
         label='Name'
         name='name'
