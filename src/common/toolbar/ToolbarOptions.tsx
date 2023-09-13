@@ -29,8 +29,8 @@ const ToolbarOptions = ({
         sortDirection={sortDirection}
         setSortAnchorEl={setSortAnchorEl}
       />
-      <IconButton onClick={onClickAddBtn}>
-        <AddCircleRoundedIcon sx={{ color: 'primary' }} />
+      <IconButton onClick={onClickAddBtn} color='primary' sx={{ ml: 1 }}>
+        <AddCircleRoundedIcon />
       </IconButton>
     </>
   );

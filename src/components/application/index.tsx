@@ -35,19 +35,20 @@ function Application({
 
   const { data, isLoading, error } = useGetAll(applicationService, query);
 
-  if (error)
-    return (
-      <Alert severity='error'>
-        An error occurred while loading the applications
-      </Alert>
-    );
-
   const editHook = useEdit(applicationService, query);
   const delHook = useDelete(applicationService);
 
+  if (error) {
+    return (
+      <Alert severity='error' sx={{ marginTop: 2 }}>
+        An error occurred while loading the applications
+      </Alert>
+    );
+  }
+
   if (delHook.error) {
     return (
-      <Alert severity='error'>
+      <Alert severity='error' sx={{ marginTop: 2 }}>
         An error occurred while deleting the application
       </Alert>
     );
@@ -69,11 +70,11 @@ function Application({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
-  if (!data?.results.length) {
+  if (!data?.results.length && query.like) {
     return (
-      <Box mt={2}>
-        <Alert severity='info'>There are no applications to display</Alert>
-      </Box>
+      <Alert severity='warning' sx={{ marginTop: 2 }}>
+        No such application exists
+      </Alert>
     );
   }
 

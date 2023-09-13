@@ -3,6 +3,7 @@ import { Alert, Box, IconButton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useState } from 'react';
 import {
   Properties,
   UseAddHookResult,
@@ -34,6 +35,9 @@ function EditDialog({
   onClose,
   onSubmit,
 }: EditDialogProps) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   if (!data && !addHook) return null;
 
   const defaultValues: ValueProps = {
@@ -41,44 +45,68 @@ function EditDialog({
     description: data?.description || '',
   };
 
+  function parseSuccessMessage(type: string, operation: string) {
+    return `${type} ${operation} successfully`;
+  }
+
+  function onSuccess(message: string) {
+    setErrorMessage(null);
+    setSuccessMessage(message);
+  }
+
+  function onError(message: string) {
+    setSuccessMessage(null);
+    setErrorMessage(message);
+  }
+
   const handleClose = () => {
     if (addHook) addHook.reset();
     if (editHook) editHook.reset();
     if (onClose) onClose();
+
+    setSuccessMessage(null);
+    setErrorMessage(null);
   };
 
   const handleSubmit = (values: ValueProps) => {
-    // noop if values are the same as defaultValues or data is null
-    if (
-      (editHook && values === defaultValues) ||
-      (editHook && data === null) ||
-      values === null
-    )
+    if (editHook && values === defaultValues) {
+      setErrorMessage('No changes made');
       return;
+    }
 
-    if (addHook) addHook.mutate(values);
+    if (editHook && data === null) return;
 
-    if (editHook)
-      editHook.mutate({
-        id: data?.id,
-        name: values.name,
-        description: values.description,
+    if (addHook) {
+      addHook.mutate(values, {
+        onSuccess: () => {
+          onSuccess(parseSuccessMessage(type, 'added'));
+        },
+        onError: (error) => {
+          onError(parseError(error));
+        },
       });
+    }
+
+    if (editHook) {
+      editHook.mutate(
+        {
+          id: data?.id,
+          name: values.name,
+          description: values.description,
+        },
+        {
+          onSuccess: () => {
+            onSuccess(parseSuccessMessage(type, 'edited'));
+          },
+          onError: (error) => {
+            onError(parseError(error));
+          },
+        }
+      );
+    }
 
     if (onSubmit) onSubmit(data, values);
   };
-
-  function renderSuccessMessage(type: string, operation: string) {
-    return (
-      <Alert severity='success'>
-        {type} {operation} successfully
-      </Alert>
-    );
-  }
-
-  function renderErrorMessage(error: any) {
-    return <Alert severity='error'>{parseError(error)}</Alert>;
-  }
 
   return (
     <>
@@ -86,7 +114,7 @@ function EditDialog({
         <DialogTitle>
           <Box display='flex' alignItems='center'>
             <Box flexGrow={1}>
-              {type} {operation}
+              {operation} {type}
             </Box>
             <Box>
               <IconButton onClick={handleClose} edge='end'>
@@ -96,13 +124,9 @@ function EditDialog({
           </Box>
         </DialogTitle>
         <DialogContent>
-          {addHook && addHook.isSuccess && renderSuccessMessage(type, 'added')}
-          {addHook && addHook.isError && renderErrorMessage(addHook.error)}
-          {editHook &&
-            editHook.isSuccess &&
-            renderSuccessMessage(type, 'edited')}
+          {successMessage && <Alert severity='success'>{successMessage}</Alert>}
+          {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
 
-          {editHook && editHook.isError && renderErrorMessage(editHook.error)}
           <PreviewForm defaultValues={defaultValues} onSubmit={handleSubmit} />
         </DialogContent>
       </Dialog>

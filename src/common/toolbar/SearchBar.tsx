@@ -5,9 +5,8 @@ import { styled } from '@mui/material/styles';
 const SearchWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  background: '#F5FAFF',
-  borderRadius: theme.shape.borderRadius,
-  border: '1px solid #98CDFF',
+  background: 'rgba(152, 205, 255, 0.25)',
+  borderRadius: 10,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     width: 'auto',
