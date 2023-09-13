@@ -127,7 +127,11 @@ function EditDialog({
           {successMessage && <Alert severity='success'>{successMessage}</Alert>}
           {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
 
-          <PreviewForm defaultValues={defaultValues} onSubmit={handleSubmit} />
+          <PreviewForm
+            defaultValues={defaultValues}
+            onSubmit={handleSubmit}
+            onError={onError}
+          />
         </DialogContent>
       </Dialog>
     </>
