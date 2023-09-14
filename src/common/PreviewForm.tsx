@@ -24,7 +24,11 @@ interface PreviewFormProps {
   tags?: string[];
 
   onError: (message: string) => void;
-  onSubmit: (values: ValueProps, onSuccess?: () => void) => void;
+  onSubmit: (
+    values: ValueProps,
+    onSuccess?: (cause: 'Add' | 'Edit') => void
+  ) => void;
+
   onChange?: (values: ValueProps) => void;
 }
 
@@ -34,6 +38,7 @@ function PreviewForm({
 
   onError,
   onSubmit,
+
   onChange,
 }: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
@@ -80,14 +85,14 @@ function PreviewForm({
 
     if (!validateForm()) return;
 
-    onSubmit(values, () => {
+    onSubmit(values, (cause) => {
+      if (cause === 'Edit') return;
+
       const data = Object.assign(defaultValues);
 
       for (const key in data) {
         data[key] = '';
       }
-
-      console.log(data);
 
       setValues(data);
     });
