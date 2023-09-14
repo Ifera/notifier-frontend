@@ -1,15 +1,35 @@
 import { Alert, Box, Container } from '@mui/material';
 
 import { useState } from 'react';
+import { useBetween } from 'use-between';
 import ApplicationContainer from '../containers/application';
 import EventContainer from '../containers/event';
 import NotificationTypeContainer from '../containers/notification';
 import { ID, NullableID } from '../interfaces';
 
-function Dashboard() {
+export const dashboardState = () => {
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
+
+  return {
+    selectedApp,
+    selectedEvent,
+    selectedNotif,
+    setSelectedApp,
+    setSelectedEvent,
+    setSelectedNotif,
+  };
+};
+
+function Dashboard() {
+  const {
+    selectedApp,
+    selectedEvent,
+    setSelectedApp,
+    setSelectedEvent,
+    setSelectedNotif,
+  } = useBetween(dashboardState);
 
   const oldAppId = selectedApp;
 

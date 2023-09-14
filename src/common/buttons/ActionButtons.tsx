@@ -1,10 +1,12 @@
 import { Switch } from '@mui/material';
 import { MouseEvent, useState } from 'react';
+import { useBetween } from 'use-between';
 import {
   Properties,
   UseDeleteHookResult,
   UseEditHookResult,
 } from '../../interfaces';
+import { dashboardState } from '../../pages/Dashboard';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 
@@ -25,12 +27,15 @@ function ActionButtons({
   data,
   editHook,
   delHook,
+
   onClickEdit,
   onClickDelete,
   onClickSwitch,
 }: ActionButtonsProps) {
   const [switchStatus, setSwitchStatus] = useState(false);
   const [delBtnStatus, setDelBtnStatus] = useState(false);
+
+  const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
 
   const handleClickEdit = () => {
     if (onClickEdit) onClickEdit(data);
@@ -42,6 +47,13 @@ function ActionButtons({
     delHook.mutate(
       { id: data.id },
       {
+        onSuccess: () => {
+          if (type === 'App') {
+            setSelectedApp(null);
+            setSelectedEvent(null);
+          }
+          if (type === 'Event') setSelectedEvent(null);
+        },
         onSettled: () => {
           setDelBtnStatus(false);
         },
