@@ -2,12 +2,14 @@
 import {
   Box,
   Button,
+  Grid,
   MenuItem,
   Select,
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import { dataSchema } from '../validation/schema';
 import TextInput from './TextInput';
@@ -22,6 +24,7 @@ export interface ValueProps {
 interface PreviewFormProps {
   defaultValues: ValueProps;
   tags?: string[];
+  backBtn?: string;
 
   onError: (message: string) => void;
   onSubmit: (
@@ -35,6 +38,7 @@ interface PreviewFormProps {
 function PreviewForm({
   defaultValues,
   tags,
+  backBtn,
 
   onError,
   onSubmit,
@@ -42,6 +46,8 @@ function PreviewForm({
   onChange,
 }: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
+
+  const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -161,9 +167,26 @@ function PreviewForm({
       ) : null}
 
       <Box py={4}>
-        <Button variant='contained' color='primary' type='submit'>
-          Submit
-        </Button>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Button variant='contained' color='primary' type='submit'>
+              Submit
+            </Button>
+          </Grid>
+
+          {backBtn ? (
+            <Grid item>
+              <Button
+                variant='contained'
+                color='warning'
+                type='button'
+                onClick={() => navigate(backBtn)}
+              >
+                Go Back
+              </Button>
+            </Grid>
+          ) : null}
+        </Grid>
       </Box>
     </form>
   );

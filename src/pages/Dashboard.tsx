@@ -1,6 +1,7 @@
 import { Alert, Box, Container } from '@mui/material';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useBetween } from 'use-between';
 import ApplicationContainer from '../containers/application';
 import EventContainer from '../containers/event';
@@ -33,6 +34,8 @@ function Dashboard() {
 
   const oldAppId = selectedApp;
 
+  const navigate = useNavigate();
+
   const handleAppSelect = (id: ID) => {
     if (oldAppId !== id) {
       setSelectedEvent(null);
@@ -48,6 +51,8 @@ function Dashboard() {
 
   const handleNotifiSelect = (id: ID) => {
     setSelectedNotif(id);
+
+    navigate(`/edit-notification/${id}`);
   };
 
   return (

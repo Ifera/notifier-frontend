@@ -131,6 +131,7 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
           <PreviewForm
             defaultValues={initialValues}
             tags={tags}
+            backBtn='/'
             onError={onError}
             onSubmit={onSubmit}
             onChange={onChange}
