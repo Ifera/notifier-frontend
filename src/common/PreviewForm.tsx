@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { ZodError } from 'zod';
 import { dataSchema } from '../validation/schema';
 import TextInput from './TextInput';
@@ -21,7 +21,7 @@ export interface ValueProps {
 
 interface PreviewFormProps {
   defaultValues: ValueProps;
-  tags?: string[] | undefined;
+  tags?: string[];
 
   onError: (message: string) => void;
   onSubmit: (values: ValueProps) => void;
@@ -36,12 +36,17 @@ function PreviewForm({
   onSubmit,
   onChange,
 }: PreviewFormProps) {
+  const [values, setValues] = useState(defaultValues);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const newValues = {
-      ...defaultValues,
+      ...values,
       [name]: value,
     };
+
+    setValues(newValues);
+
     if (onChange) onChange(newValues);
   };
 
@@ -50,12 +55,15 @@ function PreviewForm({
       ...defaultValues,
       template_body: `${defaultValues.template_body}{${event.target.value}}`,
     };
+
+    setValues(newValues);
+
     if (onChange) onChange(newValues);
   };
 
   const validateForm = () => {
     try {
-      dataSchema.parse(defaultValues);
+      dataSchema.parse(values);
       return true;
     } catch (error) {
       if (error instanceof ZodError) {
@@ -70,7 +78,7 @@ function PreviewForm({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validateForm()) return;
-    onSubmit(defaultValues);
+    onSubmit(values);
   };
 
   return (

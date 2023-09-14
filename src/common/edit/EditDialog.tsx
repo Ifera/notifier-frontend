@@ -3,6 +3,7 @@ import { Alert, Box, IconButton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import _ from 'lodash';
 import { useState } from 'react';
 import {
   ID,
@@ -74,7 +75,8 @@ function EditDialog({
   };
 
   const handleSubmit = (values: ValueProps) => {
-    if (editHook && values === defaultValues) {
+    if (_.isEqual(values, defaultValues)) {
+      setSuccessMessage(null);
       setErrorMessage('No changes made');
       return;
     }
@@ -121,6 +123,11 @@ function EditDialog({
         {
           onSuccess: () => {
             onSuccess(parseSuccessMessage(type, 'edited'));
+
+            if (data) {
+              data.name = values.name;
+              data.description = values.description;
+            }
           },
           onError: (error) => {
             onError(parseError(error));
