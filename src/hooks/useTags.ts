@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import APIClient from '../services/apiClient';
+import tagService from '../services/tagService';
 
 const useTags = () => {
   return useQuery(
     ['tags'],
     () => {
-      return new APIClient('tags').getTags();
+      return tagService.getTags();
     },
     {
       staleTime: ms('5s'),

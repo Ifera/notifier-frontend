@@ -2,6 +2,9 @@ import { Card, Container, Grid } from '@mui/material';
 import { useState } from 'react';
 import { ZodError } from 'zod';
 import Icon from '../../assets/gosaas-icon-red.webp';
+import useAuth from '../../hooks/useAuth';
+import authService from '../../services/authService';
+import { parseError } from '../../utils';
 import { userSchema } from '../../validation/schema';
 import LoginForm, { User } from './LoginForm';
 
@@ -10,14 +13,12 @@ function Login() {
     email: '',
     password: '',
   });
-  const [formErrors, setFormErrors] = useState<User>({
-    email: '',
-    password: '',
-  });
+  const [formErrors, setFormErrors] = useState('');
+  const authHook = useAuth(authService);
 
   const onInputChange = (name: string, value: string) => {
     setFormData({ ...formData, [name]: value });
-    setFormErrors({ ...formErrors, [name]: '' });
+    setFormErrors('');
   };
 
   const validateForm = () => {
@@ -30,10 +31,9 @@ function Login() {
         const passwordError = error.errors.find(
           (e) => e.path[0] === 'password'
         );
-        setFormErrors({
-          email: emailError?.message || '',
-          password: passwordError?.message || '',
-        });
+        setFormErrors(
+          `${emailError?.message || ''} ${passwordError?.message || ''}`
+        );
         return false;
       }
     }
@@ -42,6 +42,19 @@ function Login() {
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Submitted user data:', formData);
+
+      let token;
+      authHook.mutate(formData, {
+        onSuccess: (data) => {
+          console.log('data', data);
+          token = data.token;
+          localStorage.setItem('token', token);
+          setFormErrors('');
+        },
+        onError: (error) => {
+          setFormErrors(parseError(error));
+        },
+      });
     }
   };
 

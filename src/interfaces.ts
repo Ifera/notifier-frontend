@@ -67,6 +67,13 @@ export type PProperties = PApplication | PEvent | PNotificationType;
 
 // ----------------------------------------------
 
+export interface User {
+  email: string;
+  password: string;
+}
+
+// ----------------------------------------------
+
 export interface FetchResponse<T> {
   current_page: number;
   last_page: number;

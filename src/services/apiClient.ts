@@ -5,8 +5,9 @@ const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api',
   params: {},
 });
-
-class APIClient<T> {
+// S: Type of the data SENT to the API
+// R: Type of the data RECEIVED from the API
+class APIClient<S, R> {
   endpoint: string;
   queryKey: string[];
 
@@ -17,23 +18,23 @@ class APIClient<T> {
 
   getAll = (config: AxiosRequestConfig) => {
     return axiosInstance
-      .get<FetchResponse<T>>(this.endpoint, config)
+      .get<FetchResponse<R>>(this.endpoint, config)
       .then((res) => res.data);
   };
 
   get = (id: ID) => {
     return axiosInstance
-      .get<T>(this.endpoint + '/' + id)
+      .get<R>(this.endpoint + '/' + id)
       .then((res) => res.data);
   };
 
-  post = (data: Partial<T>) => {
-    return axiosInstance.post<T>(this.endpoint, data).then((res) => res.data);
+  post = (data: Partial<S>) => {
+    return axiosInstance.post<R>(this.endpoint, data).then((res) => res.data);
   };
 
-  patch = (id: ID, data: Partial<T>) => {
+  patch = (id: ID, data: Partial<S>) => {
     return axiosInstance
-      .patch<T>(this.endpoint + '/' + id, data)
+      .patch<R>(this.endpoint + '/' + id, data)
       .then((res) => res.data);
   };
 
