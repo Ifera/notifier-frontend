@@ -48,6 +48,10 @@ class APIClient<T> {
       .delete(this.endpoint, { data: { ids } })
       .then((res) => res.data);
   };
+
+  getTags = () => {
+    return axiosInstance.get<string[]>(this.endpoint).then((res) => res.data);
+  };
 }
 
 export default APIClient;

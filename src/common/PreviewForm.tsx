@@ -1,5 +1,13 @@
-import { Box, Button } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+// PreviewForm.tsx
+import {
+  Box,
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
+import React, { ChangeEvent } from 'react';
 import { ZodError } from 'zod';
 import { dataSchema } from '../validation/schema';
 import TextInput from './TextInput';
@@ -11,8 +19,10 @@ export interface ValueProps {
   template_body?: string;
 }
 
-export interface PreviewFormProps {
+interface PreviewFormProps {
   defaultValues: ValueProps;
+  tags?: string[] | undefined;
+
   onError: (message: string) => void;
   onSubmit: (values: ValueProps) => void;
   onChange?: (values: ValueProps) => void;
@@ -20,48 +30,38 @@ export interface PreviewFormProps {
 
 function PreviewForm({
   defaultValues,
+  tags,
+
   onError,
   onSubmit,
   onChange,
 }: PreviewFormProps) {
-  const [values, setValues] = useState(defaultValues);
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const newValues = {
-      ...values,
+      ...defaultValues,
       [name]: value,
     };
-    setValues(newValues);
+    if (onChange) onChange(newValues);
+  };
+
+  const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
+    const newValues = {
+      ...defaultValues,
+      template_body: `${defaultValues.template_body}{${event.target.value}}`,
+    };
     if (onChange) onChange(newValues);
   };
 
   const validateForm = () => {
     try {
-      dataSchema.parse(values);
+      dataSchema.parse(defaultValues);
       return true;
     } catch (error) {
       if (error instanceof ZodError) {
-        const nameError = error.errors.find((e) => e.path[0] === 'name');
-        const descriptionError = error.errors.find(
-          (e) => e.path[0] === 'description'
-        );
-        const subjectError = error.errors.find(
-          (e) => e.path[0] === 'template_subject'
-        );
-        const bodyError = error.errors.find(
-          (e) => e.path[0] === 'template_body'
-        );
-
         const errorMessage =
-          nameError?.message ||
-          descriptionError?.message ||
-          subjectError?.message ||
-          bodyError?.message ||
-          "Couldn't validate form";
-
+          error.errors[0]?.message || "Couldn't validate the form";
         onError(errorMessage);
-
         return false;
       }
     }
@@ -70,7 +70,7 @@ function PreviewForm({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validateForm()) return;
-    onSubmit(values);
+    onSubmit(defaultValues);
   };
 
   return (
@@ -102,9 +102,36 @@ function PreviewForm({
             multiline={true}
             label='Body'
             name='template_body'
-            defaultValue={defaultValues.template_body}
+            value={defaultValues.template_body}
             onChange={handleChange}
           />
+          <Box py={1} />
+          <Typography
+            sx={{ fontSize: 15, textAlign: 'left', mb: 1 }}
+            variant='body2'
+          >
+            Add Tags
+          </Typography>
+
+          <Select
+            sx={{
+              backgroundColor: '#F5FAFF',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#98CDFF',
+              },
+              width: '100%',
+            }}
+            multiple
+            value={[]}
+            onChange={handleTagsChange}
+          >
+            {tags &&
+              tags.map((tag) => (
+                <MenuItem key={tag} value={tag}>
+                  {tag}
+                </MenuItem>
+              ))}
+          </Select>
         </>
       ) : null}
 

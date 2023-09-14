@@ -1,7 +1,9 @@
-import { Alert, Box, Grid, Typography } from '@mui/material';
+import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
+
 import { useState } from 'react';
 import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
 import useAdd from '../../../hooks/useAdd';
+import useTags from '../../../hooks/useTags';
 import { ID } from '../../../interfaces';
 import notificationService from '../../../services/notificationService';
 import { parseError } from '../../../utils';
@@ -21,6 +23,16 @@ const Preview = ({ event }: PreviewProps) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const addHook = useAdd(notificationService);
+
+  const { data: tags, isLoading: tagsLoading, error } = useTags();
+
+  if (error) {
+    return (
+      <Alert severity='error' sx={{ marginTop: 2 }}>
+        An error occurred while loading the tags
+      </Alert>
+    );
+  }
 
   const onSubmit = (values: ValueProps) => {
     addHook.mutate(
@@ -56,12 +68,26 @@ const Preview = ({ event }: PreviewProps) => {
         </Typography>
         {successMessage && <Alert severity='success'>{successMessage}</Alert>}
         {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
-        <PreviewForm
-          defaultValues={initialValues}
-          onSubmit={onSubmit}
-          onChange={onChange}
-          onError={onError}
-        />
+        {tagsLoading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '75%',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PreviewForm
+            defaultValues={initialValues}
+            tags={tags}
+            onError={onError}
+            onSubmit={onSubmit}
+            onChange={onChange}
+          />
+        )}
       </Grid>
 
       <Grid item xs={12} md={6} px={4} py={2}>
