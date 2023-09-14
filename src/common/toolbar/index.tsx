@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAdd from '../../hooks/useAdd';
 import {
   Application,
@@ -72,6 +73,7 @@ export default function ToolBar({
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const addHook = useAdd(service);
+  const navigate = useNavigate();
 
   const handleCloseSort = () => {
     setSortAnchorEl(null);
@@ -127,6 +129,12 @@ export default function ToolBar({
   };
 
   const handleClickAddBtn = () => {
+    if (type === 'Notification') {
+      navigate(`/add-notification/${parentId}`);
+
+      return;
+    }
+
     setDialogProps({ ...dialogProps, open: true, data: null });
   };
 
