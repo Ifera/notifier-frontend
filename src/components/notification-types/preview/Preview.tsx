@@ -1,27 +1,62 @@
-import { Alert, Box, Grid, Typography } from '@mui/material';
+import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
+
 import { useState } from 'react';
 import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
+import useAdd from '../../../hooks/useAdd';
+import useTags from '../../../hooks/useTags';
+import { ID } from '../../../interfaces';
+import notificationService from '../../../services/notificationService';
+import { parseError } from '../../../utils';
 
-const Preview = () => {
+interface PreviewProps {
+  event: ID;
+}
+
+const Preview = ({ event }: PreviewProps) => {
   const [initialValues, setInitialValues] = useState<ValueProps>({
     name: '',
     description: '',
-    subject: '',
-    body: '',
+    template_subject: '',
+    template_body: '',
   });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const onSubmit = (values: ValueProps) => {
-    setInitialValues(values);
-  };
+  const addHook = useAdd(notificationService);
 
-  // onSuccess, set the errorMessage to null and set the successMessage to the
+  const { data: tags, isLoading: tagsLoading, error } = useTags();
+
+  if (error) {
+    return (
+      <Alert severity='error' sx={{ marginTop: 2 }}>
+        An error occurred while loading the tags
+      </Alert>
+    );
+  }
+
+  const onSubmit = (values: ValueProps) => {
+    addHook.mutate(
+      { ...values, event },
+      {
+        onSuccess: () => {
+          setErrorMessage(null);
+          setSuccessMessage('Notification added successfully');
+        },
+        onError: (error) => {
+          console.log('error');
+          setErrorMessage(parseError(error));
+          setSuccessMessage(null);
+        },
+      }
+    );
+  };
 
   const onChange = (values: ValueProps) => {
     setInitialValues(values);
   };
 
   const onError = (errorMessage: string) => {
+    setSuccessMessage(null);
     setErrorMessage(errorMessage);
   };
 
@@ -31,14 +66,28 @@ const Preview = () => {
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>
-        {/* Add a success message here */}
+        {successMessage && <Alert severity='success'>{successMessage}</Alert>}
         {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
-        <PreviewForm
-          defaultValues={initialValues}
-          onSubmit={onSubmit}
-          onChange={onChange}
-          onError={onError}
-        />
+        {tagsLoading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '75%',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PreviewForm
+            defaultValues={initialValues}
+            tags={tags}
+            onError={onError}
+            onSubmit={onSubmit}
+            onChange={onChange}
+          />
+        )}
       </Grid>
 
       <Grid item xs={12} md={6} px={4} py={2}>
@@ -56,9 +105,9 @@ const Preview = () => {
           p={4}
         >
           <Typography variant='h6' sx={{ fontWeight: 500 }}>
-            {initialValues.subject}
+            {initialValues.template_subject}
           </Typography>
-          <Typography variant='body1'>{initialValues.body}</Typography>
+          <Typography variant='body1'>{initialValues.template_body}</Typography>
         </Box>
       </Grid>
     </Grid>

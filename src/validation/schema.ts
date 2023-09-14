@@ -10,9 +10,12 @@ export const dataSchema = z.object({
   description: z
     .string()
     .min(3, 'Description must be at least 3 characters long'),
-  subject: z
+  template_subject: z
     .string()
-    .min(3, 'Subject must be at least 3 characters long')
+    .min(5, 'Subject must be at least 5 characters long')
     .optional(),
-  body: z.string().min(3, 'Body must be at least 3 characters long').optional(),
+  template_body: z
+    .string()
+    .min(5, 'Body must be at least 5 characters long')
+    .optional(),
 });
