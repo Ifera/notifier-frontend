@@ -1,18 +1,18 @@
 import DataGrid from '../../common/data-grid';
-import { ID } from '../../interfaces';
+import { EventQuery, ID } from '../../interfaces';
 import eventService from '../../services/eventService';
 
 interface EventProps {
-  application: ID;
+  query: EventQuery;
   onEventSelect: (id: ID) => void;
 }
 
-function Event({ application, onEventSelect }: EventProps) {
+function Event({ query, onEventSelect }: EventProps) {
   return (
     <DataGrid
-      id={application}
       type='Event'
       service={eventService}
+      query={query}
       onSelect={onEventSelect}
     />
   );

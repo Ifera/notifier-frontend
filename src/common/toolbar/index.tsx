@@ -7,10 +7,16 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import useAdd from '../../hooks/useAdd';
-import { ApplicationQuery } from '../../interfaces';
-import applicationService from '../../services/applicationService';
+import {
+  Application,
+  Event,
+  ID,
+  NotificationType,
+  Query,
+} from '../../interfaces';
+import APIClient from '../../services/apiClient';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import SortPopover from './SortPopover';
 import ToolbarOptions from './ToolbarOptions';
@@ -35,12 +41,20 @@ const sortOptions = [
 ];
 
 interface ToolBarProps {
-  title: string;
-  query: ApplicationQuery;
-  setQuery: React.Dispatch<React.SetStateAction<ApplicationQuery>>;
+  type: 'App' | 'Event' | 'Notification';
+  query: Query;
+  service: APIClient<Application | Event | NotificationType>;
+  parentId?: ID;
+  setQuery: Dispatch<SetStateAction<Query>>;
 }
 
-export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
+export default function ToolBar({
+  type,
+  query,
+  service,
+  parentId,
+  setQuery,
+}: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -51,13 +65,13 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
   );
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
-    type: 'App',
+    type: type,
     operation: 'Add',
     data: null,
   });
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const addHook = useAdd(applicationService);
+  const addHook = useAdd(service);
 
   const handleCloseSort = () => {
     setSortAnchorEl(null);
@@ -156,6 +170,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
         {...dialogProps}
         onClose={handleEditDialogClose}
         addHook={addHook}
+        parentId={parentId}
       />
 
       <Toolbar
@@ -170,7 +185,7 @@ export default function ToolBar({ title, query, setQuery }: ToolBarProps) {
         }}
       >
         <Typography variant='h6' sx={{ flex: 1, fontSize: '18px' }}>
-          {title}
+          {type === 'App' ? 'Applications' : `${type}s`}
         </Typography>
         <IconButton
           onClick={handleMobileMenuOpen}

@@ -5,6 +5,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import {
+  ID,
+  PProperties,
   Properties,
   UseAddHookResult,
   UseEditHookResult,
@@ -17,8 +19,10 @@ export interface EditDialogProps {
   type: 'App' | 'Event' | 'Notification';
   operation: 'Edit' | 'Add';
   data: Properties | null;
+
   addHook?: UseAddHookResult;
   editHook?: UseEditHookResult;
+  parentId?: ID;
 
   // callback functions
   onClose?: () => void;
@@ -32,6 +36,7 @@ function EditDialog({
   data,
   addHook,
   editHook,
+  parentId,
   onClose,
   onSubmit,
 }: EditDialogProps) {
@@ -77,7 +82,26 @@ function EditDialog({
     if (editHook && data === null) return;
 
     if (addHook) {
-      addHook.mutate(values, {
+      let d: PProperties = {
+        name: values.name,
+        description: values.description,
+      };
+
+      if (parentId && type === 'Event') {
+        d = {
+          ...d,
+          application: parentId,
+        };
+      }
+
+      if (parentId && type === 'Notification') {
+        d = {
+          ...d,
+          event: parentId,
+        };
+      }
+
+      addHook.mutate(d, {
         onSuccess: () => {
           onSuccess(parseSuccessMessage(type, 'added'));
         },

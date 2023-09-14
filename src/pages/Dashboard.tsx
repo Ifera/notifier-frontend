@@ -1,23 +1,35 @@
-import { Box, Container } from '@mui/material';
-import Application from '../components/application';
-import Event from '../components/event';
+import { Alert, Box, Container } from '@mui/material';
 
 import { useState } from 'react';
-import ToolBar from '../common/toolbar';
-import NotificationType from '../components/notification-types';
-import { ApplicationQuery, ID, NullableID } from '../interfaces';
+import { useBetween } from 'use-between';
+import ApplicationContainer from '../containers/application';
+import EventContainer from '../containers/event';
+import NotificationTypeContainer from '../containers/notification';
+import { ID, NullableID } from '../interfaces';
 
-const cardsPerPage = 3;
-
-function Dashboard() {
+export const dashboardState = () => {
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
 
-  const [query, setQuery] = useState<ApplicationQuery>({
-    pageNumber: 0,
-    pageSize: cardsPerPage,
-  });
+  return {
+    selectedApp,
+    selectedEvent,
+    selectedNotif,
+    setSelectedApp,
+    setSelectedEvent,
+    setSelectedNotif,
+  };
+};
+
+function Dashboard() {
+  const {
+    selectedApp,
+    selectedEvent,
+    setSelectedApp,
+    setSelectedEvent,
+    setSelectedNotif,
+  } = useBetween(dashboardState);
 
   const oldAppId = selectedApp;
 
@@ -40,28 +52,39 @@ function Dashboard() {
 
   return (
     <>
-      <Container>
-        <ToolBar title='Applications' query={query} setQuery={setQuery} />
-        <Application
-          onAppSelect={handleAppSelect}
-          query={query}
-          setQuery={setQuery}
-          cardsPerPage={cardsPerPage}
-        />
+      <Box mb={5}>
+        <Container>
+          <ApplicationContainer onAppSelect={handleAppSelect} />
 
-        {selectedApp && (
-          <Event application={selectedApp} onEventSelect={handleEventSelect} />
-        )}
+          {!selectedApp && (
+            <Alert severity='info' sx={{ mt: 4 }}>
+              Please select an application to display the events.
+            </Alert>
+          )}
 
-        {selectedEvent && (
-          <Box my={5}>
-            <NotificationType
-              event={selectedEvent}
-              onNotificationSelect={handleNotifiSelect}
+          {selectedApp && (
+            <EventContainer
+              selectedApp={selectedApp}
+              onEventSelect={handleEventSelect}
             />
-          </Box>
-        )}
-      </Container>
+          )}
+
+          {selectedApp && !selectedEvent && (
+            <Alert severity='info' sx={{ mt: 4 }}>
+              Please select an event to display the notification types.
+            </Alert>
+          )}
+
+          {selectedEvent && (
+            <Box my={4}>
+              <NotificationTypeContainer
+                selectedEvent={selectedEvent}
+                onNotificationSelect={handleNotifiSelect}
+              />
+            </Box>
+          )}
+        </Container>
+      </Box>
     </>
   );
 }

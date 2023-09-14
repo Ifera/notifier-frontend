@@ -1,14 +1,17 @@
 import { Switch } from '@mui/material';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
+import { useBetween } from 'use-between';
 import {
   Properties,
   UseDeleteHookResult,
   UseEditHookResult,
 } from '../../interfaces';
+import { dashboardState } from '../../pages/Dashboard';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 
 interface ActionButtonsProps {
+  type: 'App' | 'Event' | 'Notification';
   data: Properties;
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
@@ -20,28 +23,60 @@ interface ActionButtonsProps {
 }
 
 function ActionButtons({
+  type,
   data,
   editHook,
   delHook,
+
   onClickEdit,
   onClickDelete,
   onClickSwitch,
 }: ActionButtonsProps) {
+  const [switchStatus, setSwitchStatus] = useState(false);
+  const [delBtnStatus, setDelBtnStatus] = useState(false);
+
+  const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
+
   const handleClickEdit = () => {
     if (onClickEdit) onClickEdit(data);
   };
 
   const handleClickDelete = () => {
-    delHook.mutate({ id: data.id });
+    setDelBtnStatus(true);
+
+    delHook.mutate(
+      { id: data.id },
+      {
+        onSuccess: () => {
+          if (type === 'App') {
+            setSelectedApp(null);
+            setSelectedEvent(null);
+          }
+          if (type === 'Event') setSelectedEvent(null);
+        },
+        onSettled: () => {
+          setDelBtnStatus(false);
+        },
+      }
+    );
 
     if (onClickDelete) onClickDelete(data);
   };
 
   const handleClickSwitch = (value: boolean) => {
-    editHook.mutate({
-      id: data.id,
-      is_active: value,
-    });
+    setSwitchStatus(true);
+
+    editHook.mutate(
+      {
+        id: data.id,
+        is_active: value,
+      },
+      {
+        onSettled: () => {
+          setSwitchStatus(false);
+        },
+      }
+    );
 
     if (onClickSwitch) onClickSwitch(data, value);
   };
@@ -73,8 +108,16 @@ function ActionButtons({
   return (
     <>
       <EditButton onClick={(e) => onClick(e, 'edit')} />
-      <DeleteButton onClick={(e) => onClick(e, 'delete')} />
-      <Switch onClick={(e) => onClick(e, 'switch')} checked={data.is_active} />
+      <DeleteButton
+        onClick={(e) => onClick(e, 'delete')}
+        disabled={delBtnStatus}
+      />
+      <Switch
+        key={data.id}
+        onClick={(e) => onClick(e, 'switch')}
+        checked={data.is_active}
+        disabled={switchStatus}
+      />
     </>
   );
 }

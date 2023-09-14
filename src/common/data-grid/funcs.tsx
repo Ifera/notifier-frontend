@@ -16,7 +16,7 @@ import {
 import ActionButtons from '../buttons/ActionButtons';
 
 export function getColumns(
-  type: string,
+  type: 'App' | 'Event' | 'Notification',
   editHook: UseEditHookResult,
   delHook: UseDeleteHookResult,
   onClickEdit: (data: Properties) => void
@@ -51,6 +51,7 @@ export function getColumns(
 
         return (
           <ActionButtons
+            type={type}
             data={row}
             editHook={editHook}
             delHook={delHook}

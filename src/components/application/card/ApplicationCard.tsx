@@ -38,6 +38,7 @@ function ApplicationCard({
       <CardActions>
         <Box ml={1}>
           <ActionButtons
+            type='App'
             data={application}
             editHook={editHook}
             delHook={delHook}
