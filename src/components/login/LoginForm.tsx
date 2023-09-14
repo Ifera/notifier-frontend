@@ -11,7 +11,7 @@ export type User = {
 
 interface LoginFormProps {
   formData: User;
-  formErrors: { email: string; password: string };
+  formErrors: string;
   onInputChange: (name: string, value: string) => void;
   onSubmit: () => void;
 }
@@ -41,9 +41,9 @@ const LoginForm = ({
         alignItems='center'
         sx={{ mb: 2 }}
       >
-        {(formErrors.email || formErrors.password) && (
+        {formErrors && (
           <Alert severity='error' sx={{ my: 2 }}>
-            {formErrors.email || formErrors.password}
+            {formErrors}
           </Alert>
         )}
 

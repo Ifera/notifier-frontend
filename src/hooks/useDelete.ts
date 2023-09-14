@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PProperties, Properties } from '../interfaces';
 import APIClient from '../services/apiClient';
 
-const useDelete = (service: APIClient<Properties>) => {
+const useDelete = (service: APIClient<PProperties, Properties>) => {
   const queryClient = useQueryClient();
   const queryKey = [...service.queryKey];
 

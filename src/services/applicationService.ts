@@ -1,4 +1,4 @@
-import { Application } from '../interfaces';
+import { Application, PApplication } from '../interfaces';
 import APIClient from './apiClient';
 
-export default new APIClient<Application>('apps');
+export default new APIClient<PApplication, Application>('apps');
