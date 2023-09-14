@@ -8,17 +8,19 @@ import { ID } from '../../../interfaces';
 import notificationService from '../../../services/notificationService';
 import { parseError } from '../../../utils';
 
-interface PreviewProps {
-  event: ID;
+interface NotificationFormProps {
+  id: ID;
+  operation: 'Add' | 'Edit';
 }
 
-const Preview = ({ event }: PreviewProps) => {
+const NotificationForm = ({ id, operation }: NotificationFormProps) => {
   const [initialValues, setInitialValues] = useState<ValueProps>({
     name: '',
     description: '',
     template_subject: '',
     template_body: '',
   });
+
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -34,22 +36,30 @@ const Preview = ({ event }: PreviewProps) => {
     );
   }
 
-  const onSubmit = (values: ValueProps) => {
+  function onSubmit(values: ValueProps, onSuccess?: () => void) {
     addHook.mutate(
-      { ...values, event },
+      { ...values, event: id },
       {
         onSuccess: () => {
           setErrorMessage(null);
           setSuccessMessage('Notification added successfully');
+
+          setInitialValues({
+            name: '',
+            description: '',
+            template_subject: '',
+            template_body: '',
+          });
+
+          if (onSuccess) onSuccess();
         },
         onError: (error) => {
-          console.log('error');
           setErrorMessage(parseError(error));
           setSuccessMessage(null);
         },
       }
     );
-  };
+  }
 
   const onChange = (values: ValueProps) => {
     setInitialValues(values);
@@ -114,4 +124,4 @@ const Preview = ({ event }: PreviewProps) => {
   );
 };
 
-export default Preview;
+export default NotificationForm;

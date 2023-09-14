@@ -24,7 +24,7 @@ interface PreviewFormProps {
   tags?: string[];
 
   onError: (message: string) => void;
-  onSubmit: (values: ValueProps) => void;
+  onSubmit: (values: ValueProps, onSuccess?: () => void) => void;
   onChange?: (values: ValueProps) => void;
 }
 
@@ -77,8 +77,20 @@ function PreviewForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!validateForm()) return;
-    onSubmit(values);
+
+    onSubmit(values, () => {
+      const data = Object.assign(defaultValues);
+
+      for (const key in data) {
+        data[key] = '';
+      }
+
+      console.log(data);
+
+      setValues(data);
+    });
   };
 
   return (
@@ -86,14 +98,14 @@ function PreviewForm({
       <TextInput
         label='Name'
         name='name'
-        defaultValue={defaultValues.name}
+        value={values.name}
         onChange={handleChange}
       />
 
       <TextInput
         label='Description'
         name='description'
-        defaultValue={defaultValues.description}
+        value={values.description}
         onChange={handleChange}
       />
 
@@ -103,14 +115,14 @@ function PreviewForm({
           <TextInput
             label='Subject'
             name='template_subject'
-            defaultValue={defaultValues.template_subject}
+            value={values.template_subject}
             onChange={handleChange}
           />
           <TextInput
             multiline={true}
             label='Body'
             name='template_body'
-            value={defaultValues.template_body}
+            value={values.template_body}
             onChange={handleChange}
           />
           <Box py={1} />
