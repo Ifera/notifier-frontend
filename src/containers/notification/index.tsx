@@ -8,11 +8,13 @@ import notificationService from '../../services/notificationService';
 
 interface NotificationTypeContainerProps {
   selectedEvent: ID;
-  onNotificationSelect: (id: ID) => void;
+  selectedEventName: string;
+  onNotificationSelect: (id: ID, name: string) => void;
 }
 
 function NotificationTypeContainer({
   selectedEvent,
+  selectedEventName,
   onNotificationSelect,
 }: NotificationTypeContainerProps) {
   const [query, setQuery] = useState<Query>({
@@ -33,6 +35,7 @@ function NotificationTypeContainer({
         setQuery={setQuery}
         service={notificationService}
         parentId={selectedEvent}
+        parentName={selectedEventName}
       />
       <Box mt={4}>
         <NotificationType

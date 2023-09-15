@@ -4,7 +4,7 @@ import notificationService from '../../services/notificationService';
 
 interface NotificationTypeProps {
   query: NotificationTypeQuery;
-  onNotificationSelect: (id: ID) => void;
+  onNotificationSelect: (id: ID, name: string) => void;
 }
 
 function NotificationType({

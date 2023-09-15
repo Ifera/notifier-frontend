@@ -39,6 +39,7 @@ interface ToolBarProps {
   query: Query;
   service: Service;
   parentId?: ID;
+  parentName?: string;
   totalCount?: number;
   setQuery: Dispatch<SetStateAction<Query>>;
 }
@@ -48,6 +49,7 @@ export default function ToolBar({
   query,
   service,
   parentId,
+  parentName,
   totalCount,
   setQuery,
 }: ToolBarProps) {
@@ -167,6 +169,14 @@ export default function ToolBar({
 
   const openSort = Boolean(sortAnchorEl);
 
+  let parentText = '';
+
+  if (type === 'Event') {
+    parentText = 'App: ' + parentName + ', ';
+  } else if (type === 'Notification') {
+    parentText = 'Event: ' + parentName + ', ';
+  }
+
   return (
     <>
       <EditDialog
@@ -193,7 +203,9 @@ export default function ToolBar({
           sx={{ flex: 1, fontSize: '18px' }}
         >
           {type === 'App' ? 'Applications ' : `${type}s `}
-          <span style={{ fontSize: '12px' }}>(Total: {totalCount || 0})</span>
+          <span style={{ fontSize: '12px' }}>
+            ({parentText}Total: {totalCount || 0})
+          </span>
         </Typography>
         <IconButton
           onClick={handleMobileMenuOpen}

@@ -1,17 +1,21 @@
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { useState } from 'react';
 import ToolBar from '../../common/toolbar';
 import Application from '../../components/application';
 import { APPS_PAGE_SIZE } from '../../constants';
 import useGetAll from '../../hooks/useGetAll';
-import { ID, Query } from '../../interfaces';
+import { ID, NullableID, Query } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 
 interface ApplicationContainerProps {
-  onAppSelect: (id: ID) => void;
+  selectedApp: NullableID;
+  onAppSelect: (id: ID, name: string) => void;
 }
 
-function ApplicationContainer({ onAppSelect }: ApplicationContainerProps) {
+function ApplicationContainer({
+  selectedApp,
+  onAppSelect,
+}: ApplicationContainerProps) {
   const [query, setQuery] = useState<Query>({
     pageNumber: 1,
     pageSize: APPS_PAGE_SIZE,
@@ -39,6 +43,12 @@ function ApplicationContainer({ onAppSelect }: ApplicationContainerProps) {
           cardsPerPage={APPS_PAGE_SIZE}
         />
       </Box>
+
+      {!selectedApp && data?.total_count !== 0 && (
+        <Alert severity='info' sx={{ mt: 4 }}>
+          Please select an application to display the events.
+        </Alert>
+      )}
     </>
   );
 }

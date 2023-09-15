@@ -4,7 +4,7 @@ import eventService from '../../services/eventService';
 
 interface EventProps {
   query: EventQuery;
-  onEventSelect: (id: ID) => void;
+  onEventSelect: (id: ID, name: string) => void;
 }
 
 function Event({ query, onEventSelect }: EventProps) {

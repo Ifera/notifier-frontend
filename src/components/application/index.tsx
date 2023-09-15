@@ -19,7 +19,7 @@ interface ApplicationProps {
   query: ApplicationQuery;
   setQuery: React.Dispatch<React.SetStateAction<ApplicationQuery>>;
   cardsPerPage: number;
-  onAppSelect: (id: ID) => void;
+  onAppSelect: (id: ID, name: string) => void;
 }
 
 function Application({
@@ -60,7 +60,9 @@ function Application({
   if (!data?.results.length) {
     return (
       <Alert severity='warning' sx={{ marginTop: 2 }}>
-        {query.like ? 'No such application exists' : 'No applications found'}
+        {query.like
+          ? 'No such application exists.'
+          : 'No applications found. Please click the (+) button above to add a new application.'}
       </Alert>
     );
   }
@@ -69,8 +71,8 @@ function Application({
     setQuery({ ...query, pageNumber: newPage });
   };
 
-  const handleCardClick = (cardId: ID) => {
-    onAppSelect(cardId);
+  const handleCardClick = (cardId: ID, name: string) => {
+    onAppSelect(cardId, name);
   };
 
   const handleEditDialogClose = () => {

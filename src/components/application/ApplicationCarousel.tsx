@@ -17,7 +17,7 @@ interface ApplicationCarouselProps {
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
   isLoading?: boolean;
-  onCardClick: (cardId: ID) => void;
+  onCardClick: (cardId: ID, name: string) => void;
   onPageChange?: (newPage: number) => void;
   onClickEditBtn?: (data: Application) => void;
 }

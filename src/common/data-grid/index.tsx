@@ -14,7 +14,7 @@ import BaseDataGrid, { BaseDataGridProps } from './BaseDataGrid';
 
 interface DataGridProps extends Pick<BaseDataGridProps, 'type' | 'service'> {
   query: Query;
-  onSelect: (id: ID) => void;
+  onSelect: (id: ID, name: string) => void;
 }
 
 function DataGrid({
@@ -54,7 +54,7 @@ function DataGrid({
 
     if (!data) return; // not possible
 
-    onSelect(data.id);
+    onSelect(data.id, data.name);
   };
 
   return (

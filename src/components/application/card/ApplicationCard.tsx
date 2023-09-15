@@ -14,7 +14,7 @@ interface ApplicationCardProps {
   application: Application;
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
-  onCardClick: (cardId: ID) => void;
+  onCardClick: (cardId: ID, name: string) => void;
   onClickEditBtn?: (data: Application) => void;
 }
 
@@ -27,7 +27,9 @@ function ApplicationCard({
 }: ApplicationCardProps) {
   return (
     <>
-      <CardActionArea onClick={() => onCardClick(application.id)}>
+      <CardActionArea
+        onClick={() => onCardClick(application.id, application.name)}
+      >
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant='h5' component='h2'>
             {application.name}

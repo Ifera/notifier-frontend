@@ -7,7 +7,7 @@ const useGet = (service: APIClient<ID, Properties>, id: ID) => {
   return useQuery<Properties, Error>({
     queryKey: [...service.queryKey, id],
     queryFn: () => service.get(id),
-    staleTime: ms('5s'),
+    staleTime: ms('1s'),
   });
 };
 

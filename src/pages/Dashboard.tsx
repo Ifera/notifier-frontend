@@ -1,4 +1,4 @@
-import { Alert, Box, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,13 +13,21 @@ export const dashboardState = () => {
   const [selectedEvent, setSelectedEvent] = useState<NullableID>(null);
   const [selectedNotif, setSelectedNotif] = useState<NullableID>(null);
 
+  const [names, setNames] = useState({
+    app: '',
+    event: '',
+    notif: '',
+  });
+
   return {
     selectedApp,
     selectedEvent,
     selectedNotif,
+    names,
     setSelectedApp,
     setSelectedEvent,
     setSelectedNotif,
+    setNames,
   };
 };
 
@@ -27,30 +35,39 @@ function Dashboard() {
   const {
     selectedApp,
     selectedEvent,
+    names,
     setSelectedApp,
     setSelectedEvent,
     setSelectedNotif,
+    setNames,
   } = useBetween(dashboardState);
 
   const oldAppId = selectedApp;
-
   const navigate = useNavigate();
 
-  const handleAppSelect = (id: ID) => {
+  const handleAppSelect = (id: ID, name: string) => {
+    const newNames = { ...names };
+
     if (oldAppId !== id) {
       setSelectedEvent(null);
       setSelectedNotif(null);
+
+      newNames.event = '';
+      newNames.notif = '';
     }
 
     setSelectedApp(id);
+    setNames((prev) => ({ ...prev, ...newNames, app: name }));
   };
 
-  const handleEventSelect = (id: ID) => {
+  const handleEventSelect = (id: ID, name: string) => {
     setSelectedEvent(id);
+    setNames((prev) => ({ ...prev, event: name }));
   };
 
-  const handleNotifiSelect = (id: ID) => {
+  const handleNotifiSelect = (id: ID, name: string) => {
     setSelectedNotif(id);
+    setNames((prev) => ({ ...prev, notif: name }));
 
     navigate(`/edit-notification/${id}`);
   };
@@ -59,31 +76,25 @@ function Dashboard() {
     <>
       <Box mb={5}>
         <Container>
-          <ApplicationContainer onAppSelect={handleAppSelect} />
-
-          {!selectedApp && (
-            <Alert severity='info' sx={{ mt: 4 }}>
-              Please select an application to display the events.
-            </Alert>
-          )}
+          <ApplicationContainer
+            selectedApp={selectedApp}
+            onAppSelect={handleAppSelect}
+          />
 
           {selectedApp && (
             <EventContainer
               selectedApp={selectedApp}
+              selectedAppName={names.app}
+              selectedEvent={selectedEvent}
               onEventSelect={handleEventSelect}
             />
-          )}
-
-          {selectedApp && !selectedEvent && (
-            <Alert severity='info' sx={{ mt: 4 }}>
-              Please select an event to display the notification types.
-            </Alert>
           )}
 
           {selectedEvent && (
             <Box my={4}>
               <NotificationTypeContainer
                 selectedEvent={selectedEvent}
+                selectedEventName={names.event}
                 onNotificationSelect={handleNotifiSelect}
               />
             </Box>
