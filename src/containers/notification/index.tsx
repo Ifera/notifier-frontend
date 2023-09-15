@@ -1,8 +1,9 @@
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ToolBar from '../../common/toolbar';
 import NotificationType from '../../components/notification-types';
 import { GRID_PAGE_SIZE } from '../../constants';
+import useGetAll from '../../hooks/useGetAll';
 import { ID, NotificationTypeQuery, Query } from '../../interfaces';
 import notificationService from '../../services/notificationService';
 
@@ -23,6 +24,9 @@ function NotificationTypeContainer({
     event: selectedEvent,
   });
 
+  const { data, isLoading } = useGetAll(notificationService, query);
+  const totalCount = data?.total_count || 0;
+
   useEffect(() => {
     setQuery((prev) => ({ ...prev, event: selectedEvent }));
   }, [selectedEvent]);
@@ -37,11 +41,19 @@ function NotificationTypeContainer({
         parentId={selectedEvent}
         parentName={selectedEventName}
       />
+
       <Box mt={4}>
-        <NotificationType
-          query={query as NotificationTypeQuery}
-          onNotificationSelect={onNotificationSelect}
-        />
+        {!isLoading && totalCount === 0 ? (
+          <Alert severity='warning'>
+            No events found. Please add a new event by clicking on the (+)
+            button above.
+          </Alert>
+        ) : (
+          <NotificationType
+            query={query as NotificationTypeQuery}
+            onNotificationSelect={onNotificationSelect}
+          />
+        )}
       </Box>
     </>
   );
