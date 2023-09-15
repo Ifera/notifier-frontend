@@ -27,7 +27,8 @@ export interface EditDialogProps {
 
   // callback functions
   onClose?: () => void;
-  onSubmit?: (data: Properties | null, values: ValueProps) => void;
+  onSubmitSuccess?: (data: Properties | null, values: ValueProps) => void;
+  onSubmitError?: (error: Error) => void;
 }
 
 function EditDialog({
@@ -39,7 +40,8 @@ function EditDialog({
   editHook,
   parentId,
   onClose,
-  onSubmit,
+  onSubmitSuccess,
+  onSubmitError,
 }: EditDialogProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -106,9 +108,12 @@ function EditDialog({
       addHook.mutate(d, {
         onSuccess: () => {
           onSuccess(parseSuccessMessage(type, 'added'));
+
+          if (onSubmitSuccess) onSubmitSuccess(data, values);
         },
         onError: (error) => {
           onError(parseError(error));
+          if (onSubmitError) onSubmitError(error);
         },
       });
     }
@@ -124,6 +129,8 @@ function EditDialog({
           onSuccess: () => {
             onSuccess(parseSuccessMessage(type, 'edited'));
 
+            if (onSubmitSuccess) onSubmitSuccess(data, values);
+
             if (data) {
               data.name = values.name;
               data.description = values.description;
@@ -131,12 +138,11 @@ function EditDialog({
           },
           onError: (error) => {
             onError(parseError(error));
+            if (onSubmitError) onSubmitError(error);
           },
         }
       );
     }
-
-    if (onSubmit) onSubmit(data, values);
   };
 
   return (

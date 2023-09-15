@@ -1,4 +1,5 @@
 import { Alert, Box } from '@mui/material';
+import ms from 'ms';
 import { useState } from 'react';
 import EditDialog, { EditDialogProps } from '../../common/edit/EditDialog';
 import useDelete from '../../hooks/useDelete';
@@ -83,12 +84,19 @@ function Application({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
+  const handleSubmitSuccess = () => {
+    setTimeout(() => {
+      handleEditDialogClose();
+    }, ms('1s'));
+  };
+
   return (
     <Box>
       <EditDialog
         {...dialogProps}
         onClose={handleEditDialogClose}
         editHook={editHook}
+        onSubmitSuccess={handleSubmitSuccess}
       />
 
       <ApplicationCarousel

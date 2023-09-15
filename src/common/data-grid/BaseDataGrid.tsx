@@ -6,6 +6,7 @@ import {
   GridRowSelectionModel,
   useGridApiRef,
 } from '@mui/x-data-grid';
+import ms from 'ms';
 import { useEffect, useState } from 'react';
 import { useBetween } from 'use-between';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
@@ -97,12 +98,18 @@ function BaseDataGrid({
     setPaginationModel(model);
   };
 
-  const handleClose = () => {
+  const handleEditDialogClose = () => {
     setDialogProps({ ...dialogProps, open: false, data: null });
   };
 
   const handleClickEdit = (data: Properties) => {
     setDialogProps({ ...dialogProps, open: true, data });
+  };
+
+  const handleSubmitSuccess = () => {
+    setTimeout(() => {
+      handleEditDialogClose();
+    }, ms('1s'));
   };
 
   const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
@@ -149,8 +156,9 @@ function BaseDataGrid({
       <div style={{ height: selectedRows.length > 0 ? '400px' : '380px' }}>
         <EditDialog
           {...dialogProps}
-          onClose={handleClose}
+          onClose={handleEditDialogClose}
           editHook={editHook}
+          onSubmitSuccess={handleSubmitSuccess}
         />
 
         <DataGridX

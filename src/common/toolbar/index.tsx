@@ -7,6 +7,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import ms from 'ms';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAdd from '../../hooks/useAdd';
@@ -125,6 +126,12 @@ export default function ToolBar({
     setDialogProps({ ...dialogProps, open: false, data: null });
   };
 
+  const handleSubmitSuccess = () => {
+    setTimeout(() => {
+      handleEditDialogClose();
+    }, ms('1s'));
+  };
+
   const handleClickAddBtn = () => {
     if (type === 'Notification') {
       navigate(`/add-notification/${parentId}`);
@@ -170,7 +177,6 @@ export default function ToolBar({
   const openSort = Boolean(sortAnchorEl);
 
   let parentText = '';
-
   if (type === 'Event') {
     parentText = 'App: ' + parentName + ', ';
   } else if (type === 'Notification') {
@@ -184,6 +190,7 @@ export default function ToolBar({
         onClose={handleEditDialogClose}
         addHook={addHook}
         parentId={parentId}
+        onSubmitSuccess={handleSubmitSuccess}
       />
 
       <Toolbar
