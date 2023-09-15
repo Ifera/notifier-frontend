@@ -7,6 +7,7 @@ import {
   useGridApiRef,
 } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
+import { useBetween } from 'use-between';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import useDelete from '../../hooks/useDelete';
 import useDeleteAll from '../../hooks/useDeleteAll';
@@ -20,6 +21,7 @@ import {
   Properties,
   Service,
 } from '../../interfaces';
+import { dashboardState } from '../../pages/Dashboard';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import { CustomToolbar, getColumns } from './funcs';
 
@@ -62,6 +64,8 @@ function BaseDataGrid({
   const [selectedRows, setSelectedRows] = useState<
     Event[] | NotificationType[]
   >([]);
+
+  const { selectedEvent, setSelectedEvent } = useBetween(dashboardState);
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
@@ -107,9 +111,23 @@ function BaseDataGrid({
   };
 
   const handleClickDeleteMultiple = () => {
-    delAllHook.mutate(selectedRows.map((row) => row.id));
+    delAllHook.mutate(
+      selectedRows.map((row) => row.id),
+      {
+        onSuccess: () => {
+          if (type !== 'Event') return;
 
-    setSelectedRows([]);
+          selectedRows.forEach((row) => {
+            if (selectedEvent === row.id) {
+              setSelectedEvent(null);
+            }
+          });
+        },
+        onSettled: () => {
+          setSelectedRows([]);
+        },
+      }
+    );
   };
 
   const handleRowClick = (params: GridRowParams) => {
