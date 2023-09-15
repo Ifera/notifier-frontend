@@ -4,6 +4,7 @@ import APIClient from '../services/apiClient';
 
 export interface AuthResponse {
   token: string;
+  user: User;
 }
 
 const useAuth = (service: APIClient<User, AuthResponse>) => {

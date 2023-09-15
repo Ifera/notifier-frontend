@@ -5,6 +5,20 @@ const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api',
   params: {},
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['x-auth-token'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // S: Type of the data SENT to the API
 // R: Type of the data RECEIVED from the API
 class APIClient<S, R> {
