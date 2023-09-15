@@ -2,6 +2,8 @@ import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useState } from 'react';
 
+import ms from 'ms';
+import { useNavigate } from 'react-router-dom';
 import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
 import useTags from '../../../hooks/useTags';
 import { ID, UseAddHookResult, UseEditHookResult } from '../../../interfaces';
@@ -26,6 +28,8 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [tempData, setTempData] = useState<ValueProps>({ ...initialValues });
+
+  const navigate = useNavigate();
 
   const { data: tags, isLoading: tagsLoading, error } = useTags();
 
@@ -57,6 +61,11 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
             });
 
             if (onSuccess) onSuccess(operation);
+
+            // go to dashboard on success after 1s
+            setTimeout(() => {
+              navigate('/');
+            }, ms('1s'));
           },
           onError: (error) => {
             setErrorMessage(parseError(error));
@@ -86,6 +95,11 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
             setTempData({ ...tempData, ...values });
 
             if (onSuccess) onSuccess(operation);
+
+            // go to dashboard on success after 1s
+            setTimeout(() => {
+              navigate('/');
+            }, ms('1s'));
           },
           onError: (error) => {
             setErrorMessage(parseError(error));
