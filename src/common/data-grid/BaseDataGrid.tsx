@@ -1,11 +1,9 @@
 import { Alert } from '@mui/material';
 import {
   DataGrid as DataGridX,
-  GridCallbackDetails,
   GridPaginationModel,
   GridRowParams,
   GridRowSelectionModel,
-  MuiEvent,
   useGridApiRef,
 } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
@@ -35,11 +33,7 @@ export interface BaseDataGridProps {
   action?: ActionMap;
 
   onPageChange: (pageNumber: number) => void;
-  onRowClick: (
-    params: GridRowParams,
-    event: MuiEvent,
-    details: GridCallbackDetails
-  ) => void;
+  onRowClick: (params: GridRowParams) => void;
 }
 
 function BaseDataGrid({
@@ -118,7 +112,19 @@ function BaseDataGrid({
     setSelectedRows([]);
   };
 
-  const columns = getColumns(type, editHook, delHook, handleClickEdit);
+  const handleRowClick = (params: GridRowParams) => {
+    if (selectedRows.length > 0) return;
+
+    onRowClick(params);
+  };
+
+  const columns = getColumns(
+    type,
+    editHook,
+    delHook,
+    selectedRows.length > 0,
+    handleClickEdit
+  );
 
   return (
     <>
@@ -150,7 +156,7 @@ function BaseDataGrid({
           paginationMode='server'
           paginationModel={paginationModel}
           onPaginationModelChange={handlePageChange}
-          onRowClick={onRowClick}
+          onRowClick={handleRowClick}
           pageSizeOptions={[5]}
           onRowSelectionModelChange={handleRowSelectionModelChange}
           checkboxSelection

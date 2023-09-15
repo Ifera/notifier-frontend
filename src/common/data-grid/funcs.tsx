@@ -19,6 +19,7 @@ export function getColumns(
   type: 'App' | 'Event' | 'Notification',
   editHook: UseEditHookResult,
   delHook: UseDeleteHookResult,
+  disableActionBtns: boolean,
   onClickEdit: (data: Properties) => void
 ): GridColDef[] {
   return [
@@ -56,6 +57,7 @@ export function getColumns(
             editHook={editHook}
             delHook={delHook}
             onClickEdit={onClickEdit}
+            disabled={disableActionBtns}
           />
         );
       },

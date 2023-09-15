@@ -15,6 +15,7 @@ interface ActionButtonsProps {
   data: Properties;
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
+  disabled?: boolean;
 
   // callback functions
   onClickEdit?: (data: Properties) => void;
@@ -27,6 +28,7 @@ function ActionButtons({
   data,
   editHook,
   delHook,
+  disabled = false,
 
   onClickEdit,
   onClickDelete,
@@ -107,16 +109,16 @@ function ActionButtons({
 
   return (
     <>
-      <EditButton onClick={(e) => onClick(e, 'edit')} />
+      <EditButton onClick={(e) => onClick(e, 'edit')} disabled={disabled} />
       <DeleteButton
         onClick={(e) => onClick(e, 'delete')}
-        disabled={delBtnStatus}
+        disabled={delBtnStatus || disabled}
       />
       <Switch
         key={data.id}
         onClick={(e) => onClick(e, 'switch')}
         checked={data.is_active}
-        disabled={switchStatus}
+        disabled={switchStatus || disabled}
       />
     </>
   );
