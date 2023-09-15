@@ -3,7 +3,6 @@ import { useState } from 'react';
 import EditDialog, { EditDialogProps } from '../../common/edit/EditDialog';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
-import useGetAll from '../../hooks/useGetAll';
 import {
   ApplicationQuery,
   FetchResponse,
@@ -14,6 +13,9 @@ import applicationService from '../../services/applicationService';
 import ApplicationCarousel from './ApplicationCarousel';
 
 interface ApplicationProps {
+  data: FetchResponse<IApplication> | undefined;
+  isLoading: boolean;
+  error: Error | null;
   query: ApplicationQuery;
   setQuery: React.Dispatch<React.SetStateAction<ApplicationQuery>>;
   cardsPerPage: number;
@@ -21,6 +23,9 @@ interface ApplicationProps {
 }
 
 function Application({
+  data,
+  isLoading,
+  error,
   query,
   setQuery,
   cardsPerPage,
@@ -32,8 +37,6 @@ function Application({
     operation: 'Edit',
     data: null,
   });
-
-  const { data, isLoading, error } = useGetAll(applicationService, query);
 
   const editHook = useEdit(applicationService, query);
   const delHook = useDelete(applicationService);

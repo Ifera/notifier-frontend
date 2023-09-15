@@ -10,14 +10,7 @@ import {
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAdd from '../../hooks/useAdd';
-import {
-  Application,
-  Event,
-  ID,
-  NotificationType,
-  Query,
-} from '../../interfaces';
-import APIClient from '../../services/apiClient';
+import { ID, Query, Service } from '../../interfaces';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import SortPopover from './SortPopover';
 import ToolbarOptions from './ToolbarOptions';
@@ -44,8 +37,9 @@ const sortOptions = [
 interface ToolBarProps {
   type: 'App' | 'Event' | 'Notification';
   query: Query;
-  service: APIClient<Application | Event | NotificationType>;
+  service: Service;
   parentId?: ID;
+  totalCount?: number;
   setQuery: Dispatch<SetStateAction<Query>>;
 }
 
@@ -54,6 +48,7 @@ export default function ToolBar({
   query,
   service,
   parentId,
+  totalCount,
   setQuery,
 }: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
@@ -192,8 +187,13 @@ export default function ToolBar({
           alignItems: 'center',
         }}
       >
-        <Typography variant='h6' sx={{ flex: 1, fontSize: '18px' }}>
-          {type === 'App' ? 'Applications' : `${type}s`}
+        <Typography
+          component='div'
+          variant='h6'
+          sx={{ flex: 1, fontSize: '18px' }}
+        >
+          {type === 'App' ? 'Applications ' : `${type}s `}
+          <span style={{ fontSize: '12px' }}>(Total: {totalCount || 0})</span>
         </Typography>
         <IconButton
           onClick={handleMobileMenuOpen}
