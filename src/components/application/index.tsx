@@ -54,6 +54,14 @@ function Application({
     );
   }
 
+  if (!data?.results.length) {
+    return (
+      <Alert severity='warning' sx={{ marginTop: 2 }}>
+        {query.like ? 'No such application exists' : 'No applications found'}
+      </Alert>
+    );
+  }
+
   const onPageChange = (newPage: number) => {
     setQuery({ ...query, pageNumber: newPage });
   };
@@ -69,14 +77,6 @@ function Application({
   const handleClickEditBtn = (data: IApplication) => {
     setDialogProps({ ...dialogProps, open: true, data });
   };
-
-  if (!data?.results.length && query.like) {
-    return (
-      <Alert severity='warning' sx={{ marginTop: 2 }}>
-        No such application exists
-      </Alert>
-    );
-  }
 
   return (
     <Box>
