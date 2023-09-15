@@ -19,6 +19,19 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      window.history.pushState(null, '', '/login');
+      window.location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
+
 // S: Type of the data SENT to the API
 // R: Type of the data RECEIVED from the API
 class APIClient<S, R> {
