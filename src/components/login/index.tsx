@@ -1,5 +1,6 @@
 import { Card, Container, Grid } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import Icon from '../../assets/gosaas-icon-red.webp';
 import useAuth from '../../hooks/useAuth';
@@ -9,6 +10,8 @@ import { userSchema } from '../../validation/schema';
 import LoginForm, { User } from './LoginForm';
 
 function Login() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<User>({
     email: '',
     password: '',
@@ -41,15 +44,16 @@ function Login() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log('Submitted user data:', formData);
-
-      let token;
       authHook.mutate(formData, {
         onSuccess: (data) => {
-          console.log('data', data);
-          token = data.token;
-          localStorage.setItem('token', token);
+          if (!data.token) {
+            setFormErrors('An error occurred while logging in');
+            return;
+          }
+          localStorage.clear();
+          localStorage.setItem('token', data.token);
           setFormErrors('');
+          navigate('/');
         },
         onError: (error) => {
           setFormErrors(parseError(error));
