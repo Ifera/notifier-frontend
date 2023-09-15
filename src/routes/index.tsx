@@ -3,11 +3,16 @@ import Dashboard from '../pages/Dashboard';
 import Layout from '../pages/Layout';
 import LoginPage from '../pages/LoginPage';
 import NotificationPage from '../pages/NotificationPage';
+import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     // errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
