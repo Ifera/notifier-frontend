@@ -118,6 +118,7 @@ function PreviewForm({
         name='description'
         value={values.description}
         onChange={handleChange}
+        multiline
       />
 
       {defaultValues.template_subject !== undefined &&
