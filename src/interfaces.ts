@@ -4,6 +4,7 @@ import useDeleteAll from './hooks/useDeleteAll';
 import useEdit from './hooks/useEdit';
 import useGet from './hooks/useGet';
 import useGetAll from './hooks/useGetAll';
+import APIClient from './services/apiClient';
 
 // ----------------------------------------------
 
@@ -100,3 +101,5 @@ export type UseGetAllHookResult = ReturnType<typeof useGetAll>;
 export type UseGetHookResult = ReturnType<typeof useGet>;
 
 // ----------------------------------------------
+
+export type Service = APIClient<Properties, Properties>;

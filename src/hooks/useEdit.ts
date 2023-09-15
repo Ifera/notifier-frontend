@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { FetchResponse, PProperties, Properties, Query } from '../interfaces';
 import APIClient from '../services/apiClient';
 
-const useEdit = (service: APIClient<Properties>, query: Query) => {
+const useEdit = (service: APIClient<PProperties, Properties>, query: Query) => {
   const queryClient = useQueryClient();
   const queryKey = [...service.queryKey, query];
 

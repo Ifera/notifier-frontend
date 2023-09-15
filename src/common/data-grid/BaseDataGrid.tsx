@@ -20,14 +20,14 @@ import {
   NotificationType,
   NotificationTypeQuery,
   Properties,
+  Service,
 } from '../../interfaces';
-import APIClient from '../../services/apiClient';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
 import { CustomToolbar, getColumns } from './funcs';
 
 export interface BaseDataGridProps {
   type: 'Event' | 'Notification';
-  service: APIClient<Event | NotificationType>;
+  service: Service;
   query: EventQuery | NotificationTypeQuery;
   isLoading: boolean;
   totalRowCount: number;

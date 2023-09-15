@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api',
   params: {},
 });
+
 // S: Type of the data SENT to the API
 // R: Type of the data RECEIVED from the API
 class APIClient<S, R> {
