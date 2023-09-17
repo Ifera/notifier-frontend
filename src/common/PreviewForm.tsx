@@ -1,12 +1,10 @@
-// PreviewForm.tsx
 import {
   Box,
   Button,
+  ClickAwayListener,
   Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
+  Paper,
+  Popper,
 } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -42,11 +40,14 @@ function PreviewForm({
 
   onError,
   onSubmit,
-
   onChange,
 }: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
-
+  const [suggestionText, setSuggestionText] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestionAnchor, setSuggestionAnchor] = useState<null | HTMLElement>(
+    null
+  );
   const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,15 +62,65 @@ function PreviewForm({
     if (onChange) onChange(newValues);
   };
 
-  const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
+  const handleBodyChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    // Check for '{' character to open the suggestion box
+    if (value.includes('{')) {
+      const suggestion = value.substring(
+        value.lastIndexOf('{') + 1,
+        value.length
+      );
+      setSuggestionText(suggestion);
+      setSuggestionAnchor(event.target);
+
+      updateSuggestions(suggestion);
+    } else {
+      setSuggestionAnchor(null);
+    }
+
     const newValues = {
-      ...defaultValues,
-      template_body: `${defaultValues.template_body}{${event.target.value}}`,
+      ...values,
+      [name]: value,
     };
 
     setValues(newValues);
 
     if (onChange) onChange(newValues);
+  };
+
+  const handleCloseSuggestion = () => {
+    setSuggestionAnchor(null);
+  };
+
+  const updateSuggestions = (text: string) => {
+    // Filter tags based on the entered text
+    const filteredTags = tags ? tags.filter((tag) => tag.includes(text)) : [];
+
+    setSuggestions(filteredTags);
+  };
+
+  const handleSuggestionSelect = (tag: string) => {
+    const bodyValue = values.template_body || '';
+    const openBraceIndex = bodyValue.lastIndexOf('{');
+    if (openBraceIndex !== -1) {
+      const updatedValue =
+        bodyValue.substring(0, openBraceIndex) +
+        '{' +
+        tag +
+        '}' +
+        bodyValue.substring(openBraceIndex + suggestionText.length + 1);
+      setSuggestionAnchor(null);
+
+      const newValues = {
+        ...values,
+        template_body: updatedValue,
+      };
+
+      setValues(newValues);
+
+      if (onChange) onChange(newValues);
+    }
   };
 
   const validateForm = () => {
@@ -130,40 +181,55 @@ function PreviewForm({
             value={values.template_subject}
             onChange={handleChange}
           />
+
           <TextInput
-            multiline={true}
+            multiline
             label='Body'
             name='template_body'
             value={values.template_body}
-            onChange={handleChange}
-          />
-          <Box py={1} />
-          <Typography
-            sx={{ fontSize: 15, textAlign: 'left', mb: 1 }}
-            variant='body2'
-          >
-            Add Tags
-          </Typography>
-
-          <Select
-            sx={{
-              backgroundColor: '#F5FAFF',
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#98CDFF',
-              },
-              width: '100%',
-            }}
-            multiple
-            value={[]}
-            onChange={handleTagsChange}
-          >
-            {tags &&
-              tags.map((tag) => (
-                <MenuItem key={tag} value={tag}>
-                  {tag}
-                </MenuItem>
-              ))}
-          </Select>
+            onChange={handleBodyChange}
+          ></TextInput>
+          {/* Suggestion Box for Tags */}
+          <ClickAwayListener onClickAway={handleCloseSuggestion}>
+            <div style={{ position: 'relative' }}>
+              {values.template_body && values.template_body.includes('{') ? (
+                <Popper
+                  open={Boolean(suggestionAnchor)}
+                  anchorEl={suggestionAnchor}
+                  placement='bottom-start' // Adjust placement
+                  modifiers={[
+                    {
+                      name: 'offset',
+                      options: {
+                        offset: [0, 10], // Adjust the offset as needed
+                      },
+                    },
+                  ]}
+                >
+                  <Paper elevation={3}>
+                    {/* Add a div with a fixed max height to enable scrolling */}
+                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                      {suggestions.map((tag, index) => (
+                        <Box
+                          key={tag}
+                          sx={{
+                            p: 1,
+                            cursor: 'pointer',
+                            '&:hover': {
+                              background: '#F5FAFF',
+                            },
+                          }}
+                          onClick={() => handleSuggestionSelect(tag)}
+                        >
+                          {tag}
+                        </Box>
+                      ))}
+                    </div>
+                  </Paper>
+                </Popper>
+              ) : null}
+            </div>
+          </ClickAwayListener>
         </>
       ) : null}
 
