@@ -2,7 +2,9 @@ import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useState } from 'react';
 
-import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
+import PreviewForm, {
+  ValueProps,
+} from '../../../common/preview-form/PreviewForm';
 import useTags from '../../../hooks/useTags';
 import { ID, UseAddHookResult, UseEditHookResult } from '../../../interfaces';
 import { parseError } from '../../../utils';
