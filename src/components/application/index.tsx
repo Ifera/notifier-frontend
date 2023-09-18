@@ -61,7 +61,7 @@ function Application({
     );
   }
 
-  if (!data?.results.length) {
+  if (data?.results.length === 0) {
     return (
       <Alert severity='warning' sx={{ marginTop: 2 }}>
         {query.like
