@@ -3,8 +3,8 @@ import { Mention, MentionsInput } from 'react-mentions';
 
 export type MentionsInputProps = {
   label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void; // Change to HTMLTextAreaElement
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Change to HTMLTextAreaElement
   tags: string[];
 };
 
@@ -16,8 +16,8 @@ const StyledMentionsInput = ({
 }: MentionsInputProps) => {
   const inputId = `${label}-input`;
 
-  const handleBodyChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(event);
+  const handleBodyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) onChange(event);
   };
 
   return (
