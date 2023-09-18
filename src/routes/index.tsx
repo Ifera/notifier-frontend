@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
+import ErrorPage from '../pages/ErrorPage';
 import Layout from '../pages/Layout';
 import LoginPage from '../pages/LoginPage';
 import NotificationPage from '../pages/NotificationPage';
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
         <Layout />
       </ProtectedRoute>
     ),
-    // errorElement: <ErrorPage />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
       {
