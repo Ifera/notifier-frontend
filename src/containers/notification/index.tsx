@@ -45,8 +45,8 @@ function NotificationTypeContainer({
       <Box mt={4}>
         {!isLoading && totalCount === 0 ? (
           <Alert severity='warning'>
-            No events found. Please add a new event by clicking on the (+)
-            button above.
+            No notification types found. Please add a new notification type by
+            clicking on the (+) button above.
           </Alert>
         ) : (
           <NotificationType
