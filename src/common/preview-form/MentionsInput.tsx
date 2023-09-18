@@ -1,10 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { Mention, MentionsInput } from 'react-mentions';
+import { EventParamProp } from '../../interfaces';
 
 export type MentionsInputProps = {
   label: string;
   value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Change to HTMLTextAreaElement
+  onChange?: (event: EventParamProp) => void; // Change to HTMLTextAreaElement
   tags: string[];
 };
 
@@ -16,9 +17,9 @@ const StyledMentionsInput = ({
 }: MentionsInputProps) => {
   const inputId = `${label}-input`;
 
-  const handleBodyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleBodyChange(event: EventParamProp) {
     if (onChange) onChange(event);
-  };
+  }
 
   return (
     <Box>

@@ -2,6 +2,7 @@ import { Box, Button, Grid } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
+import { EventParamProp } from '../../interfaces';
 import { dataSchema } from '../../validation/schema';
 import TextInput from '../TextInput';
 import MentionsInput from './MentionsInput';
@@ -52,7 +53,7 @@ function PreviewForm({
     if (onChange) onChange(newValues);
   };
 
-  const handleBodyChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleBodyChange = (event: EventParamProp) => {
     setValues({ ...values, template_body: event.target.value });
 
     if (onChange) onChange({ ...values, template_body: event.target.value });
@@ -104,6 +105,7 @@ function PreviewForm({
         name='description'
         value={values.description}
         onChange={handleChange}
+        rows={3}
         multiline
       />
 

@@ -1,7 +1,10 @@
 import { Alert, Box } from '@mui/material';
-import ms from 'ms';
 import { useState } from 'react';
-import EditDialog, { EditDialogProps } from '../../common/edit/EditDialog';
+import EditDialog, {
+  EditDialogProps,
+  OnSubmitSuccessProps,
+} from '../../common/edit/EditDialog';
+import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
 import {
@@ -58,7 +61,7 @@ function Application({
     );
   }
 
-  if (!data?.results.length) {
+  if (data?.results.length === 0) {
     return (
       <Alert severity='warning' sx={{ marginTop: 2 }}>
         {query.like
@@ -84,10 +87,11 @@ function Application({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
-  const handleSubmitSuccess = () => {
+  const handleSubmitSuccess = ({ cleanup }: OnSubmitSuccessProps) => {
     setTimeout(() => {
       handleEditDialogClose();
-    }, ms('1s'));
+      cleanup(true);
+    }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
   };
 
   return (

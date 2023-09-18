@@ -7,12 +7,15 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import ms from 'ms';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
 import useAdd from '../../hooks/useAdd';
 import { ID, Query, Service } from '../../interfaces';
-import EditDialog, { EditDialogProps } from '../edit/EditDialog';
+import EditDialog, {
+  EditDialogProps,
+  OnSubmitSuccessProps,
+} from '../edit/EditDialog';
 import PopoverMenu from './PopoverMenu';
 import ToolbarOptions from './toolbar-options/ToolbarOptions';
 
@@ -161,10 +164,11 @@ export default function ToolBar({
     setDialogProps({ ...dialogProps, open: false, data: null });
   };
 
-  const handleSubmitSuccess = () => {
+  const handleSubmitSuccess = ({ cleanup }: OnSubmitSuccessProps) => {
     setTimeout(() => {
       handleEditDialogClose();
-    }, ms('1s'));
+      cleanup(true);
+    }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
   };
 
   const handleClickAddBtn = () => {
