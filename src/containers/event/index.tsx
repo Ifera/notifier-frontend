@@ -46,7 +46,7 @@ function EventContainer({
       />
 
       <Box mt={4}>
-        {!isLoading && totalCount === 0 ? (
+        {totalCount === 0 && !isLoading ? (
           <Alert severity='warning'>
             No events found. Please add a new event by clicking on the (+)
             button above.

@@ -44,7 +44,7 @@ function NotificationTypeContainer({
       />
 
       <Box mt={4}>
-        {!isLoading && totalCount === 0 ? (
+        {totalCount === 0 && !isLoading ? (
           <Alert severity='warning'>
             No notification types found. Please add a new notification type by
             clicking on the (+) button above.
