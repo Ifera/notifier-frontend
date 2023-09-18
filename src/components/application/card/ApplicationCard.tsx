@@ -32,21 +32,25 @@ function ApplicationCard({
       <CardActionArea
         onClick={() => onCardClick(application.id, application.name)}
       >
+        <Box
+          sx={{
+            backgroundColor: '#EBF5FF',
+
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          py={1}
+          px={2}
+        >
+          <Typography gutterBottom variant='h5' component='h2'>
+            {application.name}
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography sx={{ fontSize: 14 }} color='#071B2F'>
+            {formattedDate}
+          </Typography>
+        </Box>
         <CardContent sx={{ flexGrow: 1 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Typography gutterBottom variant='h5' component='h2'>
-              {application.name}
-            </Typography>
-            <Box sx={{ flexGrow: 1 }} />
-            <Typography sx={{ fontSize: 14 }} color='#071B2F'>
-              {formattedDate}
-            </Typography>
-          </Box>
           <Typography>{application.description}</Typography>
         </CardContent>
       </CardActionArea>
