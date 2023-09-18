@@ -1,10 +1,12 @@
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import { Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Filter from './FIlter';
 import SearchBar from './SearchBar';
 import Sort from './Sort';
 
 interface ToolbarOptionsProps {
+  type: string;
   setSortAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   sortOptions: { label: string; value: string }[];
   selectedSortOption: string | null;
@@ -18,6 +20,7 @@ interface ToolbarOptionsProps {
 }
 
 const ToolbarOptions = ({
+  type,
   setSortAnchorEl,
   sortOptions,
   selectedSortOption,
@@ -42,9 +45,11 @@ const ToolbarOptions = ({
         sortDirection={sortDirection}
         setSortAnchorEl={setSortAnchorEl}
       />
-      <IconButton onClick={onClickAddBtn} color='primary' sx={{ ml: 1 }}>
-        <AddCircleRoundedIcon />
-      </IconButton>
+      <Tooltip title={`Add new ${type}`}>
+        <IconButton onClick={onClickAddBtn} color='primary' sx={{ ml: 1 }}>
+          <AddCircleRoundedIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 };

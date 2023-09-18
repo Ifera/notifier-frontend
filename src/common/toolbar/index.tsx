@@ -183,6 +183,7 @@ export default function ToolBar({
 
   const renderToolbarOptions = () => (
     <ToolbarOptions
+      type={type}
       setSortAnchorEl={setSortAnchorEl}
       sortOptions={sortOptions}
       selectedSortOption={selectedSortOption}
