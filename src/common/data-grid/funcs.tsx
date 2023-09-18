@@ -15,13 +15,23 @@ import {
 } from '../../interfaces';
 import ActionButtons from '../buttons/ActionButtons';
 
-export function getColumns(
-  type: 'App' | 'Event' | 'Notification',
-  editHook: UseEditHookResult,
-  delHook: UseDeleteHookResult,
-  disableActionBtns: boolean,
-  onClickEdit: (data: Properties) => void
-): GridColDef[] {
+interface getColumnsProps {
+  type: 'App' | 'Event' | 'Notification';
+  editHook: UseEditHookResult;
+  delHook: UseDeleteHookResult;
+  disableActionBtns: boolean;
+  onClickEdit: (data: Properties) => void;
+  onClickDelete?: (data: Properties) => void;
+}
+
+export function getColumns({
+  type,
+  editHook,
+  delHook,
+  disableActionBtns,
+  onClickEdit,
+  onClickDelete,
+}: getColumnsProps): GridColDef[] {
   return [
     {
       field: 'name',
@@ -57,6 +67,7 @@ export function getColumns(
             editHook={editHook}
             delHook={delHook}
             onClickEdit={onClickEdit}
+            onClickDelete={onClickDelete}
             disabled={disableActionBtns}
           />
         );
@@ -64,6 +75,8 @@ export function getColumns(
     },
   ];
 }
+
+// ----------------------------------------------
 
 export const CustomToolbar = (onClickDelete: () => void) => {
   return (

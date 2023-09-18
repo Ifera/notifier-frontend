@@ -1,6 +1,8 @@
-import { Alert } from '@mui/material';
+import { Alert, TablePaginationProps } from '@mui/material';
+import MuiPagination from '@mui/material/Pagination';
 import {
   DataGrid as DataGridX,
+  GridPagination,
   GridPaginationModel,
   GridRowParams,
   GridRowSelectionModel,
@@ -112,12 +114,28 @@ function BaseDataGrid({
     }, ms('1s'));
   };
 
+  const handleRowClick = (params: GridRowParams) => {
+    if (selectedRows.length > 0) return;
+
+    onRowClick(params);
+  };
+
   const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
     const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
     setSelectedRows(selectedRowsData as Event[] | NotificationType[]);
   };
 
   const handleClickDeleteMultiple = () => {
+    if (selectedRows.length === 0) return;
+
+    // fix for the bug where the page number is not updated when the last row is deleted
+    if (selectedRows.length === rows.length && paginationModel.page > 0) {
+      setPaginationModel({
+        ...paginationModel,
+        page: paginationModel.page - 1,
+      });
+    }
+
     delAllHook.mutate(
       selectedRows.map((row) => row.id),
       {
@@ -137,19 +155,46 @@ function BaseDataGrid({
     );
   };
 
-  const handleRowClick = (params: GridRowParams) => {
-    if (selectedRows.length > 0) return;
-
-    onRowClick(params);
+  const handleClickDelete = (data: Properties) => {
+    // fix for the bug where the page number is not updated when the last row is deleted
+    if (rows.length - 1 === 0 && paginationModel.page > 0) {
+      setPaginationModel({
+        ...paginationModel,
+        page: paginationModel.page - 1,
+      });
+    }
   };
 
-  const columns = getColumns(
+  const columns = getColumns({
     type,
     editHook,
     delHook,
-    selectedRows.length > 0,
-    handleClickEdit
-  );
+    disableActionBtns: selectedRows.length > 0,
+    onClickEdit: handleClickEdit,
+    onClickDelete: handleClickDelete,
+  });
+
+  const Pagination = ({
+    page,
+    className,
+    onPageChange,
+  }: Pick<TablePaginationProps, 'page' | 'onPageChange' | 'className'>) => {
+    return (
+      <MuiPagination
+        color='primary'
+        className={className}
+        count={Math.ceil(totalRowCount / paginationModel.pageSize)}
+        page={page + 1}
+        onChange={(event, newPage) => {
+          onPageChange(event as any, newPage - 1);
+        }}
+      />
+    );
+  };
+
+  const CustomPagination = (props: any) => {
+    return <GridPagination ActionsComponent={Pagination} {...props} />;
+  };
 
   return (
     <>
@@ -198,6 +243,7 @@ function BaseDataGrid({
               selectedRows.length > 0
                 ? () => CustomToolbar(handleClickDeleteMultiple)
                 : null,
+            pagination: CustomPagination,
           }}
         />
       </div>
