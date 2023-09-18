@@ -8,9 +8,9 @@ import {
   GridRowSelectionModel,
   useGridApiRef,
 } from '@mui/x-data-grid';
-import ms from 'ms';
 import { useEffect, useState } from 'react';
 import { useBetween } from 'use-between';
+import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import useDelete from '../../hooks/useDelete';
 import useDeleteAll from '../../hooks/useDeleteAll';
@@ -25,7 +25,10 @@ import {
   Service,
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
-import EditDialog, { EditDialogProps } from '../edit/EditDialog';
+import EditDialog, {
+  EditDialogProps,
+  OnSubmitSuccessProps,
+} from '../edit/EditDialog';
 import { CustomToolbar, getColumns } from './utils';
 
 export interface BaseDataGridProps {
@@ -108,10 +111,11 @@ function BaseDataGrid({
     setDialogProps({ ...dialogProps, open: true, data });
   };
 
-  const handleSubmitSuccess = () => {
+  const handleSubmitSuccess = ({ cleanup }: OnSubmitSuccessProps) => {
     setTimeout(() => {
       handleEditDialogClose();
-    }, ms('1s'));
+      cleanup(true);
+    }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
   };
 
   const handleRowClick = (params: GridRowParams) => {

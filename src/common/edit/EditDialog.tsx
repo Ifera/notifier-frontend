@@ -15,6 +15,12 @@ import {
 import { parseError } from '../../utils';
 import PreviewForm, { ValueProps } from '../preview-form/PreviewForm';
 
+export interface OnSubmitSuccessProps {
+  data: Properties | null;
+  values: ValueProps;
+  cleanup: (value: boolean) => void;
+}
+
 export interface EditDialogProps {
   open: boolean;
   type: 'App' | 'Event' | 'Notification';
@@ -27,7 +33,7 @@ export interface EditDialogProps {
 
   // callback functions
   onClose?: () => void;
-  onSubmitSuccess?: (data: Properties | null, values: ValueProps) => void;
+  onSubmitSuccess?: ({ data, values, cleanup }: OnSubmitSuccessProps) => void;
   onSubmitError?: (error: Error) => void;
 }
 
@@ -109,7 +115,16 @@ function EditDialog({
         onSuccess: () => {
           onSuccess(parseSuccessMessage(type, 'added'));
 
-          if (onSubmitSuccess) onSubmitSuccess(data, values);
+          if (onSubmitSuccess) {
+            onSubmitSuccess({
+              data,
+              values,
+              cleanup: (value) => {
+                if (!value) return;
+                handleClose();
+              },
+            });
+          }
         },
         onError: (error) => {
           onError(parseError(error));
@@ -129,7 +144,16 @@ function EditDialog({
           onSuccess: () => {
             onSuccess(parseSuccessMessage(type, 'edited'));
 
-            if (onSubmitSuccess) onSubmitSuccess(data, values);
+            if (onSubmitSuccess) {
+              onSubmitSuccess({
+                data,
+                values,
+                cleanup: (value) => {
+                  if (!value) return;
+                  handleClose();
+                },
+              });
+            }
 
             if (data) {
               data.name = values.name;
