@@ -3,7 +3,7 @@ import {
   ArrowUpward,
   Sort as SortIcon,
 } from '@mui/icons-material';
-import { IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 
 interface SortProps {
   sortOptions: { label: string; value: string }[];
@@ -34,12 +34,19 @@ function Sort({
   };
 
   return (
-    <IconButton onClick={handleSortClick} sx={{ borderRadius: 2 }}>
-      <SortIcon />
-      <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
-        {selectedOptionLabel} {directionIcon}
-      </Typography>
-    </IconButton>
+    <Box
+      sx={{
+        backgroundColor: 'rgba(152, 205, 255, 0.25)',
+        borderRadius: 3,
+      }}
+    >
+      <IconButton onClick={handleSortClick} sx={{ borderRadius: 2 }}>
+        <SortIcon />
+        <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
+          {selectedOptionLabel} {directionIcon}
+        </Typography>
+      </IconButton>
+    </Box>
   );
 }
 

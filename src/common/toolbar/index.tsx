@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import useAdd from '../../hooks/useAdd';
 import { ID, Query, Service } from '../../interfaces';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
-import SortPopover from './SortPopover';
-import ToolbarOptions from './ToolbarOptions';
+import PopoverMenu from './PopoverMenu';
+import ToolbarOptions from './toolbar-options/ToolbarOptions';
 
 const sortOptions = [
   {
@@ -32,6 +32,17 @@ const sortOptions = [
   {
     label: 'Active',
     value: 'is_active',
+  },
+];
+
+const filterOptions = [
+  {
+    label: 'Active',
+    value: 'active',
+  },
+  {
+    label: 'Inactive',
+    value: 'inactive',
   },
 ];
 
@@ -55,6 +66,9 @@ export default function ToolBar({
   setQuery,
 }: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
 
@@ -62,6 +76,9 @@ export default function ToolBar({
   const [selectedSortOption, setSelectedSortOption] = useState<string | null>(
     null
   );
+  const [selectedFilterOption, setSelectedFilterOption] = useState<
+    string | null
+  >(null);
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
     type: type,
@@ -89,6 +106,24 @@ export default function ToolBar({
     }
 
     setSortAnchorEl(null);
+  };
+
+  const handleFilterChange = (value: string) => {
+    if (selectedFilterOption === value) {
+      delete query.isActive;
+      setQuery({ ...query, pageNumber: 1 });
+      setSelectedFilterOption(null);
+    } else {
+      query.isActive = value === 'active' ? true : false;
+      setQuery({ ...query, pageNumber: 1 });
+      setSelectedFilterOption(value);
+    }
+
+    setFilterAnchorEl(null);
+  };
+
+  const handleCloseFilter = () => {
+    setFilterAnchorEl(null);
   };
 
   const handleSearchChange = (search: string) => {
@@ -150,6 +185,9 @@ export default function ToolBar({
       sortDirection={sortDirection}
       onClickAddBtn={handleClickAddBtn}
       onSearchChange={handleSearchChange}
+      setFilterAnchorEl={setFilterAnchorEl}
+      filterOptions={filterOptions}
+      selectedFilterOption={selectedFilterOption}
     />
   );
 
@@ -175,6 +213,7 @@ export default function ToolBar({
   );
 
   const openSort = Boolean(sortAnchorEl);
+  const openFilter = Boolean(filterAnchorEl);
 
   let parentText = '';
   if (type === 'Event') {
@@ -233,15 +272,24 @@ export default function ToolBar({
 
       {renderMobileMenu}
 
-      <SortPopover
+      <PopoverMenu
         open={openSort}
         anchorEl={sortAnchorEl}
-        handleCloseSort={handleCloseSort}
-        sortOptions={sortOptions}
-        sortDirection={sortDirection}
-        selectedSortOption={selectedSortOption || ''}
-        handleSortChange={handleSortChange}
-        handleSortDirectionChange={handleSortDirectionChange}
+        onClose={handleCloseSort}
+        options={sortOptions}
+        selectedOption={selectedSortOption || ''}
+        direction={sortDirection}
+        handleOptionChange={handleSortChange}
+        handleDirectionChange={handleSortDirectionChange}
+      />
+
+      <PopoverMenu
+        open={openFilter}
+        anchorEl={filterAnchorEl}
+        onClose={handleCloseFilter}
+        options={filterOptions}
+        selectedOption={selectedFilterOption || ''}
+        handleOptionChange={handleFilterChange}
       />
     </>
   );
