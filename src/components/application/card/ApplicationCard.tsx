@@ -25,15 +25,28 @@ function ApplicationCard({
   onCardClick,
   onClickEditBtn,
 }: ApplicationCardProps) {
+  const createdAtDate: Date = new Date(application.created_at);
+  const formattedDate = createdAtDate.toLocaleDateString();
   return (
     <>
       <CardActionArea
         onClick={() => onCardClick(application.id, application.name)}
       >
         <CardContent sx={{ flexGrow: 1 }}>
-          <Typography gutterBottom variant='h5' component='h2'>
-            {application.name}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Typography gutterBottom variant='h5' component='h2'>
+              {application.name}
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Typography sx={{ fontSize: 14 }} color='#071B2F'>
+              {formattedDate}
+            </Typography>
+          </Box>
           <Typography>{application.description}</Typography>
         </CardContent>
       </CardActionArea>
