@@ -40,6 +40,7 @@ function NotificationTypeContainer({
         service={notificationService}
         parentId={selectedEvent}
         parentName={selectedEventName}
+        totalCount={totalCount}
       />
 
       <Box mt={4}>
