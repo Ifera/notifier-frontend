@@ -12,8 +12,8 @@ import {
   Properties,
   UseDeleteHookResult,
   UseEditHookResult,
-} from '../../interfaces';
-import ActionButtons from '../buttons/ActionButtons';
+} from '../../../interfaces';
+import ActionButtons from '../../buttons/ActionButtons';
 
 interface getColumnsProps {
   type: 'App' | 'Event' | 'Notification';

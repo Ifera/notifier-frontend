@@ -26,7 +26,7 @@ import {
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
 import EditDialog, { EditDialogProps } from '../edit/EditDialog';
-import { CustomToolbar, getColumns } from './funcs';
+import { CustomToolbar, getColumns } from './utils';
 
 export interface BaseDataGridProps {
   type: 'Event' | 'Notification';
