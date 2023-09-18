@@ -45,8 +45,9 @@ function NotificationTypeContainer({
       <Box mt={4}>
         {!isLoading && totalCount === 0 ? (
           <Alert severity='warning'>
-            No notification types found. Please add a new notification type by
-            clicking on the (+) button above.
+            {query.like || query.isActive !== undefined
+              ? 'No notification types found for the selected filters.'
+              : 'No notification types found. Please add a new notification type by clicking on the (+) button above.'}
           </Alert>
         ) : (
           <NotificationType

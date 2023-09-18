@@ -64,8 +64,8 @@ function Application({
   if (data?.results.length === 0) {
     return (
       <Alert severity='warning' sx={{ marginTop: 2 }}>
-        {query.like
-          ? 'No such application exists.'
+        {query.like || query.isActive !== undefined
+          ? 'No applications found for the selected filters.'
           : 'No applications found. Please click the (+) button above to add a new application.'}
       </Alert>
     );
