@@ -71,7 +71,8 @@ function BaseDataGrid({
     Event[] | NotificationType[]
   >([]);
 
-  const { selectedEvent, setSelectedEvent } = useBetween(dashboardState);
+  const { selectedEvent, setSelectedEvent, setSelectedNotif } =
+    useBetween(dashboardState);
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
@@ -125,8 +126,19 @@ function BaseDataGrid({
   };
 
   const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
-    const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
-    setSelectedRows(selectedRowsData as Event[] | NotificationType[]);
+    const data = ids.map((id) => rows.find((row) => row.id === id));
+    setSelectedRows(data as Event[] | NotificationType[]);
+
+    if (data.length > 0) {
+      if (type === 'Event') {
+        setSelectedEvent(null);
+        setSelectedNotif(null);
+      }
+
+      if (type === 'Notification') {
+        setSelectedNotif(null);
+      }
+    }
   };
 
   const handleClickDeleteMultiple = () => {
