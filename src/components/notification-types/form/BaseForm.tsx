@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 import ms from 'ms';
 import { useNavigate } from 'react-router-dom';
-import PreviewForm, { ValueProps } from '../../../common/PreviewForm';
+import PreviewForm, {
+  ValueProps,
+} from '../../../common/preview-form/PreviewForm';
 import useTags from '../../../hooks/useTags';
 import { ID, UseAddHookResult, UseEditHookResult } from '../../../interfaces';
 import { parseError } from '../../../utils';

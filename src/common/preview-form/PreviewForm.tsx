@@ -1,18 +1,10 @@
-// PreviewForm.tsx
-import {
-  Box,
-  Button,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
-import { dataSchema } from '../validation/schema';
-import TextInput from './TextInput';
+import { dataSchema } from '../../validation/schema';
+import TextInput from '../TextInput';
+import MentionsInput from './MentionsInput';
 
 export interface ValueProps {
   name: string;
@@ -42,7 +34,6 @@ function PreviewForm({
 
   onError,
   onSubmit,
-
   onChange,
 }: PreviewFormProps) {
   const [values, setValues] = useState(defaultValues);
@@ -61,15 +52,10 @@ function PreviewForm({
     if (onChange) onChange(newValues);
   };
 
-  const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
-    const newValues = {
-      ...defaultValues,
-      template_body: `${defaultValues.template_body}{${event.target.value}}`,
-    };
+  const handleBodyChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, template_body: event.target.value });
 
-    setValues(newValues);
-
-    if (onChange) onChange(newValues);
+    if (onChange) onChange({ ...values, template_body: event.target.value });
   };
 
   const validateForm = () => {
@@ -130,40 +116,13 @@ function PreviewForm({
             value={values.template_subject}
             onChange={handleChange}
           />
-          <TextInput
-            multiline={true}
-            label='Body'
-            name='template_body'
-            value={values.template_body}
-            onChange={handleChange}
-          />
-          <Box py={1} />
-          <Typography
-            sx={{ fontSize: 15, textAlign: 'left', mb: 1 }}
-            variant='body2'
-          >
-            Add Tags
-          </Typography>
 
-          <Select
-            sx={{
-              backgroundColor: '#F5FAFF',
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#98CDFF',
-              },
-              width: '100%',
-            }}
-            multiple
-            value={[]}
-            onChange={handleTagsChange}
-          >
-            {tags &&
-              tags.map((tag) => (
-                <MenuItem key={tag} value={tag}>
-                  {tag}
-                </MenuItem>
-              ))}
-          </Select>
+          <MentionsInput
+            label='Body'
+            value={values.template_body}
+            onChange={handleBodyChange}
+            tags={tags || []}
+          />
         </>
       ) : null}
 

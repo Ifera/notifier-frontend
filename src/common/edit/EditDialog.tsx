@@ -13,7 +13,7 @@ import {
   UseEditHookResult,
 } from '../../interfaces';
 import { parseError } from '../../utils';
-import PreviewForm, { ValueProps } from '../PreviewForm';
+import PreviewForm, { ValueProps } from '../preview-form/PreviewForm';
 
 export interface EditDialogProps {
   open: boolean;
