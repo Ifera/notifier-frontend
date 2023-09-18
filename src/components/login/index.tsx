@@ -34,9 +34,11 @@ function Login() {
         const passwordError = error.errors.find(
           (e) => e.path[0] === 'password'
         );
-        setFormErrors(
-          `${emailError?.message || ''} ${passwordError?.message || ''}`
-        );
+        if (emailError) {
+          setFormErrors(emailError.message);
+        } else if (passwordError) {
+          setFormErrors(passwordError.message);
+        }
         return false;
       }
     }
