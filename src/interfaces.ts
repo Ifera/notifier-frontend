@@ -103,3 +103,9 @@ export type UseGetHookResult = ReturnType<typeof useGet>;
 // ----------------------------------------------
 
 export type Service = APIClient<Properties, Properties>;
+
+// ----------------------------------------------
+
+export interface EventParamProp {
+  target: { value: string };
+}

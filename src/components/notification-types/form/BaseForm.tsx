@@ -164,7 +164,7 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
           sx={{
             bgcolor: '#F1FAFF',
             border: '1px solid #98CDFF',
-            height: '75%',
+            height: '78%',
             whiteSpace: 'pre-wrap',
           }}
           p={4}
