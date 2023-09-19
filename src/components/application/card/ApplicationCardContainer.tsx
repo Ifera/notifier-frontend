@@ -26,19 +26,13 @@ const ApplicationCardContainer = ({
       mountOnEnter
       unmountOnExit
     >
-      <Grid
-        item
-        key={cardId === undefined ? index : cardId}
-        xs={12}
-        sm={8}
-        md={4}
-      >
+      <Grid item key={cardId === undefined ? index : cardId} xs={12} sm={4}>
         <Card
           sx={{
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            minWidth: 275,
+            width: '100%',
             border: cardId === selectedApp ? '1px solid #aaa' : 'none',
           }}
         >
