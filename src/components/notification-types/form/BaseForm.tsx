@@ -170,7 +170,7 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
         )}
       </Grid>
 
-      <Grid item xs={12} md={6} px={4} py={2}>
+      <Grid item xs={12} md={6} px={4} py={1}>
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Preview
         </Typography>
@@ -181,6 +181,8 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
             border: '1px solid #98CDFF',
             height: '78%',
             whiteSpace: 'pre-wrap',
+            width: '100%',
+            overflow: 'auto',
           }}
           p={4}
         >
