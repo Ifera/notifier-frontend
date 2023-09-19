@@ -1,5 +1,5 @@
 import { Box, Button, Grid } from '@mui/material';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import { EventParamProp } from '../../interfaces';
@@ -41,9 +41,9 @@ function PreviewForm({
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setValues(defaultValues);
-  }, [defaultValues]);
+  // useEffect(() => {
+  //   setValues(defaultValues);
+  // }, [defaultValues]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -87,13 +87,13 @@ function PreviewForm({
         return;
       }
 
-      const data = Object.assign(defaultValues);
+      // const data = Object.assign(defaultValues);
 
-      for (const key in data) {
-        data[key] = '';
-      }
+      // for (const key in data) {
+      //   data[key] = '';
+      // }
 
-      setValues(data);
+      // setValues(data);
     });
   };
 
