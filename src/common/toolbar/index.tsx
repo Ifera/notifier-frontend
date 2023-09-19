@@ -130,7 +130,7 @@ export default function ToolBar({
   };
 
   const handleSearchChange = (search: string) => {
-    if (search === '') {
+    if (search === '' || search.length <= 3) {
       delete query.like;
       setQuery({ ...query, pageNumber: 1 });
       return;
@@ -183,6 +183,7 @@ export default function ToolBar({
 
   const renderToolbarOptions = () => (
     <ToolbarOptions
+      type={type}
       setSortAnchorEl={setSortAnchorEl}
       sortOptions={sortOptions}
       selectedSortOption={selectedSortOption}

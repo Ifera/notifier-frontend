@@ -40,10 +40,11 @@ function NotificationTypeContainer({
         service={notificationService}
         parentId={selectedEvent}
         parentName={selectedEventName}
+        totalCount={totalCount}
       />
 
       <Box mt={4}>
-        {!isLoading && totalCount === 0 ? (
+        {totalCount === 0 && !isLoading ? (
           <Alert severity='warning'>
             {query.like || query.isActive !== undefined
               ? 'No notification types found for the selected filters.'

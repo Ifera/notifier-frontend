@@ -1,5 +1,7 @@
 import { Alert } from '@mui/material';
+import { useEffect, useState } from 'react';
 import Loading from '../../../common/loading';
+import { ValueProps } from '../../../common/preview-form/PreviewForm';
 import useEdit from '../../../hooks/useEdit';
 import useGet from '../../../hooks/useGet';
 import { ID, NotificationType, Query } from '../../../interfaces';
@@ -11,10 +13,24 @@ interface EditFormProps {
 }
 
 function EditForm({ id }: EditFormProps) {
-  const query = { notification: id };
-  const editHook = useEdit(notificationService, query as Query); // ignore query in this case
+  const [initialData, setInitialData] = useState<ValueProps | null>(null);
 
+  const editHook = useEdit(notificationService, id as Query); // treat id as query
   const { data, isLoading, error } = useGet(notificationService, id);
+
+  useEffect(() => {
+    if (data) {
+      const { name, description, template_subject, template_body } =
+        data as NotificationType;
+
+      setInitialData({
+        name,
+        description,
+        template_subject,
+        template_body,
+      });
+    }
+  }, [data]);
 
   if (error) {
     return (
@@ -28,7 +44,7 @@ function EditForm({ id }: EditFormProps) {
     return <Loading isLoading />;
   }
 
-  if (!data) {
+  if (!initialData) {
     return (
       <Alert severity='error' sx={{ marginTop: 2 }}>
         The notification returned with empty data.
@@ -36,20 +52,12 @@ function EditForm({ id }: EditFormProps) {
     );
   }
 
-  const { name, description, template_subject, template_body } =
-    data as NotificationType;
-
   return (
     <BaseForm
       id={id}
       operation='Edit'
       hook={editHook}
-      initialData={{
-        name,
-        description,
-        template_subject,
-        template_body,
-      }}
+      initialData={initialData}
     />
   );
 }

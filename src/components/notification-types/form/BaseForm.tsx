@@ -1,7 +1,7 @@
 import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
-import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import _ from 'lodash';
 import ms from 'ms';
 import { useNavigate } from 'react-router-dom';
 import PreviewForm, {
@@ -35,6 +35,17 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
 
   const { data: tags, isLoading: tagsLoading, error } = useTags();
 
+  useEffect(() => {
+    if (initialData) {
+      setInitialValues((prev) => ({
+        ...prev,
+        ...initialData,
+      }));
+
+      setTempData(initialData);
+    }
+  }, [initialData]);
+
   if (error) {
     return (
       <Alert severity='error' sx={{ marginTop: 2 }}>
@@ -42,6 +53,15 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
       </Alert>
     );
   }
+
+  const reset = () => {
+    setInitialValues({
+      name: '',
+      description: '',
+      template_subject: '',
+      template_body: '',
+    });
+  };
 
   function onSubmit(
     values: ValueProps,
@@ -55,12 +75,7 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
             setErrorMessage(null);
             setSuccessMessage('Notification added successfully');
 
-            setInitialValues({
-              name: '',
-              description: '',
-              template_subject: '',
-              template_body: '',
-            });
+            reset();
 
             if (onSuccess) onSuccess(operation);
 
@@ -98,10 +113,10 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
 
             if (onSuccess) onSuccess(operation);
 
-            // go to dashboard on success after 1s
+            // go to dashboard on success
             setTimeout(() => {
               navigate('/');
-            }, ms('1s'));
+            }, ms('0.5s'));
           },
           onError: (error) => {
             setErrorMessage(parseError(error));

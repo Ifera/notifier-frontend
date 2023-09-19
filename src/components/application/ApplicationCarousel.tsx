@@ -33,7 +33,6 @@ function ApplicationCarousel({
   onPageChange,
   onClickEditBtn,
 }: ApplicationCarouselProps) {
-  // TODO: Make this Dynamic Maybe
   const skeletons = [1, 2, 3];
 
   return (

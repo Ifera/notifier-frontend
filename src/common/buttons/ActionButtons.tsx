@@ -1,4 +1,4 @@
-import { Switch } from '@mui/material';
+import { Switch, Tooltip } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useBetween } from 'use-between';
 import {
@@ -114,12 +114,14 @@ function ActionButtons({
         onClick={(e) => onClick(e, 'delete')}
         disabled={delBtnStatus || disabled}
       />
-      <Switch
-        key={data.id}
-        onClick={(e) => onClick(e, 'switch')}
-        checked={data.is_active}
-        disabled={switchStatus || disabled}
-      />
+      <Tooltip title={data.is_active ? 'Deactivate' : 'Activate'}>
+        <Switch
+          key={data.id}
+          onClick={(e) => onClick(e, 'switch')}
+          checked={data.is_active}
+          disabled={switchStatus || disabled}
+        />
+      </Tooltip>
     </>
   );
 }

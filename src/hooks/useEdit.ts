@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 
-import { FetchResponse, PProperties, Properties, Query } from '../interfaces';
+import { PProperties, Properties, Query } from '../interfaces';
 import APIClient from '../services/apiClient';
 
 const useEdit = (service: APIClient<PProperties, Properties>, query: Query) => {
@@ -17,18 +17,7 @@ const useEdit = (service: APIClient<PProperties, Properties>, query: Query) => {
     },
 
     onSuccess(saved: Properties, edited: PProperties) {
-      queryClient.setQueryData<FetchResponse<Properties>>(queryKey, (res) => {
-        if (!res) return;
-
-        const results = res.results || [];
-
-        return {
-          ...res,
-          results: [
-            ...results.map((event) => (event.id === edited.id ? saved : event)),
-          ],
-        };
-      });
+      queryClient.invalidateQueries(queryKey);
     },
 
     onError() {

@@ -42,7 +42,7 @@ function ApplicationCard({
           py={1}
           px={2}
         >
-          <Typography gutterBottom variant='h5' component='h2'>
+          <Typography gutterBottom variant='h6'>
             {application.name}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
@@ -51,7 +51,7 @@ function ApplicationCard({
           </Typography>
         </Box>
         <CardContent sx={{ flexGrow: 1 }}>
-          <Typography>{application.description}</Typography>
+          <Typography variant='body2'>{application.description}</Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>

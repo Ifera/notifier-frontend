@@ -46,7 +46,7 @@ function EventContainer({
       />
 
       <Box mt={4}>
-        {!isLoading && totalCount === 0 ? (
+        {totalCount === 0 && !isLoading ? (
           <Alert severity='warning'>
             {query.like || query.isActive !== undefined
               ? 'No events found for the selected filters.'

@@ -1,5 +1,7 @@
 import { Card, Grid, Slide } from '@mui/material';
+import { useBetween } from 'use-between';
 import { ID } from '../../../interfaces';
+import { dashboardState } from '../../../pages/Dashboard';
 
 interface ApplicationCardContainerProps {
   cardId?: ID;
@@ -14,6 +16,8 @@ const ApplicationCardContainer = ({
   cardsPerPage,
   children,
 }: ApplicationCardContainerProps) => {
+  const { selectedApp } = useBetween(dashboardState);
+
   return (
     <Slide
       key={index}
@@ -35,6 +39,7 @@ const ApplicationCardContainer = ({
             display: 'flex',
             flexDirection: 'column',
             minWidth: 275,
+            border: cardId === selectedApp ? '1px solid #aaa' : 'none',
           }}
         >
           {children}
