@@ -267,7 +267,9 @@ function BaseDataGrid({
             pagination: CustomPagination,
           }}
           getRowClassName={(params) =>
-            params.id === selectedEvent ? 'selected-row' : ''
+            params.id === selectedEvent && type === 'Event'
+              ? 'selected-row'
+              : ''
           }
         />
       </div>
