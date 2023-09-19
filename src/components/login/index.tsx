@@ -24,11 +24,24 @@ function Login() {
     setFormErrors('');
   };
 
-  useEffect(() => {
-    if (authHook.isAuthenticated()) {
-      navigate('/');
+  const isAuthenticated = () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return false;
     }
-  }, [authHook, navigate]);
+
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    const expirationTime = decodedToken.exp * 1000;
+    const isExpired = Date.now() - expirationTime > 0;
+
+    if (isExpired) {
+      localStorage.removeItem('token');
+      return false;
+    }
+
+    return token !== null;
+  };
 
   const validateForm = () => {
     try {
@@ -52,7 +65,7 @@ function Login() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      authHook.mutation.mutate(formData, {
+      authHook.mutate(formData, {
         onSuccess: (data) => {
           if (!data.token) {
             setFormErrors('An error occurred while logging in');
@@ -69,6 +82,12 @@ function Login() {
       });
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/');
+    }
+  }, [authHook, navigate]);
 
   return (
     <Card sx={{ py: 4, px: 2, mx: 2, maxWidth: 400, width: '100%' }}>
