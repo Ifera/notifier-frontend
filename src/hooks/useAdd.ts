@@ -9,7 +9,7 @@ const useAdd = (service: APIClient<PProperties, Properties>) => {
 
   return useMutation<Properties, Error, PProperties>({
     mutationFn: (obj: PProperties) => {
-      return service.post(obj);
+      return service.post({ ...obj, is_active: true });
     },
 
     onSuccess() {
