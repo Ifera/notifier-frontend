@@ -1,4 +1,4 @@
-import { Container, Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
   Application,
@@ -36,7 +36,7 @@ function ApplicationCarousel({
   const skeletons = [1, 2, 3];
 
   return (
-    <Container>
+    <>
       <Grid container spacing={4} justifyContent='center' alignItems='center'>
         {isLoading ? (
           skeletons.map((_, index) => (
@@ -86,7 +86,7 @@ function ApplicationCarousel({
           </>
         )}
       </Grid>
-    </Container>
+    </>
   );
 }
 
