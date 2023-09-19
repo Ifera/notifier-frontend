@@ -1,5 +1,5 @@
 import { Card, Container, Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import Icon from '../../assets/gosaas-icon-red.webp';
@@ -24,6 +24,12 @@ function Login() {
     setFormErrors('');
   };
 
+  useEffect(() => {
+    if (authHook.isAuthenticated()) {
+      navigate('/');
+    }
+  }, [authHook, navigate]);
+
   const validateForm = () => {
     try {
       userSchema.parse(formData);
@@ -46,7 +52,7 @@ function Login() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      authHook.mutate(formData, {
+      authHook.mutation.mutate(formData, {
         onSuccess: (data) => {
           if (!data.token) {
             setFormErrors('An error occurred while logging in');
