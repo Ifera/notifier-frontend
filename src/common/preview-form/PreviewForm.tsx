@@ -82,19 +82,7 @@ function PreviewForm({
 
     if (!validateForm()) return;
 
-    onSubmit(values, (cause) => {
-      if (cause === 'Edit') {
-        return;
-      }
-
-      // const data = Object.assign(defaultValues);
-
-      // for (const key in data) {
-      //   data[key] = '';
-      // }
-
-      // setValues(data);
-    });
+    onSubmit(values, (cause) => {});
   };
 
   return (
