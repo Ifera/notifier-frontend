@@ -19,11 +19,10 @@ function InfoButton({ data }: InfoButtonProps) {
         title={
           <div>
             <p>
-              ID: {data.id} <br />
-              Name: {data.name} <br />
-              Description: {data.description} <br />
-              Created at: {dcText} <br />
-              Modified at: {dmText}
+              <u>Name:</u> {data.name} <br />
+              <u>Description:</u> {data.description} <br />
+              <u>Created at:</u> {dcText} <br />
+              <u>Modified at:</u> {dmText}
             </p>
           </div>
         }
