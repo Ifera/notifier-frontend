@@ -1,5 +1,4 @@
 import {
-  Box,
   InputAdornment,
   TextField,
   TextFieldProps,
@@ -20,7 +19,14 @@ const TextInput = ({
   const inputId = `${label}-input`;
 
   return (
-    <Box>
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      }}
+    >
       <label htmlFor={inputId}>
         <Typography
           sx={{ fontSize: 15, textAlign: 'left', my: 1 }}
@@ -51,7 +57,7 @@ const TextInput = ({
         }}
         {...props}
       />
-    </Box>
+    </div>
   );
 };
 
