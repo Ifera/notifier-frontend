@@ -16,7 +16,7 @@ const useEdit = (service: APIClient<PProperties, Properties>, query: Query) => {
       return service.patch(obj.id, _.omit(obj, 'id'));
     },
 
-    onSuccess(saved: Properties, edited: PProperties) {
+    onSuccess() {
       queryClient.invalidateQueries(queryKey);
     },
 

@@ -20,7 +20,7 @@ function ErrorPage() {
         }}
       >
         <b>404</b>
-        <span style={{ margin: '0 10px' }}>|</span> This Page could not be found
+        <span style={{ margin: '0 10px' }}>|</span> This page could not be found
       </Box>
     </Box>
   );
