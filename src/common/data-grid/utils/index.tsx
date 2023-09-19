@@ -1,4 +1,5 @@
 import {
+  DataGrid,
   GridColDef,
   GridRowParams,
   GridToolbarContainer,
@@ -6,6 +7,8 @@ import {
 
 import { Delete } from '@mui/icons-material';
 import { IconButton, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
 import {
   Event,
   NotificationType,
@@ -93,3 +96,12 @@ export const CustomToolbar = (onClickDelete: () => void) => {
     </GridToolbarContainer>
   );
 };
+
+// ----------------------------------------------
+
+export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  '.selected-row': {
+    backgroundColor: '#eee',
+    fontWeight: '500',
+  },
+}));

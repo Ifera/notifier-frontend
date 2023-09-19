@@ -1,7 +1,6 @@
 import { Alert, TablePaginationProps } from '@mui/material';
 import MuiPagination from '@mui/material/Pagination';
 import {
-  DataGrid as DataGridX,
   GridPagination,
   GridPaginationModel,
   GridRowParams,
@@ -29,7 +28,9 @@ import EditDialog, {
   EditDialogProps,
   OnSubmitSuccessProps,
 } from '../edit/EditDialog';
-import { CustomToolbar, getColumns } from './utils';
+import { CustomToolbar, StyledDataGrid, getColumns } from './utils';
+
+const LIMIT_SELECTION = 0;
 
 export interface BaseDataGridProps {
   type: 'Event' | 'Notification';
@@ -120,16 +121,16 @@ function BaseDataGrid({
   };
 
   const handleRowClick = (params: GridRowParams) => {
-    if (selectedRows.length > 0) return;
+    if (selectedRows.length > LIMIT_SELECTION) return;
 
     onRowClick(params);
   };
 
   const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
-    const data = ids.map((id) => rows.find((row) => row.id === id));
-    setSelectedRows(data as Event[] | NotificationType[]);
+    const selection = ids.map((id) => rows.find((row) => row.id === id));
+    setSelectedRows(selection as Event[] | NotificationType[]);
 
-    if (data.length > 0) {
+    if (selection.length > LIMIT_SELECTION) {
       if (type === 'Event') {
         setSelectedEvent(null);
         setSelectedNotif(null);
@@ -185,7 +186,7 @@ function BaseDataGrid({
     type,
     editHook,
     delHook,
-    disableActionBtns: selectedRows.length > 0,
+    disableActionBtns: selectedRows.length > LIMIT_SELECTION,
     onClickEdit: handleClickEdit,
     onClickDelete: handleClickDelete,
   });
@@ -214,7 +215,11 @@ function BaseDataGrid({
 
   return (
     <>
-      <div style={{ height: selectedRows.length > 0 ? '400px' : '380px' }}>
+      <div
+        style={{
+          height: selectedRows.length > LIMIT_SELECTION ? '400px' : '380px',
+        }}
+      >
         <EditDialog
           {...dialogProps}
           onClose={handleEditDialogClose}
@@ -222,7 +227,7 @@ function BaseDataGrid({
           onSubmitSuccess={handleSubmitSuccess}
         />
 
-        <DataGridX
+        <StyledDataGrid
           apiRef={apiRef}
           rows={rows}
           columns={columns}
@@ -256,11 +261,14 @@ function BaseDataGrid({
           }}
           slots={{
             toolbar:
-              selectedRows.length > 0
+              selectedRows.length > LIMIT_SELECTION
                 ? () => CustomToolbar(handleClickDeleteMultiple)
                 : null,
             pagination: CustomPagination,
           }}
+          getRowClassName={(params) =>
+            params.id === selectedEvent ? 'selected-row' : ''
+          }
         />
       </div>
     </>
