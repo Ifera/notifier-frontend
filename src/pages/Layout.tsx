@@ -1,6 +1,7 @@
-import { AppBar, Button, Grid, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, Grid, Toolbar } from '@mui/material';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../assets/icon.svg';
+import Footer from '../common/footer';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -9,8 +10,11 @@ const Layout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
+
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <AppBar position='static'>
         <Toolbar color='primary'>
           <Link to='/'>
@@ -23,9 +27,11 @@ const Layout = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-
-      <Outlet />
-    </>
+      <Box sx={{ flex: 1 }}>
+        <Outlet />
+      </Box>
+      <Footer />
+    </div>
   );
 };
 
