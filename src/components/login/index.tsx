@@ -90,7 +90,7 @@ function Login() {
   }, [authHook, navigate]);
 
   return (
-    <Card sx={{ py: 4, px: 2, mx: 2, maxWidth: 400, width: '100%' }}>
+    <Card sx={{ py: 8, px: 4, mx: 4, maxWidth: 450, width: '100%' }}>
       <Container>
         <Grid
           container

@@ -53,6 +53,7 @@ const LoginForm = ({
           value={formData.email}
           onChange={handleInputChange}
           startIcon={<EmailIcon />}
+          type='email'
         />
         <TextInput
           label='Password'
@@ -67,7 +68,7 @@ const LoginForm = ({
           color='primary'
           type='submit'
           fullWidth
-          sx={{ mt: 4, mx: 3 }}
+          sx={{ mt: 4 }}
           onClick={handleSubmit}
         >
           Login
