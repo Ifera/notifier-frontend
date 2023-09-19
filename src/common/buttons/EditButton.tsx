@@ -5,7 +5,7 @@ function EditButton(props: ButtonProps) {
   return (
     <>
       <Tooltip title='Edit'>
-        <IconButton color='primary' size='medium' edge='start' {...props}>
+        <IconButton color='primary' size='medium' {...props}>
           <Edit />
         </IconButton>
       </Tooltip>

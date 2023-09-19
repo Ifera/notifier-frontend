@@ -9,6 +9,7 @@ import {
 import { dashboardState } from '../../pages/Dashboard';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
+import InfoButton from './InfoButton';
 
 interface ActionButtonsProps {
   type: 'App' | 'Event' | 'Notification';
@@ -109,6 +110,7 @@ function ActionButtons({
 
   return (
     <>
+      <InfoButton data={data} />
       <EditButton onClick={(e) => onClick(e, 'edit')} disabled={disabled} />
       <DeleteButton
         onClick={(e) => onClick(e, 'delete')}
