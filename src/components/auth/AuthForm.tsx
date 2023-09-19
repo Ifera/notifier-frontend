@@ -1,6 +1,6 @@
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
-import { Alert, Button, Grid } from '@mui/material';
+import { Alert, Box, Button, Grid, Link, Typography } from '@mui/material';
 import { SyntheticEvent } from 'react';
 import TextInput from '../../common/TextInput';
 
@@ -9,19 +9,21 @@ export type User = {
   password: string;
 };
 
-interface LoginFormProps {
+interface AuthFormProps {
   formData: User;
   formErrors: string;
   onInputChange: (name: string, value: string) => void;
   onSubmit: () => void;
+  formType: 'login' | 'register';
 }
 
-const LoginForm = ({
+const AuthForm = ({
   formData,
   formErrors,
   onInputChange,
   onSubmit,
-}: LoginFormProps) => {
+  formType,
+}: AuthFormProps) => {
   const handleInputChange = (e: SyntheticEvent) => {
     const inputElement = e.target as HTMLInputElement;
     const { name, value } = inputElement;
@@ -46,7 +48,6 @@ const LoginForm = ({
             {formErrors}
           </Alert>
         )}
-
         <TextInput
           label='Email'
           name='email'
@@ -69,13 +70,24 @@ const LoginForm = ({
           type='submit'
           fullWidth
           sx={{ mt: 4 }}
-          onClick={handleSubmit}
         >
-          Login
+          {formType === 'login' ? 'Login' : 'Register'}
         </Button>
+
+        <Box pt={3}>
+          {formType === 'login' ? (
+            <Typography variant='body2' color='text.secondary'>
+              Don't have an account? <Link href='/register'>Register</Link>
+            </Typography>
+          ) : (
+            <Typography variant='body2' color='text.secondary'>
+              Already have an account? <Link href='/login'>Login</Link>
+            </Typography>
+          )}
+        </Box>
       </Grid>
     </form>
   );
 };
 
-export default LoginForm;
+export default AuthForm;

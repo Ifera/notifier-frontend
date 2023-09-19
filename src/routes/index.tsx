@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
+import AuthPage from '../pages/AuthPage';
 import Dashboard from '../pages/Dashboard';
 import ErrorPage from '../pages/ErrorPage';
 import Layout from '../pages/Layout';
-import LoginPage from '../pages/LoginPage';
 import NotificationPage from '../pages/NotificationPage';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -27,7 +27,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: 'login', element: <LoginPage /> },
+  { path: 'login', element: <AuthPage authType='login' /> },
+  { path: 'register', element: <AuthPage authType='register' /> },
 ]);
 
 export default router;

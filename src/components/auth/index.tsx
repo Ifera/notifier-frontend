@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import Icon from '../../assets/gosaas-icon-red.webp';
 import useAuth from '../../hooks/useAuth';
+import { AuthType } from '../../pages/AuthPage';
 import authService from '../../services/authService';
 import { parseError } from '../../utils';
 import { userSchema } from '../../validation/schema';
-import LoginForm, { User } from './LoginForm';
+import AuthForm, { User } from './AuthForm';
 
-function Login() {
+function Auth({ authType }: AuthType) {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<User>({
@@ -17,7 +18,10 @@ function Login() {
     password: '',
   });
   const [formErrors, setFormErrors] = useState('');
-  const authHook = useAuth(authService);
+
+  const authHook = useAuth(
+    authType === 'login' ? authService.login : authService.register
+  );
 
   const onInputChange = (name: string, value: string) => {
     setFormData({ ...formData, [name]: value });
@@ -68,7 +72,7 @@ function Login() {
       authHook.mutate(formData, {
         onSuccess: (data) => {
           if (!data.token) {
-            setFormErrors('An error occurred while logging in');
+            setFormErrors('Something went wrong');
             return;
           }
           localStorage.clear();
@@ -90,7 +94,15 @@ function Login() {
   }, [authHook, navigate]);
 
   return (
-    <Card sx={{ py: 8, px: 4, mx: 4, maxWidth: 450, width: '100%' }}>
+    <Card
+      sx={{
+        py: 8,
+        px: 4,
+        mx: 4,
+        maxWidth: 450,
+        width: '100%',
+      }}
+    >
       <Container>
         <Grid
           container
@@ -100,16 +112,26 @@ function Login() {
         >
           <img src={Icon} alt='icon' style={{ maxWidth: '100%' }} />
         </Grid>
-
-        <LoginForm
-          formData={formData}
-          formErrors={formErrors}
-          onInputChange={onInputChange}
-          onSubmit={handleSubmit}
-        />
+        {authType === 'login' ? (
+          <AuthForm
+            formData={formData}
+            formErrors={formErrors}
+            onInputChange={onInputChange}
+            onSubmit={handleSubmit}
+            formType={authType}
+          />
+        ) : (
+          <AuthForm
+            formData={formData}
+            formErrors={formErrors}
+            onInputChange={onInputChange}
+            onSubmit={handleSubmit}
+            formType={authType}
+          />
+        )}
       </Container>
     </Card>
   );
 }
 
-export default Login;
+export default Auth;
