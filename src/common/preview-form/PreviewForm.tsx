@@ -114,7 +114,7 @@ function PreviewForm({
           />
 
           <MentionsInput
-            label='Body'
+            label='Body *'
             value={values.template_body}
             onChange={handleBodyChange}
             tags={tags || []}
