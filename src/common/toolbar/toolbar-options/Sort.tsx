@@ -23,10 +23,10 @@ function Sort({
     : 'Name';
 
   const directionIcon =
-    sortDirection === 1 ? (
-      <ArrowUpward sx={{ fontSize: '1rem' }} />
-    ) : (
+    sortDirection === -1 ? (
       <ArrowDownward sx={{ fontSize: '1rem' }} />
+    ) : (
+      <ArrowUpward sx={{ fontSize: '1rem' }} />
     );
 
   const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
