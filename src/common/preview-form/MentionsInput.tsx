@@ -53,10 +53,10 @@ const StyledMentionsInput = ({
             '&:hover': {
               borderColor: '#98CDFF',
             },
-            minHeight: '10rem',
+            minHeight: '12rem',
           },
           highlighter: {
-            overflow: 'hidden',
+            overflow: 'auto',
           },
           marginTop: '10px',
 
