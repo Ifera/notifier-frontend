@@ -47,7 +47,7 @@ function PopoverMenu({
       }}
     >
       <Box p={1}>
-        {direction && handleDirectionChange && (
+        {handleDirectionChange && (
           <Box display='flex' alignItems='center' sx={{ marginBottom: '8px' }}>
             <ToggleButtonGroup
               value={direction}

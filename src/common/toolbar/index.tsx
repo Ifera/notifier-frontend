@@ -17,7 +17,7 @@ import EditDialog, {
   OnSubmitSuccessProps,
 } from '../edit/EditDialog';
 import PopoverMenu from './PopoverMenu';
-import ToolbarOptions from './toolbar-options/ToolbarOptions';
+import ToolbarOptions from './toolbar-options/';
 
 const sortOptions = [
   {
