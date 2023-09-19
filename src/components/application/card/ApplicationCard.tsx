@@ -27,6 +27,7 @@ function ApplicationCard({
 }: ApplicationCardProps) {
   const createdAtDate: Date = new Date(application.created_at);
   const formattedDate = createdAtDate.toLocaleDateString();
+
   return (
     <>
       <CardActionArea
@@ -35,7 +36,6 @@ function ApplicationCard({
         <Box
           sx={{
             backgroundColor: '#EBF5FF',
-
             display: 'flex',
             alignItems: 'center',
           }}
