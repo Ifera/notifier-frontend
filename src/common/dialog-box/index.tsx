@@ -1,0 +1,59 @@
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from '@mui/material';
+
+interface DialogBoxProps {
+  open: boolean;
+  type: string;
+  handleClose: () => void;
+  handleSubmit: () => void;
+}
+
+const DialogBox = ({
+  open,
+  type,
+  handleClose,
+  handleSubmit,
+}: DialogBoxProps) => {
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth='xs' fullWidth>
+      <DialogTitle>
+        <Box display='flex' alignItems='center'>
+          <Box flexGrow={1}>Delete {type}</Box>
+          <Box>
+            <IconButton onClick={handleClose} edge='end'>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant='body1' sx={{ mb: 2 }}>
+          Are you sure you want to delete this {type}?
+        </Typography>
+        <Box display='flex' justifyContent='flex-end' sx={{ mt: 6 }}>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleClose}
+            sx={{ mr: 1 }}
+          >
+            Cancel
+          </Button>
+          <Button variant='contained' color='error' onClick={handleSubmit}>
+            Delete
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default DialogBox;
