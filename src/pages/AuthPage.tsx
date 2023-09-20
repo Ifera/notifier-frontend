@@ -1,7 +1,11 @@
 import { Box } from '@mui/material';
-import Login from '../components/login';
+import Auth from '../components/auth';
 
-function LoginPage() {
+export interface AuthType {
+  authType: 'login' | 'register';
+}
+
+function AuthPage({ authType }: AuthType) {
   return (
     <Box
       sx={{
@@ -12,9 +16,9 @@ function LoginPage() {
         alignItems: 'center',
       }}
     >
-      <Login />
+      <Auth authType={authType} />
     </Box>
   );
 }
 
-export default LoginPage;
+export default AuthPage;

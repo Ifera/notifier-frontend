@@ -1,9 +1,11 @@
 import {
   Box,
-  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Popover,
-  ToggleButton,
-  ToggleButtonGroup,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
 
 interface PopoverMenuProps {
@@ -27,11 +29,6 @@ function PopoverMenu({
   direction,
   handleDirectionChange,
 }: PopoverMenuProps) {
-  const toggleButtons = [
-    { value: 1, label: 'ASC' },
-    { value: -1, label: 'DESC' },
-  ];
-
   return (
     <Popover
       open={open}
@@ -49,37 +46,51 @@ function PopoverMenu({
       <Box p={1}>
         {handleDirectionChange && (
           <Box display='flex' alignItems='center' sx={{ marginBottom: '8px' }}>
-            <ToggleButtonGroup
-              value={direction}
-              exclusive
-              onChange={(event, newDirection) =>
-                handleDirectionChange && handleDirectionChange(newDirection)
-              }
-              size='small'
-            >
-              {toggleButtons.map((button) => (
-                <ToggleButton
-                  key={button.value}
-                  value={button.value}
-                  sx={{ width: '50%' }}
-                >
-                  {button.label}
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
+            <FormControl>
+              <FormLabel component='legend'>
+                <b>SORT BY </b>
+              </FormLabel>
+              <RadioGroup
+                value={String(direction)}
+                onChange={(event) =>
+                  handleDirectionChange &&
+                  handleDirectionChange(Number(event.target.value))
+                }
+              >
+                <FormControlLabel
+                  value='1'
+                  control={<Radio />}
+                  label='Ascending'
+                />
+                <FormControlLabel
+                  value='-1'
+                  control={<Radio />}
+                  label='Descending'
+                />
+              </RadioGroup>
+            </FormControl>
           </Box>
         )}
 
-        {options.map((option) => (
-          <Button
-            sx={{ display: 'block', width: '100%', textAlign: 'left' }}
-            key={option.value}
-            onClick={() => handleOptionChange(option.value)}
-            variant={selectedOption === option.value ? 'contained' : 'text'}
+        <FormControl>
+          <FormLabel component='legend'>
+            {handleDirectionChange ? <b>SORT BY </b> : <b>FILTER BY </b>}
+          </FormLabel>
+
+          <RadioGroup
+            value={selectedOption}
+            onChange={(event) => handleOptionChange(event.target.value)}
           >
-            {option.label}
-          </Button>
-        ))}
+            {options.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                control={<Radio />}
+                label={option.label}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
       </Box>
     </Popover>
   );

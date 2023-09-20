@@ -32,7 +32,7 @@ const TextInput = ({
           sx={{ fontSize: 15, textAlign: 'left', my: 1 }}
           color='#071B2F'
         >
-          {label}
+          {label} *
         </Typography>
       </label>
       <TextField
