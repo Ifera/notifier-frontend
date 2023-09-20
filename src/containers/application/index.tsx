@@ -32,6 +32,7 @@ function ApplicationContainer({
         service={applicationService}
         totalCount={data?.total_count}
       />
+
       <Box mt={5}>
         <Application
           data={data}

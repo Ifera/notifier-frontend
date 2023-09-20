@@ -255,12 +255,25 @@ export default function ToolBar({
         <Typography
           component='div'
           variant='h6'
-          sx={{ flex: 1, fontSize: '18px' }}
+          sx={{
+            flex: 1,
+            fontSize: '18px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
-          {type === 'App' ? 'Applications ' : `${type}s `}
-          <span style={{ fontSize: '12px' }}>
+          {type === 'App' ? 'Applications' : `${type}s`}
+
+          <Typography
+            variant='body2'
+            sx={{
+              fontSize: '13px',
+              display: { sm: 'inline', xs: 'none' },
+              mx: 1,
+            }}
+          >
             ({parentText}Total: {totalCount || 0})
-          </span>
+          </Typography>
         </Typography>
         <IconButton
           onClick={handleMobileMenuOpen}

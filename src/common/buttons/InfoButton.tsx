@@ -18,7 +18,7 @@ function InfoButton({ data }: InfoButtonProps) {
       <Tooltip
         title={
           <div>
-            <p>
+            <p style={{ fontSize: '13px' }}>
               <u>Name:</u> {data.name} <br />
               <u>Description:</u> {data.description} <br />
               <u>Created at:</u> {dcText} <br />
