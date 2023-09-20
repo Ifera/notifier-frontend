@@ -49,7 +49,7 @@ class APIClient<S, R> {
       .then((res) => res.data);
   };
 
-  get = (id: ID) => {
+  getById = (id: ID) => {
     return axiosInstance
       .get<R>(this.endpoint + '/' + id)
       .then((res) => res.data);
@@ -77,8 +77,8 @@ class APIClient<S, R> {
       .then((res) => res.data);
   };
 
-  getTags = () => {
-    return axiosInstance.get<string[]>(this.endpoint).then((res) => res.data);
+  get = () => {
+    return axiosInstance.get<R>(this.endpoint).then((res) => res.data);
   };
 }
 

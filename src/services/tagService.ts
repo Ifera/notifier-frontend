@@ -1,3 +1,3 @@
 import APIClient from './apiClient';
 
-export default new APIClient<string[], any>('tags');
+export default new APIClient<any, string[]>('tags');
