@@ -7,13 +7,14 @@ import {
 import { ReactNode } from 'react';
 
 export type TextInputProps = TextFieldProps & {
+  label: string;
   startIcon?: ReactNode;
 };
 
 const TextInput = ({
-  multiline,
   label,
   startIcon,
+  multiline,
   ...props
 }: TextInputProps) => {
   const inputId = `${label}-input`;
@@ -32,13 +33,14 @@ const TextInput = ({
           sx={{ fontSize: 15, textAlign: 'left', my: 1 }}
           color='#071B2F'
         >
-          {label} *
+          {label} {props.required && '*'}
         </Typography>
       </label>
+
       <TextField
         id={inputId}
-        {...(multiline && { multiline: true, rows: 6 })}
         fullWidth
+        placeholder={`Enter ${label.toLowerCase()}...`}
         InputProps={{
           startAdornment: startIcon && (
             <InputAdornment position='start'>{startIcon}</InputAdornment>
@@ -55,6 +57,7 @@ const TextInput = ({
             },
           },
         }}
+        {...(multiline && { multiline: true, rows: 6 })}
         {...props}
       />
     </div>
