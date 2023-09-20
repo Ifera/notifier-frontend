@@ -7,6 +7,7 @@ import {
   UseEditHookResult,
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
+import DialogBox from '../dialog-box';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import InfoButton from './InfoButton';
@@ -37,6 +38,7 @@ function ActionButtons({
 }: ActionButtonsProps) {
   const [switchStatus, setSwitchStatus] = useState(false);
   const [delBtnStatus, setDelBtnStatus] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control the dialog visibility
 
   const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
 
@@ -46,7 +48,10 @@ function ActionButtons({
 
   const handleClickDelete = () => {
     setDelBtnStatus(true);
+    setIsDialogOpen(true);
+  };
 
+  const handleConfirmDelete = () => {
     delHook.mutate(
       { id: data.id },
       {
@@ -59,6 +64,7 @@ function ActionButtons({
         },
         onSettled: () => {
           setDelBtnStatus(false);
+          setIsDialogOpen(false);
         },
       }
     );
@@ -124,6 +130,17 @@ function ActionButtons({
           disabled={switchStatus || disabled}
         />
       </Tooltip>
+
+      <DialogBox
+        open={isDialogOpen}
+        type={type}
+        handleClose={() => {
+          setIsDialogOpen(false);
+          setDelBtnStatus(false);
+          disabled = false;
+        }}
+        handleSubmit={handleConfirmDelete} // Perform the delete action
+      />
     </>
   );
 }
