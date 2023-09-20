@@ -43,7 +43,7 @@ const DialogBox = ({
       <DialogContent>
         <Typography variant='body1' sx={{ mb: 2 }}>
           {multipleDelete
-            ? `Are you sure you want to delete all these ${type}?`
+            ? `Are you sure you want to delete all these ${type}s?`
             : `Are you sure you want to delete this ${type}?`}
         </Typography>
         <Box display='flex' justifyContent='flex-end' sx={{ mt: 6 }}>
