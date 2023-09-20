@@ -43,15 +43,21 @@ function ApplicationCard({
           px={2}
         >
           <Typography gutterBottom variant='h6'>
-            {application.name}
+            {application.name.length > 20
+              ? application.name.substring(0, 20) + '...'
+              : application.name}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Typography sx={{ fontSize: 14 }} color='#071B2F'>
             {formattedDate}
           </Typography>
         </Box>
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Typography variant='body2'>{application.description}</Typography>
+        <CardContent sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
+          <Typography variant='body2'>
+            {application.description.length > 90
+              ? application.description.substring(0, 90) + '...'
+              : application.description}
+          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
