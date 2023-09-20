@@ -38,7 +38,7 @@ function ActionButtons({
 }: ActionButtonsProps) {
   const [switchStatus, setSwitchStatus] = useState(false);
   const [delBtnStatus, setDelBtnStatus] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control the dialog visibility
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
 
