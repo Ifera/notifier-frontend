@@ -48,7 +48,7 @@ function PopoverMenu({
           <Box display='flex' alignItems='center' sx={{ marginBottom: '8px' }}>
             <FormControl>
               <FormLabel component='legend'>
-                <b>SORT BY </b>
+                <b>SORT ORDER</b>
               </FormLabel>
               <RadioGroup
                 value={String(direction)}
@@ -56,6 +56,14 @@ function PopoverMenu({
                   handleDirectionChange &&
                   handleDirectionChange(Number(event.target.value))
                 }
+                onClick={(event) => {
+                  if (
+                    (event.target as HTMLInputElement).value ===
+                    String(direction)
+                  ) {
+                    handleDirectionChange && handleDirectionChange(0);
+                  }
+                }}
               >
                 <FormControlLabel
                   value='1'
@@ -80,6 +88,11 @@ function PopoverMenu({
           <RadioGroup
             value={selectedOption}
             onChange={(event) => handleOptionChange(event.target.value)}
+            onClick={(event) => {
+              if ((event.target as HTMLInputElement).value === selectedOption) {
+                handleOptionChange('');
+              }
+            }}
           >
             {options.map((option) => (
               <FormControlLabel
