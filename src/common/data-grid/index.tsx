@@ -1,5 +1,4 @@
 import { Alert } from '@mui/material';
-import { GridRowParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import useGetAll from '../../hooks/useGetAll';
 import {
@@ -8,6 +7,7 @@ import {
   ID,
   NotificationType,
   NotificationTypeQuery,
+  Properties,
   Query,
 } from '../../interfaces';
 import BaseDataGrid, { BaseDataGridProps } from './BaseDataGrid';
@@ -41,20 +41,20 @@ function DataGrid({
     setPageNumber(pageNumber);
   };
 
-  const handleRowClick = (params: GridRowParams) => {
-    let data = null;
+  const handleRowClick = (data: Properties) => {
+    let d = null;
 
     if (type === 'Event') {
-      data = params.row as Event;
+      d = data as Event;
     }
 
     if (type === 'Notification') {
-      data = params.row as NotificationType;
+      d = data as NotificationType;
     }
 
-    if (!data) return; // not possible
+    if (!d) return; // not possible
 
-    onSelect(data.id, data.name);
+    onSelect(d.id, d.name);
   };
 
   return (

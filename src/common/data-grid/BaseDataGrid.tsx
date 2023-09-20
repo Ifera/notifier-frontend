@@ -1,9 +1,9 @@
 import { Alert, TablePaginationProps } from '@mui/material';
 import MuiPagination from '@mui/material/Pagination';
 import {
+  GridCellParams,
   GridPagination,
   GridPaginationModel,
-  GridRowParams,
   GridRowSelectionModel,
   useGridApiRef,
 } from '@mui/x-data-grid';
@@ -42,7 +42,7 @@ export interface BaseDataGridProps {
   action?: ActionMap;
 
   onPageChange: (pageNumber: number) => void;
-  onRowClick: (params: GridRowParams) => void;
+  onRowClick: (data: Properties) => void;
 }
 
 function BaseDataGrid({
@@ -120,10 +120,11 @@ function BaseDataGrid({
     }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
   };
 
-  const handleRowClick = (params: GridRowParams) => {
+  const handleCellClick = (params: GridCellParams) => {
+    if (params.field === 'action' || params.field === '__check__') return;
     if (selectedRows.length > LIMIT_SELECTION) return;
 
-    onRowClick(params);
+    onRowClick(params.row);
   };
 
   const handleRowSelectionModelChange = (ids: GridRowSelectionModel) => {
@@ -248,7 +249,8 @@ function BaseDataGrid({
           paginationMode='server'
           paginationModel={paginationModel}
           onPaginationModelChange={handlePageChange}
-          onRowClick={handleRowClick}
+          onCellClick={handleCellClick}
+          // onRowClick={handleRowClick}
           pageSizeOptions={[5]}
           onRowSelectionModelChange={handleRowSelectionModelChange}
           checkboxSelection
