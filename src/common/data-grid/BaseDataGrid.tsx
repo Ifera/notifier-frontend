@@ -289,7 +289,7 @@ function BaseDataGrid({
             setIsDialogOpen(false);
           }}
           handleSubmit={handleDeleteMultiple}
-          multipleDelete
+          multipleDelete={selectedRows.length > 1}
         />
       </div>
     </>
