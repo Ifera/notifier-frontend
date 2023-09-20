@@ -92,6 +92,7 @@ function PreviewForm({
         name='name'
         value={values.name}
         onChange={handleChange}
+        required
       />
 
       <TextInput
@@ -101,6 +102,7 @@ function PreviewForm({
         onChange={handleChange}
         rows={3}
         multiline
+        required
       />
 
       {defaultValues.template_subject !== undefined &&
@@ -111,6 +113,7 @@ function PreviewForm({
             name='template_subject'
             value={values.template_subject}
             onChange={handleChange}
+            required
           />
 
           <MentionsInput
