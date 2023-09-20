@@ -98,7 +98,7 @@ export default function ToolBar({
   };
 
   const handleSortChange = (value: string) => {
-    if (selectedSortOption === value) {
+    if (selectedSortOption === value || value === '') {
       delete query.sortBy;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(null);
@@ -112,7 +112,11 @@ export default function ToolBar({
   };
 
   const handleFilterChange = (value: string) => {
-    if (selectedFilterOption === value) {
+    if (selectedFilterOption === value || value === '') {
+      delete query.isActive;
+      setQuery({ ...query, pageNumber: 1 });
+      setSelectedFilterOption(null);
+    } else if (value === '') {
       delete query.isActive;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(null);
@@ -141,10 +145,10 @@ export default function ToolBar({
   };
 
   const handleSortDirectionChange = (newDirection: number) => {
-    if (newDirection === sortDirection) {
+    if (newDirection === sortDirection || newDirection === 0) {
       delete query.sortOrder;
       setQuery({ ...query, pageNumber: 1 });
-      setSortDirection(1);
+      setSortDirection(0);
     } else {
       query.sortOrder = newDirection;
       setQuery({ ...query, pageNumber: 1 });
