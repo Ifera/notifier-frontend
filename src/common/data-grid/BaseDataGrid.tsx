@@ -1,4 +1,9 @@
-import { Alert, TablePaginationProps } from '@mui/material';
+import {
+  Alert,
+  PaginationItem,
+  TablePaginationProps,
+  Tooltip,
+} from '@mui/material';
 import MuiPagination from '@mui/material/Pagination';
 import {
   GridCellParams,
@@ -212,6 +217,20 @@ function BaseDataGrid({
         page={page + 1}
         onChange={(event, newPage) => {
           onPageChange(event as any, newPage - 1);
+        }}
+        renderItem={(item) => {
+          if (item.type === 'previous' || item.type === 'next') {
+            return (
+              <Tooltip title={item.type === 'previous' ? 'Previous' : 'Next'}>
+                <span>
+                  {' '}
+                  <PaginationItem {...item} />
+                </span>
+              </Tooltip>
+            );
+          }
+
+          return <PaginationItem {...item} />;
         }}
       />
     );
