@@ -3,6 +3,7 @@ import { MouseEvent, useState } from 'react';
 import { useBetween } from 'use-between';
 import { Properties, UseDeleteHookResult, UseEditHookResult } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
+import { snackbarState } from '../../utils/SnackbarState';
 import DeleteDialog from '../dialog/delete';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
@@ -37,6 +38,7 @@ function ActionButtons({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
+  const { handleSuccessMessage, handleErrorMessage } = useBetween(snackbarState);
 
   const handleClickEdit = () => {
     if (onClickEdit) onClickEdit(data);
@@ -52,11 +54,18 @@ function ActionButtons({
       { id: data.id },
       {
         onSuccess: () => {
+          handleSuccessMessage(`${type} deleted successfully`);
+
           if (type === 'App') {
             setSelectedApp(null);
             setSelectedEvent(null);
           }
+
           if (type === 'Event') setSelectedEvent(null);
+        },
+        onError: (error) => {
+          handleErrorMessage(`Unable to delete the selected ${type}`);
+          console.log(error);
         },
         onSettled: () => {
           setDelBtnStatus(false);
@@ -77,6 +86,13 @@ function ActionButtons({
         is_active: value,
       },
       {
+        onSuccess: () => {
+          handleSuccessMessage(`${type} ${value ? 'activated' : 'deactivated'} successfully`);
+        },
+        onError: (error) => {
+          handleErrorMessage(`Unable to ${value ? 'activate' : 'deactivate'} the selected ${type}`);
+          console.log(error);
+        },
         onSettled: () => {
           setSwitchStatus(false);
         },
