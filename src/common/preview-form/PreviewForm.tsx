@@ -3,9 +3,9 @@ import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import { EventParamProp } from '../../interfaces';
-import { dataSchema } from '../../validation/schema';
-import TextInput from '../TextInput';
-import MentionsInput from './MentionsInput';
+import { formDataSchema } from '../../utils/validation/schema';
+import MentionsInput from '../text/input/MentionsInput';
+import TextInput from '../text/input/TextInput';
 
 export interface ValueProps {
   name: string;
@@ -65,7 +65,7 @@ function PreviewForm({
 
   const validateForm = () => {
     try {
-      dataSchema.parse(values);
+      formDataSchema.parse(values);
       return true;
     } catch (error) {
       if (error instanceof ZodError) {
@@ -117,10 +117,9 @@ function PreviewForm({
           />
 
           <MentionsInput
-            label='Body *'
+            label='Body'
             value={values.template_body}
             onChange={handleBodyChange}
-            tags={tags || []}
           />
         </>
       ) : null}

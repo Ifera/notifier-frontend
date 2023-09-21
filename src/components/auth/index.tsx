@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth';
 import { AuthType } from '../../pages/AuthPage';
 import authService from '../../services/authService';
 import { parseError } from '../../utils';
-import { userSchema } from '../../validation/schema';
+import { userSchema } from '../../utils/validation/schema';
 import AuthForm, { User } from './AuthForm';
 
 function Auth({ authType }: AuthType) {

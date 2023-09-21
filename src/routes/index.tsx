@@ -4,6 +4,7 @@ import Dashboard from '../pages/Dashboard';
 import ErrorPage from '../pages/ErrorPage';
 import Layout from '../pages/Layout';
 import NotificationPage from '../pages/NotificationPage';
+import TestPage from '../pages/TestPage';
 import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
   },
   { path: 'login', element: <AuthPage authType='login' /> },
   { path: 'register', element: <AuthPage authType='register' /> },
+  { path: 'test', element: <TestPage /> },
 ]);
 
 export default router;

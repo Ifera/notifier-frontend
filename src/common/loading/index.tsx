@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from '@mui/material';
 
 interface LoadingProps {
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 function Loading({ isLoading = true }: LoadingProps) {

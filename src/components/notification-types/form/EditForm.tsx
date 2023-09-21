@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Loading from '../../../common/loading';
 import { ValueProps } from '../../../common/preview-form/PreviewForm';
 import useEdit from '../../../hooks/useEdit';
-import useGet from '../../../hooks/useGet';
+import useGetById from '../../../hooks/useGetById';
 import { ID, NotificationType, Query } from '../../../interfaces';
 import notificationService from '../../../services/notificationService';
 import BaseForm from './BaseForm';
@@ -16,7 +16,7 @@ function EditForm({ id }: EditFormProps) {
   const [initialData, setInitialData] = useState<ValueProps | null>(null);
 
   const editHook = useEdit(notificationService, id as Query); // treat id as query
-  const { data, isLoading, error } = useGet(notificationService, id);
+  const { data, isLoading, error } = useGetById(notificationService, id);
 
   useEffect(() => {
     if (data) {

@@ -1,10 +1,12 @@
+import { z } from 'zod';
 import useAdd from './hooks/useAdd';
 import useDelete from './hooks/useDelete';
 import useDeleteAll from './hooks/useDeleteAll';
 import useEdit from './hooks/useEdit';
-import useGet from './hooks/useGet';
 import useGetAll from './hooks/useGetAll';
+import useGetById from './hooks/useGetById';
 import APIClient from './services/apiClient';
+import { formDataSchema } from './utils/validation/schema';
 
 // ----------------------------------------------
 
@@ -98,7 +100,7 @@ export type UseEditHookResult = ReturnType<typeof useEdit>;
 export type UseDeleteHookResult = ReturnType<typeof useDelete>;
 export type UseDeleteAllHookResult = ReturnType<typeof useDeleteAll>;
 export type UseGetAllHookResult = ReturnType<typeof useGetAll>;
-export type UseGetHookResult = ReturnType<typeof useGet>;
+export type UseGetByIdHookResult = ReturnType<typeof useGetById>;
 
 // ----------------------------------------------
 
@@ -109,3 +111,7 @@ export type Service = APIClient<Properties, Properties>;
 export interface EventParamProp {
   target: { value: string };
 }
+
+// ----------------------------------------------
+
+export type FormDataSchemaType = z.infer<typeof formDataSchema>;

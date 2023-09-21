@@ -2,7 +2,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import { Alert, Box, Button, Grid, Link, Typography } from '@mui/material';
 import { SyntheticEvent } from 'react';
-import TextInput from '../../common/TextInput';
+import TextInput from '../../common/text/input/TextInput';
 
 export type User = {
   email: string;

@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { ZodError } from 'zod';
 import BaseForm, { BaseFormProps, FormData } from './BaseForm';
 
 interface FormProps {
-  type: Pick<BaseFormProps, 'type'>['type'];
   formData: Pick<BaseFormProps, 'formData'>['formData'];
 }
 
-function Form({ type, formData }: FormProps) {
+function Form({ formData }: FormProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -21,31 +19,13 @@ function Form({ type, formData }: FormProps) {
     setErrorMessage(null);
   };
 
-  const resetMessages = () => {
-    setSuccessMessage(null);
-    setErrorMessage(null);
+  const handleSubmit = (data: FormData) => {
+    console.log(data);
   };
-
-  const handleError = (error: Error) => {
-    if (error instanceof ZodError) {
-      handleErrorMessage(error.errors[0]?.message || 'Form validation failed');
-
-      return false;
-    }
-
-    handleErrorMessage((error as Error).message);
-  };
-
-  const handleSubmit = (data: FormData) => {};
 
   return (
     <>
-      <BaseForm
-        type={type}
-        formData={formData}
-        onError={handleError}
-        onSubmit={handleSubmit}
-      />
+      <BaseForm formData={formData} onSubmit={handleSubmit} />
     </>
   );
 }

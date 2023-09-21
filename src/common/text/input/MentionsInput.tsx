@@ -1,42 +1,56 @@
-import { Box, Typography } from '@mui/material';
-import { Mention, MentionsInput } from 'react-mentions';
-import { EventParamProp } from '../../interfaces';
+import { Alert, Box } from '@mui/material';
+import { forwardRef } from 'react';
+import { Mention, MentionsInput, MentionsInputProps } from 'react-mentions';
+import useTags from '../../../hooks/useTags';
+import Loading from '../../loading';
+import ErrorText from '../ErrorText';
+import LabelText from '../LabelText';
 
-export type MentionsInputProps = {
+export type StyledMentionsInputProps = Omit<MentionsInputProps, 'children'> & {
   label: string;
-  value?: string;
-  onChange?: (event: EventParamProp) => void; // Change to HTMLTextAreaElement
-  tags: string[];
+
+  errorMessage?: string | null;
+  asterisk?: boolean;
+
+  // onChange?: (event: EventParamProp) => void;
 };
 
-const StyledMentionsInput = ({
-  label,
-  value,
-  onChange,
-  tags,
-}: MentionsInputProps) => {
-  const inputId = `${label}-input`;
+const StyledMentionsInput = forwardRef<
+  HTMLTextAreaElement,
+  StyledMentionsInputProps
+>(({ label, errorMessage, asterisk = true, ...props }, ref) => {
+  const inputId = `${label}-mentions-input`;
 
-  function handleBodyChange(event: EventParamProp) {
-    if (onChange) onChange(event);
+  const { data: tags, isLoading, error } = useTags();
+
+  // function handleBodyChange(event: EventParamProp) {
+  //   if (onChange) onChange(event);
+  // }
+
+  if (error) {
+    return (
+      <Alert severity='error' sx={{ marginTop: 2 }}>
+        An error occurred while loading the tags
+      </Alert>
+    );
   }
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  // console.log(ref);
 
   return (
     <Box>
       <label htmlFor={inputId}>
-        <Typography
-          sx={{ fontSize: 15, textAlign: 'left', my: 1 }}
-          color='#071B2F'
-        >
-          {label}
-        </Typography>
+        <LabelText label={label} asterisk={asterisk} />
       </label>
 
       <MentionsInput
-        value={value}
-        onChange={handleBodyChange}
+        inputRef={ref}
         readOnly={false}
-        placeholder='Template Body'
+        placeholder={props.placeholder || `Enter ${label.toLowerCase()}`}
         style={{
           width: '100%',
           background: '#F5FAFF',
@@ -94,6 +108,7 @@ const StyledMentionsInput = ({
             },
           },
         }}
+        {...props}
       >
         <Mention
           trigger='{'
@@ -107,8 +122,10 @@ const StyledMentionsInput = ({
           markup='{__display__}'
         />
       </MentionsInput>
+
+      {errorMessage && <ErrorText text={errorMessage} />}
     </Box>
   );
-};
+});
 
 export default StyledMentionsInput;
