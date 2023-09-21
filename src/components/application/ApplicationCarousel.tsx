@@ -87,7 +87,9 @@ function ApplicationCarousel({
                       <Tooltip
                         title={item.type === 'previous' ? 'Previous' : 'Next'}
                       >
-                        <PaginationItem {...item} />
+                        <span>
+                          <PaginationItem {...item} />
+                        </span>
                       </Tooltip>
                     );
                   }
