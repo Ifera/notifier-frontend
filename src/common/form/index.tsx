@@ -5,6 +5,7 @@ import BaseForm, { BaseFormProps, FormData } from './BaseForm';
 
 interface FormProps {
   formData: Pick<BaseFormProps, 'formData'>['formData'];
+  backBtn?: Pick<BaseFormProps, 'backBtn'>['backBtn'];
 
   onSubmit: (
     data: FormData,
@@ -13,9 +14,11 @@ interface FormProps {
       onError: (message: string) => void;
     }
   ) => void;
+
+  onChange?: Pick<BaseFormProps, 'onChange'>['onChange'];
 }
 
-function Form({ formData, onSubmit }: FormProps) {
+function Form({ formData, backBtn, onSubmit, onChange }: FormProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -54,7 +57,12 @@ function Form({ formData, onSubmit }: FormProps) {
         severity='error'
       />
 
-      <BaseForm formData={formData} onSubmit={handleSubmit} />
+      <BaseForm
+        formData={formData}
+        backBtn={backBtn}
+        onSubmit={handleSubmit}
+        onChange={onChange}
+      />
     </>
   );
 }

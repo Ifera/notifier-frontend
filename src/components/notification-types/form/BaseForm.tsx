@@ -1,175 +1,125 @@
-import { Alert, Box, CircularProgress, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-
-import _ from 'lodash';
-import ms from 'ms';
+import { Box, Grid, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PreviewForm, {
-  ValueProps,
-} from '../../../common/preview-form/PreviewForm';
-import useTags from '../../../hooks/useTags';
+import Form from '../../../common/form';
+import { FormData } from '../../../common/form/BaseForm';
 import { ID, UseAddHookResult, UseEditHookResult } from '../../../interfaces';
-import { parseError } from '../../../utils';
 
 interface BaseFormProps {
   id: ID;
   operation: 'Add' | 'Edit';
   hook: UseAddHookResult | UseEditHookResult;
-  initialData?: ValueProps;
+  initialData?: FormData;
 }
 
 const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
-  const [initialValues, setInitialValues] = useState<ValueProps>({
-    name: initialData?.name || '',
-    description: initialData?.description || '',
-    template_subject: initialData?.template_subject || '',
-    template_body: initialData?.template_body || '',
-  });
-
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const [tempData, setTempData] = useState<ValueProps>({ ...initialValues });
+  const [data, setData] = useState<FormData>(
+    initialData || {
+      name: '',
+      description: '',
+      notification: {
+        template_subject: '',
+        template_body: '',
+      },
+    }
+  );
 
   const navigate = useNavigate();
 
-  const { data: tags, isLoading: tagsLoading, error } = useTags();
+  // function onSubmit(
+  //   values: ValueProps,
+  //   onSuccess?: (cause: 'Add' | 'Edit') => void
+  // ) {
+  //   if (operation === 'Add') {
+  //     hook.mutate(
+  //       { ...values, event: id },
+  //       {
+  //         onSuccess: () => {
+  //           setErrorMessage(null);
+  //           setSuccessMessage('Notification added successfully');
 
-  useEffect(() => {
-    if (initialData) {
-      setInitialValues((prev) => ({
-        ...prev,
-        ...initialData,
-      }));
+  //           reset();
 
-      setTempData(initialData);
-    }
-  }, [initialData]);
+  //           if (onSuccess) onSuccess(operation);
 
-  if (error) {
-    return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
-        An error occurred while loading the tags
-      </Alert>
-    );
-  }
+  //           // go to dashboard on success after 1s
+  //           setTimeout(() => {
+  //             navigate('/');
+  //           }, ms('1s'));
+  //         },
+  //         onError: (error) => {
+  //           setErrorMessage(parseError(error));
+  //           setSuccessMessage(null);
+  //         },
+  //       }
+  //     );
 
-  const reset = () => {
-    setInitialValues({
-      name: '',
-      description: '',
-      template_subject: '',
-      template_body: '',
-    });
+  //     return;
+  //   }
+
+  //   if (operation === 'Edit') {
+  //     if (_.isEqual(tempData, values)) {
+  //       setErrorMessage('No changes made.');
+  //       setSuccessMessage(null);
+
+  //       return;
+  //     }
+
+  //     hook.mutate(
+  //       { ...values, id },
+  //       {
+  //         onSuccess: () => {
+  //           setErrorMessage(null);
+  //           setSuccessMessage('Notification updated successfully');
+
+  //           setTempData({ ...tempData, ...values });
+
+  //           if (onSuccess) onSuccess(operation);
+
+  //           // go to dashboard on success
+  //           setTimeout(() => {
+  //             navigate('/');
+  //           }, ms('0.5s'));
+  //         },
+  //         onError: (error) => {
+  //           setErrorMessage(parseError(error));
+  //           setSuccessMessage(null);
+  //         },
+  //       }
+  //     );
+
+  //     return;
+  //   }
+  // }
+
+  const handleChange = (newData: FormData) => {
+    setData((prevData) => ({
+      ...prevData,
+      ...newData,
+    }));
   };
 
-  function onSubmit(
-    values: ValueProps,
-    onSuccess?: (cause: 'Add' | 'Edit') => void
-  ) {
-    if (operation === 'Add') {
-      hook.mutate(
-        { ...values, event: id },
-        {
-          onSuccess: () => {
-            setErrorMessage(null);
-            setSuccessMessage('Notification added successfully');
-
-            reset();
-
-            if (onSuccess) onSuccess(operation);
-
-            // go to dashboard on success after 1s
-            setTimeout(() => {
-              navigate('/');
-            }, ms('1s'));
-          },
-          onError: (error) => {
-            setErrorMessage(parseError(error));
-            setSuccessMessage(null);
-          },
-        }
-      );
-
-      return;
-    }
-
-    if (operation === 'Edit') {
-      if (_.isEqual(tempData, values)) {
-        setErrorMessage('No changes made.');
-        setSuccessMessage(null);
-
-        return;
-      }
-
-      hook.mutate(
-        { ...values, id },
-        {
-          onSuccess: () => {
-            setErrorMessage(null);
-            setSuccessMessage('Notification updated successfully');
-
-            setTempData({ ...tempData, ...values });
-
-            if (onSuccess) onSuccess(operation);
-
-            // go to dashboard on success
-            setTimeout(() => {
-              navigate('/');
-            }, ms('0.5s'));
-          },
-          onError: (error) => {
-            setErrorMessage(parseError(error));
-            setSuccessMessage(null);
-          },
-        }
-      );
-
-      return;
-    }
-  }
-
-  const onChange = (values: ValueProps) => {
-    setInitialValues(values);
-  };
-
-  const onError = (errorMessage: string) => {
-    setSuccessMessage(null);
-    setErrorMessage(errorMessage);
+  const handleSubmit = (newData: FormData) => {
+    console.log(newData);
   };
 
   return (
     <Grid container p={{ sm: 2, md: 8, lg: 10 }}>
+      {/* form */}
       <Grid item xs={12} md={6} px={4} py={1}>
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>
-        {successMessage && <Alert severity='success'>{successMessage}</Alert>}
-        {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
 
-        {tagsLoading ? (
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '75%',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PreviewForm
-            defaultValues={initialValues}
-            tags={tags}
-            backBtn='/'
-            onError={onError}
-            onSubmit={onSubmit}
-            onChange={onChange}
-          />
-        )}
+        <Form
+          formData={data}
+          backBtn='/'
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+        />
       </Grid>
 
+      {/* preview */}
       <Grid item xs={12} md={6} px={4} py={1}>
         <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
           Preview
@@ -187,9 +137,11 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
           p={4}
         >
           <Typography variant='h6' sx={{ fontWeight: 500 }}>
-            {initialValues.template_subject}
+            {data.notification.template_subject}
           </Typography>
-          <Typography variant='body1'>{initialValues.template_body}</Typography>
+          <Typography variant='body1'>
+            {data.notification.template_body}
+          </Typography>
         </Box>
       </Grid>
     </Grid>
