@@ -3,10 +3,12 @@ import { Box, Container } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBetween } from 'use-between';
+import Snackbar from '../common/snackbar';
 import ApplicationContainer from '../containers/application';
 import EventContainer from '../containers/event';
 import NotificationTypeContainer from '../containers/notification';
 import { ID, NullableID } from '../interfaces';
+import { snackbarState } from '../utils/SnackbarState';
 
 export const dashboardState = () => {
   const [selectedApp, setSelectedApp] = useState<NullableID>(null);
@@ -42,6 +44,8 @@ function Dashboard() {
     setNames,
   } = useBetween(dashboardState);
 
+  const { successMessage, errorMessage } = useBetween(snackbarState);
+
   const oldAppId = selectedApp;
   const navigate = useNavigate();
 
@@ -76,6 +80,18 @@ function Dashboard() {
     <>
       <Box mb={5}>
         <Container>
+          <Snackbar
+            open={!!successMessage}
+            message={successMessage || ''}
+            severity='success'
+          />
+
+          <Snackbar
+            open={!!errorMessage}
+            message={errorMessage || ''}
+            severity='error'
+          />
+
           <ApplicationContainer
             selectedApp={selectedApp}
             onAppSelect={handleAppSelect}
