@@ -1,4 +1,14 @@
-import { AppBar, Box, Button, Grid, Toolbar } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
+import {
+  AppBar,
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Popover,
+  Toolbar,
+} from '@mui/material';
+import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../assets/icon.svg';
 import Footer from '../common/footer';
@@ -6,9 +16,24 @@ import Footer from '../common/footer';
 const Layout = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handlePopoverOpen = (event: any) => {
+    setAnchorEl(event.currentTarget);
+    setPopoverOpen(true);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopoverOpen(false);
+  };
+
+  // Logout handler
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+    handlePopoverClose();
   };
 
   return (
@@ -21,12 +46,42 @@ const Layout = () => {
             <img src={Logo} alt='logo' />
           </Link>
           <Grid container justifyContent='flex-end'>
-            <Button sx={{ color: 'white' }} onClick={handleClick}>
-              Logout
-            </Button>
+            <IconButton
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              color='inherit'
+              onClick={handlePopoverOpen}
+            >
+              <AccountCircle />
+            </IconButton>
           </Grid>
         </Toolbar>
+        <Popover
+          id='menu-appbar'
+          anchorEl={anchorEl}
+          open={popoverOpen}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <Button
+            onClick={handleLogout}
+            sx={{
+              padding: '10px 20px',
+            }}
+          >
+            Logout
+          </Button>
+        </Popover>
       </AppBar>
+
       <Box sx={{ flex: 1 }}>
         <Outlet />
       </Box>
