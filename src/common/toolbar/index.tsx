@@ -1,56 +1,46 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
-import useAdd from '../../hooks/useAdd';
-import { ID, Query, Service } from '../../interfaces';
-import EditDialog, {
-  EditDialogProps,
-  OnSubmitSuccessProps,
-} from '../edit/EditDialog';
-import PopoverMenu from './PopoverMenu';
-import ToolbarOptions from './toolbar-options/';
+import MenuIcon from "@mui/icons-material/Menu";
+import { Box, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from "../../constants";
+import useAdd from "../../hooks/useAdd";
+import { ID, Query, Service } from "../../interfaces";
+import EditDialog, { EditDialogProps, OnSubmitSuccessProps } from "../edit/EditDialog";
+import PopoverMenu from "./PopoverMenu";
+import ToolbarOptions from "./toolbar-options/";
 
 const sortOptions = [
   {
-    label: 'Name',
-    value: 'name',
+    label: "Name",
+    value: "name",
   },
   {
-    label: 'Date Created',
-    value: 'created_at',
+    label: "Date Created",
+    value: "created_at",
   },
   {
-    label: 'Date Modified',
-    value: 'modified_at',
+    label: "Date Modified",
+    value: "modified_at",
   },
   {
-    label: 'Active',
-    value: 'is_active',
+    label: "Active",
+    value: "is_active",
   },
 ];
 
 const filterOptions = [
   {
-    label: 'Active',
-    value: 'active',
+    label: "Active",
+    value: "active",
   },
   {
-    label: 'Inactive',
-    value: 'inactive',
+    label: "Inactive",
+    value: "inactive",
   },
 ];
 
 interface ToolBarProps {
-  type: 'App' | 'Event' | 'Notification';
+  type: "App" | "Event" | "Notification";
   query: Query;
   service: Service;
   parentId?: ID;
@@ -69,23 +59,16 @@ export default function ToolBar({
   setQuery,
 }: ToolBarProps) {
   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
-    null
-  );
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
   const [sortDirection, setSortDirection] = useState(1);
-  const [selectedSortOption, setSelectedSortOption] = useState<string | null>(
-    null
-  );
-  const [selectedFilterOption, setSelectedFilterOption] = useState<
-    string | null
-  >(null);
+  const [selectedSortOption, setSelectedSortOption] = useState<string | null>(null);
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string | null>(null);
   const [dialogProps, setDialogProps] = useState<EditDialogProps>({
     open: false,
     type: type,
-    operation: 'Add',
+    operation: "Add",
     data: null,
   });
 
@@ -98,7 +81,7 @@ export default function ToolBar({
   };
 
   const handleSortChange = (value: string) => {
-    if (selectedSortOption === value || value === '') {
+    if (selectedSortOption === value || value === "") {
       delete query.sortBy;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(null);
@@ -112,16 +95,16 @@ export default function ToolBar({
   };
 
   const handleFilterChange = (value: string) => {
-    if (selectedFilterOption === value || value === '') {
+    if (selectedFilterOption === value || value === "") {
       delete query.isActive;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(null);
-    } else if (value === '') {
+    } else if (value === "") {
       delete query.isActive;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(null);
     } else {
-      query.isActive = value === 'active' ? true : false;
+      query.isActive = value === "active" ? true : false;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(value);
     }
@@ -134,7 +117,7 @@ export default function ToolBar({
   };
 
   const handleSearchChange = (search: string) => {
-    if (search === '' || search.length <= 3) {
+    if (search === "" || search.length <= 3) {
       delete query.like;
       setQuery({ ...query, pageNumber: 1 });
       return;
@@ -176,7 +159,7 @@ export default function ToolBar({
   };
 
   const handleClickAddBtn = () => {
-    if (type === 'Notification') {
+    if (type === "Notification") {
       navigate(`/add-notification/${parentId}`);
 
       return;
@@ -204,18 +187,18 @@ export default function ToolBar({
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
-      id='toolbar-menu-mobile'
+      id="toolbar-menu-mobile"
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-      sx={{ display: { xs: 'block', sm: 'none' } }}
+      sx={{ display: { xs: "block", sm: "none" } }}
     >
       <MenuItem>{renderToolbarOptions()}</MenuItem>
     </Menu>
@@ -224,11 +207,11 @@ export default function ToolBar({
   const openSort = Boolean(sortAnchorEl);
   const openFilter = Boolean(filterAnchorEl);
 
-  let parentText = '';
-  if (type === 'Event') {
-    parentText = 'App: ' + parentName + ', ';
-  } else if (type === 'Notification') {
-    parentText = 'Event: ' + parentName + ', ';
+  let parentText = "";
+  if (type === "Event") {
+    parentText = "App: " + parentName + ", ";
+  } else if (type === "Notification") {
+    parentText = "Event: " + parentName + ", ";
   }
 
   return (
@@ -242,50 +225,47 @@ export default function ToolBar({
       />
 
       <Toolbar
-        variant='dense'
+        variant="dense"
         sx={{
           mt: 4,
-          background: '#F5FAFF',
-          boxShadow: '0px 4px 4px rgba(152, 205, 255, 0.5)',
+          background: "#F5FAFF",
+          boxShadow: "0px 4px 4px rgba(152, 205, 255, 0.5)",
           borderRadius: 2,
-          color: 'black',
-          alignItems: 'center',
+          color: "black",
+          alignItems: "center",
         }}
       >
         <Typography
-          component='div'
-          variant='h6'
+          component="div"
+          variant="h6"
           sx={{
             flex: 1,
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
+            fontSize: "18px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          {type === 'App' ? 'Applications' : `${type}s`}
+          {type === "App" ? "Applications" : `${type}s`}
 
           <Typography
-            variant='body2'
+            variant="body2"
             sx={{
-              fontSize: '13px',
-              display: { sm: 'inline', xs: 'none' },
+              fontSize: "13px",
+              display: { sm: "inline", xs: "none" },
               mx: 1,
             }}
           >
             ({parentText}Total: {totalCount || 0})
           </Typography>
         </Typography>
-        <IconButton
-          onClick={handleMobileMenuOpen}
-          sx={{ display: { sm: 'none' } }}
-        >
+        <IconButton onClick={handleMobileMenuOpen} sx={{ display: { sm: "none" } }}>
           <MenuIcon />
         </IconButton>
         <Box
           sx={{
-            display: { xs: 'none', sm: 'flex' },
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: { xs: "none", sm: "flex" },
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           {renderToolbarOptions()}
@@ -299,7 +279,7 @@ export default function ToolBar({
         anchorEl={sortAnchorEl}
         onClose={handleCloseSort}
         options={sortOptions}
-        selectedOption={selectedSortOption || ''}
+        selectedOption={selectedSortOption || ""}
         direction={sortDirection}
         handleOptionChange={handleSortChange}
         handleDirectionChange={handleSortDirectionChange}
@@ -310,7 +290,7 @@ export default function ToolBar({
         anchorEl={filterAnchorEl}
         onClose={handleCloseFilter}
         options={filterOptions}
-        selectedOption={selectedFilterOption || ''}
+        selectedOption={selectedFilterOption || ""}
         handleOptionChange={handleFilterChange}
       />
     </>
