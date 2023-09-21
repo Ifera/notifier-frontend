@@ -7,14 +7,9 @@ interface FilterProps {
   setFilterAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
-function Filter({
-  filterOptions,
-  selectedFilterOption,
-  setFilterAnchorEl,
-}: FilterProps) {
+function Filter({ filterOptions, selectedFilterOption, setFilterAnchorEl }: FilterProps) {
   const selectedOptionLabel = selectedFilterOption
-    ? filterOptions.find((option) => option.value === selectedFilterOption)
-        ?.label
+    ? filterOptions.find((option) => option.value === selectedFilterOption)?.label
     : 'All';
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -24,14 +19,15 @@ function Filter({
   return (
     <Box
       sx={{
-        backgroundColor: 'rgba(152, 205, 255, 0.25)',
+        backgroundColor: '#0060B9',
+        color: 'white',
         borderRadius: 3,
-        mr: 2,
+        mr: 1,
       }}
     >
-      <IconButton onClick={handleFilterClick} sx={{ borderRadius: 2 }}>
+      <IconButton onClick={handleFilterClick} sx={{ borderRadius: 2, color: 'white', px: 1.5 }}>
         <FilterListIcon />
-        <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
+        <Typography sx={{ display: { xs: 'none', sm: 'block', color: 'white' } }} ml={1}>
           {selectedOptionLabel}
         </Typography>
       </IconButton>

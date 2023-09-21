@@ -1,5 +1,5 @@
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import { Tooltip } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircleRounded';
+import { Box, Tooltip, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Filter from './FIlter';
 import SearchBar from './SearchBar';
@@ -46,9 +46,24 @@ const ToolbarOptions = ({
         setSortAnchorEl={setSortAnchorEl}
       />
       <Tooltip title={`Add new ${type}`}>
-        <IconButton onClick={onClickAddBtn} color='primary' sx={{ ml: 1 }}>
-          <AddCircleRoundedIcon />
-        </IconButton>
+        <Box
+          sx={{
+            backgroundColor: '#0060B9',
+            color: 'white',
+            borderRadius: 3,
+          }}
+        >
+          <IconButton
+            onClick={onClickAddBtn}
+            color="primary"
+            sx={{ borderRadius: 2, color: 'white', px: 1.5 }}
+          >
+            <AddCircleIcon />
+            <Typography sx={{ display: { xs: 'none', sm: 'block', ml: 1 } }} ml={1}>
+              Add {type}
+            </Typography>
+          </IconButton>
+        </Box>
       </Tooltip>
     </>
   );

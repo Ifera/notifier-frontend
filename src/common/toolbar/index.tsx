@@ -228,11 +228,12 @@ export default function ToolBar({
         variant="dense"
         sx={{
           mt: 4,
-          background: '#F5FAFF',
-          boxShadow: '0px 4px 4px rgba(152, 205, 255, 0.5)',
-          borderRadius: 2,
+          background: '#FFFFFF',
+          borderRadius: '5px',
+          boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.04)',
           color: 'black',
           alignItems: 'center',
+          py: 1,
         }}
       >
         <Typography

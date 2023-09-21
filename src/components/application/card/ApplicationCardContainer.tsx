@@ -19,13 +19,7 @@ const ApplicationCardContainer = ({
   const { selectedApp } = useBetween(dashboardState);
 
   return (
-    <Slide
-      key={index}
-      direction='right'
-      in={index < cardsPerPage}
-      mountOnEnter
-      unmountOnExit
-    >
+    <Slide key={index} direction="right" in={index < cardsPerPage} mountOnEnter unmountOnExit>
       <Grid item key={cardId === undefined ? index : cardId} xs={12} sm={4}>
         <Card
           sx={{
@@ -34,6 +28,7 @@ const ApplicationCardContainer = ({
             flexDirection: 'column',
             width: '100%',
             border: cardId === selectedApp ? '1px solid #000' : 'none',
+            borderRadius: 2,
           }}
         >
           {children}
