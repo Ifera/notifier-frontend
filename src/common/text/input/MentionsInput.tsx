@@ -11,8 +11,6 @@ export type StyledMentionsInputProps = Omit<MentionsInputProps, 'children'> & {
 
   errorMessage?: string | null;
   asterisk?: boolean;
-
-  // onChange?: (event: EventParamProp) => void;
 };
 
 const StyledMentionsInput = forwardRef<
@@ -22,10 +20,6 @@ const StyledMentionsInput = forwardRef<
   const inputId = `${label}-mentions-input`;
 
   const { data: tags, isLoading, error } = useTags();
-
-  // function handleBodyChange(event: EventParamProp) {
-  //   if (onChange) onChange(event);
-  // }
 
   if (error) {
     return (
@@ -38,8 +32,6 @@ const StyledMentionsInput = forwardRef<
   if (isLoading) {
     return <Loading />;
   }
-
-  // console.log(ref);
 
   return (
     <Box>

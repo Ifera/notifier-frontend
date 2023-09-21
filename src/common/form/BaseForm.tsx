@@ -1,10 +1,9 @@
-import { FormDataSchemaType } from '../../interfaces';
-import { formDataSchema } from '../../utils/validation/schema';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Grid } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { FormDataSchemaType } from '../../interfaces';
+import { formDataSchema } from '../../utils/validation/schema';
 import StyledMentionsInput from '../text/input/MentionsInput';
 import TextInput from '../text/input/TextInput';
 
