@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Grid } from '@mui/material';
-import { FormEvent, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormDataSchemaType } from '../../interfaces';
@@ -28,8 +27,6 @@ export interface BaseFormProps {
 }
 
 function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
-  const [data, setData] = useState<FormData>(formData);
-
   const {
     register,
     handleSubmit,
@@ -44,21 +41,12 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
 
   const navigate = useNavigate();
 
-  const onFormSubmit: SubmitHandler<FormDataSchemaType> = (d) => {
-    onSubmit(d); // submit data
+  const onFormSubmit: SubmitHandler<FormDataSchemaType> = (data) => {
+    onSubmit(data); // submit data
   };
 
-  const handleFormChange = (e: FormEvent<HTMLFormElement>) => {
-    const target = e.target as HTMLInputElement;
-
-    const newData = {
-      ...data,
-      [target.name]: target.value,
-    };
-
-    setData(newData);
-
-    if (onChange) onChange(newData);
+  const handleFormChange = () => {
+    if (onChange) onChange(getValues());
   };
 
   return (

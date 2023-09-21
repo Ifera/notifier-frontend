@@ -1,20 +1,21 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Form from '../../../common/form';
+import Form, { FormSubmitOptions } from '../../../common/form';
 import { FormData } from '../../../common/form/BaseForm';
 import { ID, UseAddHookResult, UseEditHookResult } from '../../../interfaces';
+import { parseError } from '../../../utils';
 
 interface BaseFormProps {
   id: ID;
   operation: 'Add' | 'Edit';
   hook: UseAddHookResult | UseEditHookResult;
-  initialData?: FormData;
+  formData: FormData | null;
 }
 
-const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
+const BaseForm = ({ id, operation, hook, formData }: BaseFormProps) => {
   const [data, setData] = useState<FormData>(
-    initialData || {
+    formData || {
       name: '',
       description: '',
       notification: {
@@ -26,81 +27,54 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
 
   const navigate = useNavigate();
 
-  // function onSubmit(
-  //   values: ValueProps,
-  //   onSuccess?: (cause: 'Add' | 'Edit') => void
-  // ) {
-  //   if (operation === 'Add') {
-  //     hook.mutate(
-  //       { ...values, event: id },
-  //       {
-  //         onSuccess: () => {
-  //           setErrorMessage(null);
-  //           setSuccessMessage('Notification added successfully');
-
-  //           reset();
-
-  //           if (onSuccess) onSuccess(operation);
-
-  //           // go to dashboard on success after 1s
-  //           setTimeout(() => {
-  //             navigate('/');
-  //           }, ms('1s'));
-  //         },
-  //         onError: (error) => {
-  //           setErrorMessage(parseError(error));
-  //           setSuccessMessage(null);
-  //         },
-  //       }
-  //     );
-
-  //     return;
-  //   }
-
-  //   if (operation === 'Edit') {
-  //     if (_.isEqual(tempData, values)) {
-  //       setErrorMessage('No changes made.');
-  //       setSuccessMessage(null);
-
-  //       return;
-  //     }
-
-  //     hook.mutate(
-  //       { ...values, id },
-  //       {
-  //         onSuccess: () => {
-  //           setErrorMessage(null);
-  //           setSuccessMessage('Notification updated successfully');
-
-  //           setTempData({ ...tempData, ...values });
-
-  //           if (onSuccess) onSuccess(operation);
-
-  //           // go to dashboard on success
-  //           setTimeout(() => {
-  //             navigate('/');
-  //           }, ms('0.5s'));
-  //         },
-  //         onError: (error) => {
-  //           setErrorMessage(parseError(error));
-  //           setSuccessMessage(null);
-  //         },
-  //       }
-  //     );
-
-  //     return;
-  //   }
-  // }
-
   const handleChange = (newData: FormData) => {
-    setData((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
+    setData(newData);
   };
 
-  const handleSubmit = (newData: FormData) => {
-    console.log(newData);
+  const handleSubmit = (
+    newData: FormData,
+    { onSuccess, onError }: FormSubmitOptions
+  ) => {
+    const mutationData = {
+      name: newData.name,
+      description: newData.description,
+      template_subject: newData.notification?.template_subject,
+      template_body: newData.notification?.template_body,
+    };
+
+    if (operation === 'Add') {
+      hook.mutate(
+        { ...mutationData, event: id },
+        {
+          onSuccess: () => {
+            navigate('/');
+            if (onSuccess) onSuccess('Notification added successfully');
+          },
+          onError: (error) => {
+            if (onError) onError(parseError(error));
+          },
+        }
+      );
+
+      return;
+    }
+
+    if (operation === 'Edit') {
+      hook.mutate(
+        { ...mutationData, id },
+        {
+          onSuccess: () => {
+            navigate('/');
+            if (onSuccess) onSuccess('Notification updated successfully');
+          },
+          onError: (error) => {
+            if (onError) onError(parseError(error));
+          },
+        }
+      );
+
+      return;
+    }
   };
 
   return (
@@ -112,7 +86,16 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
         </Typography>
 
         <Form
-          formData={data}
+          formData={
+            formData || {
+              name: '',
+              description: '',
+              notification: {
+                template_subject: '',
+                template_body: '',
+              },
+            }
+          }
           backBtn='/'
           onSubmit={handleSubmit}
           onChange={handleChange}
@@ -137,10 +120,10 @@ const BaseForm = ({ id, operation, hook, initialData }: BaseFormProps) => {
           p={4}
         >
           <Typography variant='h6' sx={{ fontWeight: 500 }}>
-            {data.notification.template_subject}
+            {data.notification?.template_subject}
           </Typography>
           <Typography variant='body1'>
-            {data.notification.template_body}
+            {data.notification?.template_body}
           </Typography>
         </Box>
       </Grid>

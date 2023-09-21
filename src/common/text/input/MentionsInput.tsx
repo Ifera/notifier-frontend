@@ -64,6 +64,7 @@ const StyledMentionsInput = forwardRef<
           highlighter: {
             overflow: 'auto',
           },
+
           marginTop: '10px',
 
           '&multiLine': {
@@ -91,6 +92,7 @@ const StyledMentionsInput = forwardRef<
               position: 'absolute',
               zIndex: 1,
             },
+
             item: {
               padding: '5px 15px',
               borderBottom: '1px solid rgba(0,0,0,0.15)',

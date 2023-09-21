@@ -10,7 +10,7 @@ interface AddFormProps {
 function AddForm({ id }: AddFormProps) {
   const addHook = useAdd(notificationService);
 
-  return <BaseForm id={id} operation='Add' hook={addHook} />;
+  return <BaseForm id={id} operation='Add' hook={addHook} formData={null} />;
 }
 
 export default AddForm;

@@ -1,11 +1,12 @@
-import { Alert } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useBetween } from 'use-between';
+import { FormData } from '../../../common/form/BaseForm';
 import Loading from '../../../common/loading';
-import { ValueProps } from '../../../common/preview-form/PreviewForm';
 import useEdit from '../../../hooks/useEdit';
 import useGetById from '../../../hooks/useGetById';
 import { ID, NotificationType, Query } from '../../../interfaces';
 import notificationService from '../../../services/notificationService';
+import { snackbarState } from '../../../utils/SnackbarState';
 import BaseForm from './BaseForm';
 
 interface EditFormProps {
@@ -13,52 +14,40 @@ interface EditFormProps {
 }
 
 function EditForm({ id }: EditFormProps) {
-  const [initialData, setInitialData] = useState<ValueProps | null>(null);
+  const { handleErrorMessage } = useBetween(snackbarState);
+  const navigate = useNavigate();
 
   const editHook = useEdit(notificationService, id as Query); // treat id as query
   const { data, isLoading, error } = useGetById(notificationService, id);
 
-  useEffect(() => {
-    if (data) {
-      const { name, description, template_subject, template_body } =
-        data as NotificationType;
-
-      setInitialData({
-        name,
-        description,
-        template_subject,
-        template_body,
-      });
-    }
-  }, [data]);
-
   if (error) {
-    return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
-        An error occurred while loading the notification
-      </Alert>
-    );
+    navigate('/');
+    handleErrorMessage('An error occurred while loading the notification.');
   }
 
   if (isLoading) {
     return <Loading isLoading />;
   }
 
-  if (!initialData) {
-    return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
-        The notification returned with empty data.
-      </Alert>
-    );
+  if (!data) {
+    navigate('/');
+    handleErrorMessage('The notification returned with empty data.');
+
+    return;
   }
 
+  const d = data as NotificationType;
+  const formData: FormData = {
+    name: d.name,
+    description: d.description,
+    notification: {
+      template_subject: d.template_subject,
+      template_body: d.template_body,
+    },
+  };
+
   return (
-    <BaseForm
-      id={id}
-      operation='Edit'
-      hook={editHook}
-      initialData={initialData}
-    />
+    <BaseForm id={id} operation='Edit' hook={editHook} formData={formData} />
   );
 }
 
