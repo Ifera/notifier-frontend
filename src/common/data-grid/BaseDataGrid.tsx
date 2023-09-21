@@ -24,6 +24,7 @@ import {
   Service,
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
+import DialogBox from '../dialog-box';
 import EditDialog, {
   EditDialogProps,
   OnSubmitSuccessProps,
@@ -71,7 +72,7 @@ function BaseDataGrid({
   const [selectedRows, setSelectedRows] = useState<
     Event[] | NotificationType[]
   >([]);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { selectedEvent, setSelectedEvent, setSelectedNotif } =
     useBetween(dashboardState);
 
@@ -154,6 +155,10 @@ function BaseDataGrid({
       });
     }
 
+    setIsDialogOpen(true);
+  };
+
+  const handleDeleteMultiple = () => {
     delAllHook.mutate(
       selectedRows.map((row) => row.id),
       {
@@ -171,6 +176,8 @@ function BaseDataGrid({
         },
       }
     );
+
+    setIsDialogOpen(false);
   };
 
   const handleClickDelete = (data: Properties) => {
@@ -273,6 +280,16 @@ function BaseDataGrid({
               ? 'selected-row'
               : ''
           }
+        />
+
+        <DialogBox
+          open={isDialogOpen}
+          type={type}
+          handleClose={() => {
+            setIsDialogOpen(false);
+          }}
+          handleSubmit={handleDeleteMultiple}
+          multipleDelete={selectedRows.length > 1}
         />
       </div>
     </>

@@ -52,10 +52,12 @@ function ApplicationCard({
             {formattedDate}
           </Typography>
         </Box>
-        <CardContent sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
+        <CardContent
+          sx={{ flexGrow: 1, overflowWrap: 'anywhere', minHeight: '80px' }}
+        >
           <Typography variant='body2'>
             {application.description.length > 90
-              ? application.description.substring(0, 90) + '...'
+              ? application.description.substring(0, 80) + '...'
               : application.description}
           </Typography>
         </CardContent>
