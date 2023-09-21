@@ -13,113 +13,117 @@ export type StyledMentionsInputProps = Omit<MentionsInputProps, 'children'> & {
   asterisk?: boolean;
 };
 
-const StyledMentionsInput = forwardRef<
-  HTMLTextAreaElement,
-  StyledMentionsInputProps
->(({ label, errorMessage, asterisk = true, ...props }, ref) => {
-  const inputId = `${label}-mentions-input`;
+const StyledMentionsInput = forwardRef<HTMLTextAreaElement, StyledMentionsInputProps>(
+  ({ label, errorMessage, asterisk = true, ...props }, ref) => {
+    const inputId = `${label}-mentions-input`;
 
-  const { data: tags, isLoading, error } = useTags();
+    const { data: tags, isLoading, error } = useTags();
 
-  if (error) {
+    if (error) {
+      return (
+        <Alert severity='error' sx={{ marginTop: 2 }}>
+          An error occurred while loading the tags
+        </Alert>
+      );
+    }
+
+    if (isLoading) {
+      return <Loading />;
+    }
+
     return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
-        An error occurred while loading the tags
-      </Alert>
-    );
-  }
+      <Box>
+        <label htmlFor={inputId}>
+          <LabelText label={label} asterisk={asterisk} />
+        </label>
 
-  if (isLoading) {
-    return <Loading />;
-  }
+        <MentionsInput
+          inputRef={ref}
+          readOnly={false}
+          placeholder={props.placeholder || `Enter ${label.toLowerCase()}`}
+          // forceSuggestionsAboveCursor
+          style={{
+            width: '100%',
+            background: '#F5FAFF',
+            marginTop: '10px',
 
-  return (
-    <Box>
-      <label htmlFor={inputId}>
-        <LabelText label={label} asterisk={asterisk} />
-      </label>
-
-      <MentionsInput
-        inputRef={ref}
-        readOnly={false}
-        placeholder={props.placeholder || `Enter ${label.toLowerCase()}`}
-        style={{
-          width: '100%',
-          background: '#F5FAFF',
-          resize: 'vertical',
-
-          control: {
-            backgroundColor: '#F5FAFF',
-            lineHeight: '20px',
-            color: '#071B2F',
-            padding: '8px 12px',
-            borderRadius: '5px',
-            border: '1px solid #98CDFF',
-            boxShadow: 'none',
-            '&:hover': {
-              borderColor: '#98CDFF',
-            },
-            minHeight: '12rem',
-          },
-          highlighter: {
-            overflow: 'auto',
-          },
-
-          marginTop: '10px',
-
-          '&multiLine': {
-            highlighter: {
-              padding: 9,
-            },
-            input: {
-              padding: 9,
-              minHeight: 63,
-              outline: 0,
-              border: 0,
-            },
-          },
-
-          suggestions: {
-            list: {
-              backgroundColor: 'white',
-              border: '1px solid rgba(0,0,0,0.15)',
-              fontSize: '15px',
-              fontWeight: 400,
+            control: {
+              backgroundColor: '#F5FAFF',
               lineHeight: '20px',
               color: '#071B2F',
-              overflow: 'auto',
-              maxHeight: 200,
-              position: 'absolute',
-              zIndex: 1,
-            },
-
-            item: {
-              padding: '5px 15px',
-              borderBottom: '1px solid rgba(0,0,0,0.15)',
-              '&focused': {
-                backgroundColor: '#cee4e5',
+              padding: '8px 12px',
+              borderRadius: '5px',
+              border: '1px solid #98CDFF',
+              boxShadow: 'none',
+              height: '12rem',
+              '&:hover': {
+                borderColor: '#98CDFF',
               },
             },
-          },
-        }}
-        {...props}
-      >
-        <Mention
-          trigger='{'
-          data={tags.map((tag) => ({ id: tag, display: tag }))}
-          renderSuggestion={(suggestion, search, highlightedDisplay) => (
-            <div style={{ maxHeight: '50px', overflowY: 'auto' }}>
-              {highlightedDisplay}
-            </div>
-          )}
-          displayTransform={(id, display) => `{${display}}`}
-          markup='{__display__}'
-        />
-      </MentionsInput>
 
-      {errorMessage && <ErrorText text={errorMessage} />}
-    </Box>
-  );
-});
+            // highlighter: {
+            //   overflow: 'auto',
+            // },
+
+            '&multiLine': {
+              highlighter: {
+                // padding: 9,
+                whiteSpace: 'nowrap',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+              },
+              input: {
+                padding: 9,
+                overflow: 'auto',
+                minHeight: 63,
+                outline: 0,
+                border: 0,
+              },
+            },
+
+            suggestions: {
+              // left: 5,
+              zIndex: 5,
+
+              list: {
+                backgroundColor: 'white',
+                border: '1px solid rgba(0,0,0,0.15)',
+                fontSize: '15px',
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#071B2F',
+                overflow: 'auto',
+                maxHeight: 200,
+                position: 'absolute',
+                zIndex: 6,
+              },
+
+              item: {
+                padding: '5px 15px',
+                borderBottom: '1px solid rgba(0,0,0,0.15)',
+                '&focused': {
+                  backgroundColor: '#cee4e5',
+                },
+              },
+            },
+          }}
+          {...props}
+        >
+          <Mention
+            trigger='{'
+            data={tags.map((tag) => ({ id: tag, display: tag }))}
+            renderSuggestion={(suggestion, search, highlightedDisplay) => (
+              <div style={{ maxHeight: '50px', overflowY: 'auto' }}>{highlightedDisplay}</div>
+            )}
+            displayTransform={(id, display) => `{${display}}`}
+            markup='{__display__}'
+          />
+        </MentionsInput>
+
+        {errorMessage && <ErrorText text={errorMessage} />}
+      </Box>
+    );
+  }
+);
 
 export default StyledMentionsInput;

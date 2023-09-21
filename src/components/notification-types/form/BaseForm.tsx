@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form, { FormSubmitOptions } from '../../../common/form';
@@ -31,10 +31,7 @@ const BaseForm = ({ id, operation, hook, formData }: BaseFormProps) => {
     setData(newData);
   };
 
-  const handleSubmit = (
-    newData: FormData,
-    { onSuccess, onError }: FormSubmitOptions
-  ) => {
+  const handleSubmit = (newData: FormData, { onSuccess, onError }: FormSubmitOptions) => {
     const mutationData = {
       name: newData.name,
       description: newData.description,
@@ -78,10 +75,10 @@ const BaseForm = ({ id, operation, hook, formData }: BaseFormProps) => {
   };
 
   return (
-    <Grid container p={{ sm: 2, md: 8, lg: 10 }}>
+    <Grid container px={{ sm: 4, md: 8, lg: 10 }} py={4} alignItems='stretch'>
       {/* form */}
-      <Grid item xs={12} md={6} px={4} py={1}>
-        <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
+      <Grid item xs={12} md={6} px={4} py={2} component={Paper}>
+        <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>
 
@@ -103,28 +100,28 @@ const BaseForm = ({ id, operation, hook, formData }: BaseFormProps) => {
       </Grid>
 
       {/* preview */}
-      <Grid item xs={12} md={6} px={4} py={1}>
-        <Typography variant='h5' sx={{ fontWeight: 600, mb: 2 }}>
+      <Grid item xs={12} md={6} px={4} py={2} component={Paper}>
+        <Typography variant='h6' sx={{ fontWeight: 600, mb: { xs: 2, md: 7 } }}>
           Preview
         </Typography>
+
         <Box
           width='100%'
           sx={{
             bgcolor: '#F1FAFF',
             border: '1px solid #98CDFF',
-            height: '78%',
             whiteSpace: 'pre-wrap',
-            width: '100%',
             overflow: 'auto',
+            height: '530px',
+            my: 2,
           }}
-          p={4}
+          py={1}
+          px={2}
         >
-          <Typography variant='h6' sx={{ fontWeight: 500 }}>
+          <Typography variant='h6' sx={{ fontWeight: 500, mb: 1 }}>
             {data.notification?.template_subject}
           </Typography>
-          <Typography variant='body1'>
-            {data.notification?.template_body}
-          </Typography>
+          <Typography variant='body1'>{data.notification?.template_body}</Typography>
         </Box>
       </Grid>
     </Grid>
