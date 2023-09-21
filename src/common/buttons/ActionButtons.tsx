@@ -1,4 +1,5 @@
-import { Switch, Tooltip } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Box, Hidden, IconButton, Menu, MenuItem, Switch, Tooltip } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useBetween } from 'use-between';
 import { Properties, UseDeleteHookResult, UseEditHookResult } from '../../interfaces';
@@ -36,9 +37,12 @@ function ActionButtons({
   const [switchStatus, setSwitchStatus] = useState(false);
   const [delBtnStatus, setDelBtnStatus] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
   const { setSelectedApp, setSelectedEvent } = useBetween(dashboardState);
   const { handleSuccessMessage, handleErrorMessage } = useBetween(snackbarState);
+
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleClickEdit = () => {
     if (onClickEdit) onClickEdit(data);
@@ -126,30 +130,80 @@ function ActionButtons({
     }
   };
 
+  const btns = () => {
+    return (
+      <>
+        <InfoButton data={data} />
+        <EditButton onClick={(e) => onClick(e, 'edit')} disabled={disabled} />
+        <DeleteButton onClick={(e) => onClick(e, 'delete')} disabled={delBtnStatus || disabled} />
+        <Tooltip title={data.is_active ? 'Deactivate' : 'Activate'}>
+          <Switch
+            key={data.id}
+            onClick={(e) => onClick(e, 'switch')}
+            checked={data.is_active}
+            disabled={switchStatus || disabled}
+          />
+        </Tooltip>
+
+        <DeleteDialog
+          open={isDialogOpen}
+          type={type}
+          handleClose={() => {
+            setIsDialogOpen(false);
+            setDelBtnStatus(false);
+            disabled = false;
+          }}
+          handleSubmit={handleConfirmDelete} // Perform the delete action
+        />
+      </>
+    );
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const renderMobileMenu = () => (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: 'center',
+        horizontal: 'center',
+      }}
+      id="action-btns-mobile"
+      keepMounted
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+      sx={{ display: { xs: 'block', sm: 'none' } }}
+    >
+      <MenuItem>{btns()}</MenuItem>
+    </Menu>
+  );
+
+  // just render the btns as is for app cards
+  if (type === 'App') return <>{btns()}</>;
+
   return (
     <>
-      <InfoButton data={data} />
-      <EditButton onClick={(e) => onClick(e, 'edit')} disabled={disabled} />
-      <DeleteButton onClick={(e) => onClick(e, 'delete')} disabled={delBtnStatus || disabled} />
-      <Tooltip title={data.is_active ? 'Deactivate' : 'Activate'}>
-        <Switch
-          key={data.id}
-          onClick={(e) => onClick(e, 'switch')}
-          checked={data.is_active}
-          disabled={switchStatus || disabled}
-        />
-      </Tooltip>
-
-      <DeleteDialog
-        open={isDialogOpen}
-        type={type}
-        handleClose={() => {
-          setIsDialogOpen(false);
-          setDelBtnStatus(false);
-          disabled = false;
+      <IconButton onClick={handleMobileMenuOpen} sx={{ display: { sm: 'none' } }}>
+        <MenuIcon />
+      </IconButton>
+      <Box
+        sx={{
+          display: { xs: 'none', sm: 'flex' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexDirection: 'column',
         }}
-        handleSubmit={handleConfirmDelete} // Perform the delete action
-      />
+      >
+        {renderMobileMenu()}
+      </Box>
+
+      <Hidden smDown>{btns()}</Hidden>
     </>
   );
 }

@@ -72,7 +72,7 @@ function BaseDataGrid({
   const { selectedEvent, setSelectedEvent, setSelectedNotif } = useBetween(dashboardState);
   const { handleSuccessMessage, handleErrorMessage } = useBetween(snackbarState);
 
-  const isMobile = useCheckMobileScreen();
+  const { isMobile, isTablet } = useCheckMobileScreen();
   const apiRef = useGridApiRef();
 
   const editHook = useEdit(service, query);
@@ -80,8 +80,8 @@ function BaseDataGrid({
   const delAllHook = useDeleteAll(service);
 
   useEffect(() => {
-    apiRef.current.setColumnVisibility('description', !isMobile);
-  }, [isMobile, apiRef]);
+    apiRef.current.setColumnVisibility('description', !isTablet);
+  }, [isTablet, apiRef]);
 
   if (delHook.error) {
     return <Alert severity="error">An error occurred while deleting the event</Alert>;
@@ -192,6 +192,8 @@ function BaseDataGrid({
     editHook,
     delHook,
     disableActionBtns: selectedRows.length > LIMIT_SELECTION,
+    isMobile,
+    isTablet,
     onClickEdit: handleClickEdit,
     onClickDelete: handleClickDelete,
   });
@@ -282,6 +284,7 @@ function BaseDataGrid({
           onRowSelectionModelChange={handleRowSelectionModelChange}
           checkboxSelection
           disableRowSelectionOnClick
+          disableColumnMenu
           sx={{
             // remove the focus outline
             '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {

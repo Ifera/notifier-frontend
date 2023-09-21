@@ -1,9 +1,4 @@
-import {
-  DataGrid,
-  GridColDef,
-  GridRowParams,
-  GridToolbarContainer,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams, GridToolbarContainer } from '@mui/x-data-grid';
 
 import { Delete } from '@mui/icons-material';
 import { IconButton, Typography } from '@mui/material';
@@ -23,6 +18,8 @@ interface getColumnsProps {
   editHook: UseEditHookResult;
   delHook: UseDeleteHookResult;
   disableActionBtns: boolean;
+  isMobile: boolean;
+  isTablet: boolean;
   onClickEdit: (data: Properties) => void;
   onClickDelete?: (data: Properties) => void;
 }
@@ -32,6 +29,8 @@ export function getColumns({
   editHook,
   delHook,
   disableActionBtns,
+  isMobile,
+  isTablet,
   onClickEdit,
   onClickDelete,
 }: getColumnsProps): GridColDef[] {
@@ -39,7 +38,7 @@ export function getColumns({
     {
       field: 'name',
       headerName: type,
-      minWidth: 100,
+      minWidth: isMobile ? 150 : isTablet ? 450 : 100,
       flex: 1,
       hideable: false,
     },
@@ -53,14 +52,13 @@ export function getColumns({
     {
       field: 'action',
       headerName: 'Action',
-      minWidth: 150,
+      headerAlign: isMobile ? 'center' : 'left',
+      minWidth: isMobile ? 10 : isTablet ? 100 : 200,
       sortable: false,
-      align: 'left',
+      align: isMobile ? 'center' : 'left',
       flex: 1,
       hideable: false,
-      renderCell: ({
-        row,
-      }: Partial<GridRowParams<Event | NotificationType>>) => {
+      renderCell: ({ row }: Partial<GridRowParams<Event | NotificationType>>) => {
         if (!row) return null;
 
         return (
@@ -84,12 +82,9 @@ export function getColumns({
 export const CustomToolbar = (onClickDelete: () => void) => {
   return (
     <GridToolbarContainer>
-      <IconButton color='error' size='small' onClick={onClickDelete}>
+      <IconButton color="error" size="small" onClick={onClickDelete}>
         <Delete sx={{ fontSize: '16px', marginRight: '4px' }} />
-        <Typography
-          variant='body1'
-          sx={{ fontSize: '0.8125rem', fontWeight: '500' }}
-        >
+        <Typography variant="body1" sx={{ fontSize: '0.8125rem', fontWeight: '500' }}>
           DELETE
         </Typography>
       </IconButton>
