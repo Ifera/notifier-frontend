@@ -1,5 +1,6 @@
 import { Info } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
+import ms from 'ms';
 import { Properties } from '../../interfaces';
 
 interface InfoButtonProps {
@@ -27,6 +28,7 @@ function InfoButton({ data }: InfoButtonProps) {
           </div>
         }
         enterTouchDelay={0}
+        leaveTouchDelay={ms('5s')}
       >
         <IconButton size='medium' edge='start' sx={{ color: 'gray' }}>
           <Info />
