@@ -26,7 +26,6 @@ function InfoButton({ data }: InfoButtonProps) {
             </p>
           </div>
         }
-        enterTouchDelay={0}
       >
         <IconButton size='medium' edge='start' sx={{ color: 'gray' }}>
           <Info />
