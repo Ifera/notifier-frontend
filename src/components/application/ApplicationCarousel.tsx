@@ -1,4 +1,4 @@
-import { Pagination } from '@mui/material';
+import { Pagination, PaginationItem, Tooltip } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
   Application,
@@ -81,6 +81,19 @@ function ApplicationCarousel({
                 }}
                 size='medium'
                 color='primary'
+                renderItem={(item) => {
+                  if (item.type === 'previous' || item.type === 'next') {
+                    return (
+                      <Tooltip
+                        title={item.type === 'previous' ? 'Previous' : 'Next'}
+                      >
+                        <PaginationItem {...item} />
+                      </Tooltip>
+                    );
+                  }
+
+                  return <PaginationItem {...item} />;
+                }}
               />
             </Grid>
           </>
