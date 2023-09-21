@@ -97,10 +97,6 @@ export default function ToolBar({
       delete query.isActive;
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(null);
-    } else if (value === '') {
-      delete query.isActive;
-      setQuery({ ...query, pageNumber: 1 });
-      setSelectedFilterOption(null);
     } else {
       query.isActive = value === 'active' ? true : false;
       setQuery({ ...query, pageNumber: 1 });

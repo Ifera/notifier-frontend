@@ -10,8 +10,7 @@ const useEdit = (service: APIClient<PProperties, Properties>, query: Query) => {
 
   return useMutation<Properties, Error, PProperties>({
     mutationFn: (obj: PProperties) => {
-      if (obj.id === undefined)
-        throw new Error('The required property "id" is missing.');
+      if (obj.id === undefined) throw new Error('The required property "id" is missing.');
 
       return service.patch(obj.id, _.omit(obj, 'id'));
     },
