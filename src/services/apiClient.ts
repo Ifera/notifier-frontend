@@ -44,15 +44,11 @@ class APIClient<S, R> {
   }
 
   getAll = (config: AxiosRequestConfig) => {
-    return axiosInstance
-      .get<FetchResponse<R>>(this.endpoint, config)
-      .then((res) => res.data);
+    return axiosInstance.get<FetchResponse<R>>(this.endpoint, config).then((res) => res.data);
   };
 
   getById = (id: ID) => {
-    return axiosInstance
-      .get<R>(this.endpoint + '/' + id)
-      .then((res) => res.data);
+    return axiosInstance.get<R>(this.endpoint + '/' + id).then((res) => res.data);
   };
 
   post = (data: Partial<S>) => {
@@ -60,21 +56,15 @@ class APIClient<S, R> {
   };
 
   patch = (id: ID, data: Partial<S>) => {
-    return axiosInstance
-      .patch<R>(this.endpoint + '/' + id, data)
-      .then((res) => res.data);
+    return axiosInstance.patch<R>(this.endpoint + '/' + id, data).then((res) => res.data);
   };
 
   delete = (id: ID) => {
-    return axiosInstance
-      .delete(this.endpoint + '/' + id)
-      .then((res) => res.data);
+    return axiosInstance.delete(this.endpoint + '/' + id).then((res) => res.data);
   };
 
   deleteAll = (ids: ID[]) => {
-    return axiosInstance
-      .delete(this.endpoint, { data: { ids } })
-      .then((res) => res.data);
+    return axiosInstance.delete(this.endpoint, { data: { ids } }).then((res) => res.data);
   };
 
   get = () => {

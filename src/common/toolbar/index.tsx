@@ -247,7 +247,7 @@ export default function ToolBar({
             variant="body2"
             sx={{
               fontSize: '13px',
-              display: { sm: 'inline', xs: 'none' },
+              display: { md: 'inline', sm: 'none', xs: 'none' },
               mx: 1,
             }}
           >
