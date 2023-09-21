@@ -33,7 +33,7 @@ const ApplicationCardContainer = ({
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
-            border: cardId === selectedApp ? '1px solid #aaa' : 'none',
+            border: cardId === selectedApp ? '1px solid #000' : 'none',
           }}
         >
           {children}
