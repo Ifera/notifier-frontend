@@ -15,7 +15,7 @@ const useCheckMobileScreen = () => {
     };
   }, []);
 
-  return width <= 768;
+  return { isMobile: width <= 425, isTablet: width <= 768, width }; // 768 -> table
 };
 
 export default useCheckMobileScreen;
