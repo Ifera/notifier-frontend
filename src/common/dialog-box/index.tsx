@@ -14,11 +14,13 @@ interface DialogBoxProps {
   type: string;
   handleClose: () => void;
   handleSubmit: () => void;
+  multipleDelete?: boolean;
 }
 
 const DialogBox = ({
   open,
   type,
+  multipleDelete = false,
   handleClose,
   handleSubmit,
 }: DialogBoxProps) => {
@@ -26,7 +28,11 @@ const DialogBox = ({
     <Dialog open={open} onClose={handleClose} maxWidth='xs' fullWidth>
       <DialogTitle>
         <Box display='flex' alignItems='center'>
-          <Box flexGrow={1}>Delete {type}</Box>
+          <Box flexGrow={1}>
+            <Typography variant='h6'>
+              {multipleDelete ? `Delete Multiple ${type}s` : `Delete ${type}`}
+            </Typography>
+          </Box>
           <Box>
             <IconButton onClick={handleClose} edge='end'>
               <CloseIcon />
@@ -36,7 +42,9 @@ const DialogBox = ({
       </DialogTitle>
       <DialogContent>
         <Typography variant='body1' sx={{ mb: 2 }}>
-          Are you sure you want to delete this {type}?
+          {multipleDelete
+            ? `Are you sure you want to delete all selected ${type}s?`
+            : `Are you sure you want to delete this ${type}?`}
         </Typography>
         <Box display='flex' justifyContent='flex-end' sx={{ mt: 6 }}>
           <Button
