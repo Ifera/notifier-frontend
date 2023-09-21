@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormDataSchemaType } from '../../interfaces';
 import { formDataSchema } from '../../utils/validation/schema';
 
@@ -28,12 +27,11 @@ export interface BaseFormProps {
 }
 
 function BaseForm({ formData, backBtn, onSubmit }: BaseFormProps) {
-  const [data, setData] = useState(formData);
-
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<FormDataSchemaType>({
     resolver: zodResolver(formDataSchema),
@@ -44,7 +42,6 @@ function BaseForm({ formData, backBtn, onSubmit }: BaseFormProps) {
   const navigate = useNavigate();
 
   const onFormSubmit: SubmitHandler<FormDataSchemaType> = (d) => {
-    setData(d); // update state
     onSubmit(d); // submit data
   };
 
@@ -65,7 +62,7 @@ function BaseForm({ formData, backBtn, onSubmit }: BaseFormProps) {
           errorMessage={errors.description?.message || null}
         />
 
-        {data.notification ? (
+        {formData.notification ? (
           <>
             <TextInput
               {...register('notification.template_subject')}
@@ -79,18 +76,10 @@ function BaseForm({ formData, backBtn, onSubmit }: BaseFormProps) {
             <StyledMentionsInput
               {...register('notification.template_body')}
               label='Body'
-              value={data.notification.template_body}
+              value={getValues('notification.template_body')}
               onChange={(e) => {
                 setValue('notification.template_body', e.target.value, {
                   shouldValidate: true,
-                });
-
-                setData({
-                  ...data,
-                  notification: {
-                    ...data.notification!!, // notification is not null
-                    template_body: e.target.value,
-                  },
                 });
               }}
               errorMessage={errors.notification?.template_body?.message || null}
