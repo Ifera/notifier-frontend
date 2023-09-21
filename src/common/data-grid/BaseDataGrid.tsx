@@ -1,9 +1,4 @@
-import {
-  Alert,
-  PaginationItem,
-  TablePaginationProps,
-  Tooltip,
-} from '@mui/material';
+import { Alert, PaginationItem, TablePaginationProps, Tooltip } from '@mui/material';
 import MuiPagination from '@mui/material/Pagination';
 import {
   GridCellParams,
@@ -14,7 +9,6 @@ import {
 } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useBetween } from 'use-between';
-import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
 import useCheckMobileScreen from '../../hooks/useCheckMobileScreen';
 import useDelete from '../../hooks/useDelete';
 import useDeleteAll from '../../hooks/useDeleteAll';
@@ -29,11 +23,8 @@ import {
   Service,
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
+import Dialog, { DialogProps } from '../dialog';
 import DialogBox from '../dialog-box';
-import EditDialog, {
-  EditDialogProps,
-  OnSubmitSuccessProps,
-} from '../edit/EditDialog';
 import { CustomToolbar, StyledDataGrid, getColumns } from './utils';
 
 const LIMIT_SELECTION = 0;
@@ -62,24 +53,21 @@ function BaseDataGrid({
   onPageChange,
   onRowClick,
 }: BaseDataGridProps) {
-  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
+  const [dialogProps, setDialogProps] = useState<DialogProps>({
     open: false,
     type,
-    data: null,
-    operation: 'Edit',
   });
+
+  const [dialogData, setDialogData] = useState<Properties | null>(null);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
 
-  const [selectedRows, setSelectedRows] = useState<
-    Event[] | NotificationType[]
-  >([]);
+  const [selectedRows, setSelectedRows] = useState<Event[] | NotificationType[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { selectedEvent, setSelectedEvent, setSelectedNotif } =
-    useBetween(dashboardState);
+  const { selectedEvent, setSelectedEvent, setSelectedNotif } = useBetween(dashboardState);
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
@@ -93,17 +81,11 @@ function BaseDataGrid({
   }, [isMobile, apiRef]);
 
   if (delHook.error) {
-    return (
-      <Alert severity='error'>An error occurred while deleting the event</Alert>
-    );
+    return <Alert severity="error">An error occurred while deleting the event</Alert>;
   }
 
   if (delAllHook.error) {
-    return (
-      <Alert severity='error'>
-        An error occurred while deleting the events
-      </Alert>
-    );
+    return <Alert severity="error">An error occurred while deleting the events</Alert>;
   }
 
   const handlePageChange = (model: GridPaginationModel) => {
@@ -111,19 +93,20 @@ function BaseDataGrid({
     setPaginationModel(model);
   };
 
-  const handleEditDialogClose = () => {
-    setDialogProps({ ...dialogProps, open: false, data: null });
+  const handleDialogClose = () => {
+    setDialogData(null);
+    setDialogProps({ ...dialogProps, open: false });
   };
 
   const handleClickEdit = (data: Properties) => {
-    setDialogProps({ ...dialogProps, open: true, data });
+    setDialogData(data);
+    setDialogProps({ ...dialogProps, open: true });
   };
 
-  const handleSubmitSuccess = ({ cleanup }: OnSubmitSuccessProps) => {
-    setTimeout(() => {
-      handleEditDialogClose();
-      cleanup(true);
-    }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
+  const handleDialogSubmit = (success: boolean) => {
+    if (!success) return;
+
+    handleDialogClose();
   };
 
   const handleCellClick = (params: GridCellParams) => {
@@ -211,7 +194,7 @@ function BaseDataGrid({
   }: Pick<TablePaginationProps, 'page' | 'onPageChange' | 'className'>) => {
     return (
       <MuiPagination
-        color='primary'
+        color="primary"
         className={className}
         count={Math.ceil(totalRowCount / paginationModel.pageSize)}
         page={page + 1}
@@ -247,12 +230,21 @@ function BaseDataGrid({
           height: selectedRows.length > LIMIT_SELECTION ? '400px' : '380px',
         }}
       >
-        <EditDialog
-          {...dialogProps}
-          onClose={handleEditDialogClose}
-          editHook={editHook}
-          onSubmitSuccess={handleSubmitSuccess}
-        />
+        {dialogData && (
+          <Dialog
+            {...dialogProps}
+            operation={{
+              type: 'Edit',
+              editHook,
+              data: dialogData,
+            }}
+            options={{
+              onSuccess: () => handleDialogSubmit(true),
+              onError: () => handleDialogSubmit(false),
+              onClose: handleDialogClose,
+            }}
+          />
+        )}
 
         <StyledDataGrid
           apiRef={apiRef}
@@ -272,7 +264,7 @@ function BaseDataGrid({
               },
             },
           }}
-          paginationMode='server'
+          paginationMode="server"
           paginationModel={paginationModel}
           onPaginationModelChange={handlePageChange}
           onCellClick={handleCellClick}
@@ -295,9 +287,7 @@ function BaseDataGrid({
             pagination: CustomPagination,
           }}
           getRowClassName={(params) =>
-            params.id === selectedEvent && type === 'Event'
-              ? 'selected-row'
-              : ''
+            params.id === selectedEvent && type === 'Event' ? 'selected-row' : ''
           }
         />
 
