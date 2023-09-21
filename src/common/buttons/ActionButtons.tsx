@@ -1,13 +1,9 @@
 import { Switch, Tooltip } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useBetween } from 'use-between';
-import {
-  Properties,
-  UseDeleteHookResult,
-  UseEditHookResult,
-} from '../../interfaces';
+import { Properties, UseDeleteHookResult, UseEditHookResult } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
-import DialogBox from '../dialog-box';
+import DeleteDialog from '../dialog/delete';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import InfoButton from './InfoButton';
@@ -118,10 +114,7 @@ function ActionButtons({
     <>
       <InfoButton data={data} />
       <EditButton onClick={(e) => onClick(e, 'edit')} disabled={disabled} />
-      <DeleteButton
-        onClick={(e) => onClick(e, 'delete')}
-        disabled={delBtnStatus || disabled}
-      />
+      <DeleteButton onClick={(e) => onClick(e, 'delete')} disabled={delBtnStatus || disabled} />
       <Tooltip title={data.is_active ? 'Deactivate' : 'Activate'}>
         <Switch
           key={data.id}
@@ -131,7 +124,7 @@ function ActionButtons({
         />
       </Tooltip>
 
-      <DialogBox
+      <DeleteDialog
         open={isDialogOpen}
         type={type}
         handleClose={() => {
