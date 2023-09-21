@@ -1,10 +1,6 @@
 import { Alert, Box } from '@mui/material';
 import { useState } from 'react';
-import EditDialog, {
-  EditDialogProps,
-  OnSubmitSuccessProps,
-} from '../../common/edit/EditDialog';
-import { EDIT_DIALOG_AUTO_CLOSE_DELAY } from '../../constants';
+import Dialog, { DialogProps } from '../../common/dialog';
 import useDelete from '../../hooks/useDelete';
 import useEdit from '../../hooks/useEdit';
 import {
@@ -12,6 +8,7 @@ import {
   FetchResponse,
   Application as IApplication,
   ID,
+  Properties,
 } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 import ApplicationCarousel from './ApplicationCarousel';
@@ -35,19 +32,19 @@ function Application({
   cardsPerPage,
   onAppSelect,
 }: ApplicationProps) {
-  const [dialogProps, setDialogProps] = useState<EditDialogProps>({
+  const [dialogProps, setDialogProps] = useState<DialogProps>({
     open: false,
     type: 'App',
-    operation: 'Edit',
-    data: null,
   });
+
+  const [dialogData, setDialogData] = useState<Properties | null>(null);
 
   const editHook = useEdit(applicationService, query);
   const delHook = useDelete(applicationService);
 
   if (error) {
     return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
+      <Alert severity="error" sx={{ marginTop: 2 }}>
         An error occurred while loading the applications
       </Alert>
     );
@@ -55,7 +52,7 @@ function Application({
 
   if (delHook.error) {
     return (
-      <Alert severity='error' sx={{ marginTop: 2 }}>
+      <Alert severity="error" sx={{ marginTop: 2 }}>
         An error occurred while deleting the application
       </Alert>
     );
@@ -63,7 +60,7 @@ function Application({
 
   if (data?.results.length === 0) {
     return (
-      <Alert severity='warning' sx={{ marginTop: 2 }}>
+      <Alert severity="warning" sx={{ marginTop: 2 }}>
         {query.like || query.isActive !== undefined
           ? 'No applications found for the selected filters.'
           : 'No applications found. Please click the (+) button above to add a new application.'}
@@ -79,29 +76,39 @@ function Application({
     onAppSelect(cardId, name);
   };
 
-  const handleEditDialogClose = () => {
-    setDialogProps({ ...dialogProps, open: false, data: null });
+  const handleDialogClose = () => {
+    setDialogData(null);
+    setDialogProps({ ...dialogProps, open: false });
   };
 
-  const handleClickEditBtn = (data: IApplication) => {
-    setDialogProps({ ...dialogProps, open: true, data });
+  const handleClickEditBtn = (data: Properties) => {
+    setDialogData(data);
+    setDialogProps({ ...dialogProps, open: true });
   };
 
-  const handleSubmitSuccess = ({ cleanup }: OnSubmitSuccessProps) => {
-    setTimeout(() => {
-      handleEditDialogClose();
-      cleanup(true);
-    }, EDIT_DIALOG_AUTO_CLOSE_DELAY);
+  const handleDialogSubmit = (success: boolean) => {
+    if (!success) return;
+
+    handleDialogClose();
   };
 
   return (
     <Box>
-      <EditDialog
-        {...dialogProps}
-        onClose={handleEditDialogClose}
-        editHook={editHook}
-        onSubmitSuccess={handleSubmitSuccess}
-      />
+      {dialogData && (
+        <Dialog
+          {...dialogProps}
+          operation={{
+            type: 'Edit',
+            editHook,
+            data: dialogData,
+          }}
+          options={{
+            onSuccess: () => handleDialogSubmit(true),
+            onError: () => handleDialogSubmit(false),
+            onClose: handleDialogClose,
+          }}
+        />
+      )}
 
       <ApplicationCarousel
         data={data as FetchResponse<IApplication>}
