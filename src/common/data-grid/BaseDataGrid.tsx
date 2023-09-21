@@ -23,8 +23,9 @@ import {
   Service,
 } from '../../interfaces';
 import { dashboardState } from '../../pages/Dashboard';
+import { snackbarState } from '../../utils/SnackbarState';
 import Dialog, { DialogProps } from '../dialog';
-import DialogBox from '../dialog-box';
+import DeleteDialog from '../dialog/delete';
 import { CustomToolbar, StyledDataGrid, getColumns } from './utils';
 
 const LIMIT_SELECTION = 0;
@@ -67,7 +68,9 @@ function BaseDataGrid({
 
   const [selectedRows, setSelectedRows] = useState<Event[] | NotificationType[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const { selectedEvent, setSelectedEvent, setSelectedNotif } = useBetween(dashboardState);
+  const { handleSuccessMessage, handleErrorMessage } = useBetween(snackbarState);
 
   const isMobile = useCheckMobileScreen();
   const apiRef = useGridApiRef();
@@ -151,6 +154,8 @@ function BaseDataGrid({
       selectedRows.map((row) => row.id),
       {
         onSuccess: () => {
+          handleSuccessMessage(`${type}s deleted successfully`);
+
           if (type !== 'Event') return;
 
           selectedRows.forEach((row) => {
@@ -158,6 +163,10 @@ function BaseDataGrid({
               setSelectedEvent(null);
             }
           });
+        },
+        onError: (error) => {
+          handleErrorMessage('Unable to delete the selected events');
+          console.log(error);
         },
         onSettled: () => {
           setSelectedRows([]);
@@ -291,7 +300,7 @@ function BaseDataGrid({
           }
         />
 
-        <DialogBox
+        <DeleteDialog
           open={isDialogOpen}
           type={type}
           handleClose={() => {
