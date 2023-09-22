@@ -82,9 +82,9 @@ export function getColumns({
 export const CustomToolbar = (onClickDelete: () => void) => {
   return (
     <GridToolbarContainer>
-      <IconButton color="error" size="small" onClick={onClickDelete}>
+      <IconButton color='error' size='small' onClick={onClickDelete}>
         <Delete sx={{ fontSize: '16px', marginRight: '4px' }} />
-        <Typography variant="body1" sx={{ fontSize: '0.8125rem', fontWeight: '500' }}>
+        <Typography variant='body1' sx={{ fontSize: '0.8125rem', fontWeight: '500' }}>
           DELETE
         </Typography>
       </IconButton>
@@ -95,8 +95,19 @@ export const CustomToolbar = (onClickDelete: () => void) => {
 // ----------------------------------------------
 
 export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  '& .MuiDataGrid-cell': {
+    border: 'none ',
+  },
+
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: '#F0F0F0 !important',
+    cursor: 'pointer',
+  },
+
   '.selected-row': {
-    backgroundColor: '#eee',
+    backgroundColor: '#F0F0F0 !important',
     fontWeight: '500',
+    borderTop: `1px solid #0060B9`,
+    borderBottom: `1px solid #0060B9`,
   },
 }));

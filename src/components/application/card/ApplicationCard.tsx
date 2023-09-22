@@ -36,7 +36,7 @@ function ApplicationCard({
               borderBottom: '1px solid #E0E0E0',
             }}
           >
-            <Typography sx={{ fontSize: 14 }} color="#071B2F">
+            <Typography sx={{ fontSize: 14 }} color='#071B2F'>
               {formattedDate}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
@@ -51,22 +51,30 @@ function ApplicationCard({
               }}
             />
           </Box>
-          <Typography variant="h6">
-            {application.name.length > 30
-              ? application.name.substring(0, 30) + '...'
-              : application.name}
-          </Typography>
-          <Typography variant="body2">
-            {application.description.length > 90
-              ? application.description.substring(0, 80) + '...'
-              : application.description}
-          </Typography>
+          <Box
+            sx={{
+              flexGrow: 1,
+              minHeight: { xs: '65px', sm: '75px' },
+              maxHeight: '75px',
+            }}
+          >
+            <Typography variant='h6'>
+              {application.name.length > 25
+                ? application.name.substring(0, 25) + '...'
+                : application.name}
+            </Typography>
+            <Typography variant='body2'>
+              {application.description.length > 80
+                ? application.description.substring(0, 80) + '...'
+                : application.description}
+            </Typography>
+          </Box>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Box ml={1}>
           <ActionButtons
-            type="App"
+            type='App'
             data={application}
             editHook={editHook}
             delHook={delHook}

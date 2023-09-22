@@ -37,7 +37,7 @@ function ApplicationCarousel({
 
   return (
     <>
-      <Grid container spacing={4} justifyContent="center" alignItems="center">
+      <Grid container spacing={4} justifyContent='center' alignItems='center'>
         {isLoading ? (
           skeletons.map((_, index) => (
             <ApplicationCardContainer key={index} index={index} cardsPerPage={cardsPerPage}>
@@ -63,15 +63,15 @@ function ApplicationCarousel({
               </ApplicationCardContainer>
             ))}
 
-            <Grid container justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
+            <Grid container justifyContent='center' alignItems='center' sx={{ mt: 2 }}>
               <Pagination
                 count={Math.ceil(data.total_count / cardsPerPage)}
                 page={data.current_page}
                 onChange={(event, newPage) => {
                   onPageChange && onPageChange(newPage);
                 }}
-                size="medium"
-                color="primary"
+                size='medium'
+                color='primary'
                 sx={{ '& .Mui-selected': { bgcolor: '#0060B9' } }}
                 renderItem={(item) => {
                   if (item.type === 'previous' || item.type === 'next') {

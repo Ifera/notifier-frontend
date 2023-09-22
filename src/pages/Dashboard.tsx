@@ -77,11 +77,11 @@ function Dashboard() {
   };
 
   return (
-    <Box mb={5}>
+    <Box mb={5} sx={{ backgroundColor: '#F3F7FD' }}>
       <Container>
-        <Snackbar open={!!successMessage} message={successMessage || ''} severity="success" />
+        <Snackbar open={!!successMessage} message={successMessage || ''} severity='success' />
 
-        <Snackbar open={!!errorMessage} message={errorMessage || ''} severity="error" />
+        <Snackbar open={!!errorMessage} message={errorMessage || ''} severity='error' />
 
         <ApplicationContainer selectedApp={selectedApp} onAppSelect={handleAppSelect} />
 
