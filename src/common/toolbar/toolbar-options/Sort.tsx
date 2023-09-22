@@ -1,8 +1,4 @@
-import {
-  ArrowDownward,
-  ArrowUpward,
-  Sort as SortIcon,
-} from '@mui/icons-material';
+import { ArrowDownward, ArrowUpward, Sort as SortIcon } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 
 interface SortProps {
@@ -12,12 +8,7 @@ interface SortProps {
   setSortAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
-function Sort({
-  sortOptions,
-  selectedSortOption,
-  sortDirection,
-  setSortAnchorEl,
-}: SortProps) {
+function Sort({ sortOptions, selectedSortOption, sortDirection, setSortAnchorEl }: SortProps) {
   const selectedOptionLabel = selectedSortOption
     ? sortOptions.find((option) => option.value === selectedSortOption)?.label
     : 'Name';
@@ -36,11 +27,12 @@ function Sort({
   return (
     <Box
       sx={{
-        backgroundColor: 'rgba(152, 205, 255, 0.25)',
+        backgroundColor: '#0060B9',
         borderRadius: 3,
+        mr: 1,
       }}
     >
-      <IconButton onClick={handleSortClick} sx={{ borderRadius: 2 }}>
+      <IconButton onClick={handleSortClick} sx={{ borderRadius: 2, color: 'white', px: 1.5 }}>
         <SortIcon />
         <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
           {selectedOptionLabel} {directionIcon}

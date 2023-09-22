@@ -12,10 +12,7 @@ interface ApplicationContainerProps {
   onAppSelect: (id: ID, name: string) => void;
 }
 
-function ApplicationContainer({
-  selectedApp,
-  onAppSelect,
-}: ApplicationContainerProps) {
+function ApplicationContainer({ selectedApp, onAppSelect }: ApplicationContainerProps) {
   const [query, setQuery] = useState<Query>({
     pageNumber: 1,
     pageSize: APPS_PAGE_SIZE,
@@ -26,14 +23,14 @@ function ApplicationContainer({
   return (
     <>
       <ToolBar
-        type='App'
+        type="App"
         query={query}
         setQuery={setQuery}
         service={applicationService}
         totalCount={data?.total_count}
       />
 
-      <Box mt={5}>
+      <Box mt={4}>
         <Application
           data={data}
           isLoading={isLoading}
@@ -46,7 +43,7 @@ function ApplicationContainer({
       </Box>
 
       {!selectedApp && data?.total_count !== 0 && (
-        <Alert severity='info' sx={{ mt: 4 }}>
+        <Alert severity="info" sx={{ mt: 4 }}>
           Please select an application to display the events.
         </Alert>
       )}

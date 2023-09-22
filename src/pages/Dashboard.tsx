@@ -77,47 +77,34 @@ function Dashboard() {
   };
 
   return (
-    <>
-      <Box mb={5}>
-        <Container>
-          <Snackbar
-            open={!!successMessage}
-            message={successMessage || ''}
-            severity='success'
-          />
+    <Box mb={5}>
+      <Container>
+        <Snackbar open={!!successMessage} message={successMessage || ''} severity="success" />
 
-          <Snackbar
-            open={!!errorMessage}
-            message={errorMessage || ''}
-            severity='error'
-          />
+        <Snackbar open={!!errorMessage} message={errorMessage || ''} severity="error" />
 
-          <ApplicationContainer
+        <ApplicationContainer selectedApp={selectedApp} onAppSelect={handleAppSelect} />
+
+        {selectedApp && (
+          <EventContainer
             selectedApp={selectedApp}
-            onAppSelect={handleAppSelect}
+            selectedAppName={names.app}
+            selectedEvent={selectedEvent}
+            onEventSelect={handleEventSelect}
           />
+        )}
 
-          {selectedApp && (
-            <EventContainer
-              selectedApp={selectedApp}
-              selectedAppName={names.app}
+        {selectedEvent && (
+          <Box my={4}>
+            <NotificationTypeContainer
               selectedEvent={selectedEvent}
-              onEventSelect={handleEventSelect}
+              selectedEventName={names.event}
+              onNotificationSelect={handleNotifiSelect}
             />
-          )}
-
-          {selectedEvent && (
-            <Box my={4}>
-              <NotificationTypeContainer
-                selectedEvent={selectedEvent}
-                selectedEventName={names.event}
-                onNotificationSelect={handleNotifiSelect}
-              />
-            </Box>
-          )}
-        </Container>
-      </Box>
-    </>
+          </Box>
+        )}
+      </Container>
+    </Box>
   );
 }
 

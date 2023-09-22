@@ -1,13 +1,5 @@
 import { AccountCircle } from '@mui/icons-material';
-import {
-  AppBar,
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Popover,
-  Toolbar,
-} from '@mui/material';
+import { AppBar, Box, Button, Grid, IconButton, Popover, Toolbar } from '@mui/material';
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../assets/icon.svg';
@@ -38,19 +30,24 @@ const Layout = () => {
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: '#F3F7FD',
+      }}
     >
-      <AppBar position='static'>
-        <Toolbar color='primary'>
-          <Link to='/'>
-            <img src={Logo} alt='logo' />
+      <AppBar position="static" sx={{ backgroundColor: '#0060B9' }}>
+        <Toolbar color="primary">
+          <Link to="/">
+            <img src={Logo} alt="logo" />
           </Link>
-          <Grid container justifyContent='flex-end'>
+          <Grid container justifyContent="flex-end">
             <IconButton
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              color='inherit'
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
               onClick={handlePopoverOpen}
             >
               <AccountCircle />
@@ -58,7 +55,7 @@ const Layout = () => {
           </Grid>
         </Toolbar>
         <Popover
-          id='menu-appbar'
+          id="menu-appbar"
           anchorEl={anchorEl}
           open={popoverOpen}
           onClose={handlePopoverClose}

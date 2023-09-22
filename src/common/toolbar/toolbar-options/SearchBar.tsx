@@ -5,13 +5,13 @@ import { styled } from '@mui/material/styles';
 const SearchWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  background: 'rgba(152, 205, 255, 0.25)',
   borderRadius: 10,
+  border: '1px solid #CDCDCD',
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     width: 'auto',
   },
-  margin: theme.spacing(0, 2),
+  margin: theme.spacing(0, 1),
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -48,7 +48,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
-        placeholder='Search…'
+        placeholder="Search…"
         inputProps={{ 'aria-label': 'search' }}
         onChange={(event) => onSearchChange(event.target.value)}
       />
