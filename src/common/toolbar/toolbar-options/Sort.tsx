@@ -1,5 +1,5 @@
 import { ArrowDownward, ArrowUpward, Sort as SortIcon } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
 interface SortProps {
   sortOptions: { label: string; value: string }[];
@@ -25,20 +25,22 @@ function Sort({ sortOptions, selectedSortOption, sortDirection, setSortAnchorEl 
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: '#0060B9',
-        borderRadius: 3,
-        mr: 1,
-      }}
-    >
-      <IconButton onClick={handleSortClick} sx={{ borderRadius: 2, color: 'white', px: 1.5 }}>
-        <SortIcon />
-        <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
-          {selectedOptionLabel} {directionIcon}
-        </Typography>
-      </IconButton>
-    </Box>
+    <Tooltip title={`Sort`}>
+      <Box
+        sx={{
+          backgroundColor: '#0060B9',
+          borderRadius: 3,
+          mr: 1,
+        }}
+      >
+        <IconButton onClick={handleSortClick} sx={{ borderRadius: 2, color: 'white', px: 1 }}>
+          <SortIcon />
+          <Typography sx={{ display: { xs: 'none', sm: 'block' } }} ml={1}>
+            {selectedOptionLabel} {directionIcon}
+          </Typography>
+        </IconButton>
+      </Box>
+    </Tooltip>
   );
 }
 

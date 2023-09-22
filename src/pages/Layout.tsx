@@ -1,9 +1,10 @@
 import { AccountCircle } from '@mui/icons-material';
-import { AppBar, Box, Button, Grid, IconButton, Popover, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Grid, IconButton, Toolbar, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../assets/icon.svg';
 import Footer from '../common/footer';
+import UserProfilePopover from '../common/popover/UserProfilePopover';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const Layout = () => {
     setPopoverOpen(false);
   };
 
-  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -42,58 +42,32 @@ const Layout = () => {
     >
       <AppBar position='static' sx={{ backgroundColor: '#0060B9' }}>
         <Toolbar color='primary'>
-          <Link to='/'>
-            <img src={Logo} alt='logo' />
-          </Link>
+          <Tooltip title='GoSaaS'>
+            <Link to='/'>
+              <img src={Logo} alt='logo' />
+            </Link>
+          </Tooltip>
           <Grid container justifyContent='flex-end'>
-            <IconButton
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              color='inherit'
-              onClick={handlePopoverOpen}
-            >
-              <AccountCircle />
-            </IconButton>
+            <Tooltip title='Profile'>
+              <IconButton
+                aria-label='account of current user'
+                aria-controls='menu-appbar'
+                aria-haspopup='true'
+                color='inherit'
+                onClick={handlePopoverOpen}
+              >
+                <AccountCircle />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Toolbar>
-        <Popover
-          id='menu-appbar'
-          anchorEl={anchorEl}
+        <UserProfilePopover
           open={popoverOpen}
+          anchorEl={anchorEl}
+          email={email}
           onClose={handlePopoverClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              padding: '20px',
-            }}
-          >
-            <AccountCircle sx={{ fontSize: '50px' }} />
-            <Box sx={{ mt: 2 }}>
-              <Typography variant='body1'>{email}</Typography>
-            </Box>
-            <Button
-              variant='outlined'
-              onClick={handleLogout}
-              sx={{
-                mt: 2,
-              }}
-            >
-              Logout
-            </Button>
-          </Box>
-        </Popover>
+          onLogout={handleLogout}
+        />
       </AppBar>
 
       <Box sx={{ flex: 1 }}>
