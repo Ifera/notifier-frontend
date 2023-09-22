@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { FetchResponse, ID } from '../interfaces';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL,
   params: {},
 });
 
