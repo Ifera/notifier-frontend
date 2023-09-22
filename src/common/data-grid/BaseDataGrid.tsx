@@ -1,4 +1,4 @@
-import { Alert, PaginationItem, TablePaginationProps, Tooltip } from '@mui/material';
+import { Alert, PaginationItem, Paper, TablePaginationProps, Tooltip } from '@mui/material';
 import MuiPagination from '@mui/material/Pagination';
 import {
   GridCellParams,
@@ -84,11 +84,11 @@ function BaseDataGrid({
   }, [isTablet, apiRef]);
 
   if (delHook.error) {
-    return <Alert severity="error">An error occurred while deleting the event</Alert>;
+    return <Alert severity='error'>An error occurred while deleting the event</Alert>;
   }
 
   if (delAllHook.error) {
-    return <Alert severity="error">An error occurred while deleting the events</Alert>;
+    return <Alert severity='error'>An error occurred while deleting the events</Alert>;
   }
 
   const handlePageChange = (model: GridPaginationModel) => {
@@ -205,7 +205,7 @@ function BaseDataGrid({
   }: Pick<TablePaginationProps, 'page' | 'onPageChange' | 'className'>) => {
     return (
       <MuiPagination
-        color="primary"
+        color='primary'
         className={className}
         count={Math.ceil(totalRowCount / paginationModel.pageSize)}
         page={page + 1}
@@ -236,11 +236,7 @@ function BaseDataGrid({
 
   return (
     <>
-      <div
-        style={{
-          height: selectedRows.length > LIMIT_SELECTION ? '400px' : '380px',
-        }}
-      >
+      <div style={{}}>
         {dialogData && (
           <Dialog
             {...dialogProps}
@@ -257,51 +253,54 @@ function BaseDataGrid({
           />
         )}
 
-        <StyledDataGrid
-          apiRef={apiRef}
-          rows={rows}
-          columns={columns}
-          rowCount={totalRowCount}
-          loading={isLoading}
-          initialState={{
-            pagination: {
-              paginationModel,
-            },
-            columns: {
-              columnVisibilityModel: {
-                [type.toLowerCase()]: true,
-                description: true,
-                action: true,
+        <Paper>
+          <StyledDataGrid
+            apiRef={apiRef}
+            rows={rows}
+            columns={columns}
+            rowCount={totalRowCount}
+            loading={isLoading}
+            initialState={{
+              pagination: {
+                paginationModel,
               },
-            },
-          }}
-          paginationMode="server"
-          paginationModel={paginationModel}
-          onPaginationModelChange={handlePageChange}
-          onCellClick={handleCellClick}
-          // onRowClick={handleRowClick}
-          pageSizeOptions={[5]}
-          onRowSelectionModelChange={handleRowSelectionModelChange}
-          checkboxSelection
-          disableRowSelectionOnClick
-          disableColumnMenu
-          sx={{
-            // remove the focus outline
-            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-              outline: 'none !important',
-            },
-          }}
-          slots={{
-            toolbar:
-              selectedRows.length > LIMIT_SELECTION
-                ? () => CustomToolbar(handleClickDeleteMultiple)
-                : null,
-            pagination: CustomPagination,
-          }}
-          getRowClassName={(params) =>
-            params.id === selectedEvent && type === 'Event' ? 'selected-row' : ''
-          }
-        />
+              columns: {
+                columnVisibilityModel: {
+                  [type.toLowerCase()]: true,
+                  description: true,
+                  action: true,
+                },
+              },
+            }}
+            paginationMode='server'
+            paginationModel={paginationModel}
+            onPaginationModelChange={handlePageChange}
+            onCellClick={handleCellClick}
+            // onRowClick={handleRowClick}
+            pageSizeOptions={[5]}
+            onRowSelectionModelChange={handleRowSelectionModelChange}
+            checkboxSelection
+            disableRowSelectionOnClick
+            disableColumnMenu
+            sx={{
+              // remove the focus outline
+              '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+                outline: 'none !important',
+              },
+              height: selectedRows.length > LIMIT_SELECTION ? '410px' : '380px',
+            }}
+            slots={{
+              toolbar:
+                selectedRows.length > LIMIT_SELECTION
+                  ? () => CustomToolbar(handleClickDeleteMultiple)
+                  : null,
+              pagination: CustomPagination,
+            }}
+            getRowClassName={(params) =>
+              params.id === selectedEvent && type === 'Event' ? 'selected-row' : ''
+            }
+          />
+        </Paper>
 
         <DeleteDialog
           open={isDialogOpen}
