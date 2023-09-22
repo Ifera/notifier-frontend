@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material';
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import useGetAll from '../../hooks/useGetAll';
 import {
   Event,
@@ -14,6 +14,7 @@ import BaseDataGrid, { BaseDataGridProps } from './BaseDataGrid';
 
 interface DataGridProps extends Pick<BaseDataGridProps, 'type' | 'service'> {
   query: Query;
+  setQuery: Dispatch<SetStateAction<Query>>;
   onSelect: (id: ID, name: string) => void;
 }
 
@@ -22,23 +23,19 @@ function DataGrid({
   service,
   query,
 
+  setQuery,
   onSelect,
 }: DataGridProps) {
-  const [pageNumber, setPageNumber] = useState(1);
-  query.pageNumber = pageNumber; // do not change order
-
   const { data, isLoading, error } = useGetAll(service, query);
 
   if (error) {
     return (
-      <Alert severity='error'>
-        An error occurred while loading the {type.toLowerCase()}s
-      </Alert>
+      <Alert severity='error'>An error occurred while loading the {type.toLowerCase()}s</Alert>
     );
   }
 
   const onPageChange = (pageNumber: number) => {
-    setPageNumber(pageNumber);
+    setQuery((prev) => ({ ...prev, pageNumber }));
   };
 
   const handleRowClick = (data: Properties) => {

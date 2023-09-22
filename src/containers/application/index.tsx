@@ -1,10 +1,11 @@
 import { Alert, Box } from '@mui/material';
-import { useState } from 'react';
+import { useBetween } from 'use-between';
+import GlobalState from '../../GlobalState';
 import ToolBar from '../../common/toolbar';
 import Application from '../../components/application';
 import { APPS_PAGE_SIZE } from '../../constants';
 import useGetAll from '../../hooks/useGetAll';
-import { ID, NullableID, Query } from '../../interfaces';
+import { ID, NullableID } from '../../interfaces';
 import applicationService from '../../services/applicationService';
 
 interface ApplicationContainerProps {
@@ -13,17 +14,13 @@ interface ApplicationContainerProps {
 }
 
 function ApplicationContainer({ selectedApp, onAppSelect }: ApplicationContainerProps) {
-  const [query, setQuery] = useState<Query>({
-    pageNumber: 1,
-    pageSize: APPS_PAGE_SIZE,
-  });
-
+  const { appQuery: query, setAppQuery: setQuery } = useBetween(GlobalState);
   const { data, isLoading, error } = useGetAll(applicationService, query);
 
   return (
     <>
       <ToolBar
-        type="App"
+        type='App'
         query={query}
         setQuery={setQuery}
         service={applicationService}
@@ -43,7 +40,7 @@ function ApplicationContainer({ selectedApp, onAppSelect }: ApplicationContainer
       </Box>
 
       {!selectedApp && data?.total_count !== 0 && (
-        <Alert severity="info" sx={{ mt: 4 }}>
+        <Alert severity='info' sx={{ mt: 4 }}>
           Please select an application to display the events.
         </Alert>
       )}

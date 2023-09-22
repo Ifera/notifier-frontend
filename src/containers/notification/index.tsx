@@ -1,10 +1,11 @@
 import { Alert, Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useBetween } from 'use-between';
+import GlobalState from '../../GlobalState';
 import ToolBar from '../../common/toolbar';
 import NotificationType from '../../components/notification-types';
-import { GRID_PAGE_SIZE } from '../../constants';
 import useGetAll from '../../hooks/useGetAll';
-import { ID, NotificationTypeQuery, Query } from '../../interfaces';
+import { ID, NotificationTypeQuery } from '../../interfaces';
 import notificationService from '../../services/notificationService';
 
 interface NotificationTypeContainerProps {
@@ -18,18 +19,21 @@ function NotificationTypeContainer({
   selectedEventName,
   onNotificationSelect,
 }: NotificationTypeContainerProps) {
-  const [query, setQuery] = useState<Query>({
-    pageNumber: 1,
-    pageSize: GRID_PAGE_SIZE,
-    event: selectedEvent,
-  });
+  const { notifQuery, setNotifQuery: setQuery } = useBetween(GlobalState);
+  const query = notifQuery as NotificationTypeQuery;
+
+  useEffect(() => {
+    if (query.event === selectedEvent) return;
+
+    setQuery((prev) => ({ ...prev, event: selectedEvent, pageNumber: 1 }));
+  }, [selectedEvent]);
+
+  if (!query.event) {
+    query.event = selectedEvent;
+  }
 
   const { data, isLoading } = useGetAll(notificationService, query);
   const totalCount = data?.total_count || 0;
-
-  useEffect(() => {
-    setQuery((prev) => ({ ...prev, event: selectedEvent }));
-  }, [selectedEvent]);
 
   return (
     <>
@@ -53,6 +57,7 @@ function NotificationTypeContainer({
         ) : (
           <NotificationType
             query={query as NotificationTypeQuery}
+            setQuery={setQuery}
             onNotificationSelect={onNotificationSelect}
           />
         )}

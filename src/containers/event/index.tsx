@@ -1,10 +1,11 @@
 import { Alert, Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useBetween } from 'use-between';
+import GlobalState from '../../GlobalState';
 import ToolBar from '../../common/toolbar';
 import Event from '../../components/event';
-import { GRID_PAGE_SIZE } from '../../constants';
 import useGetAll from '../../hooks/useGetAll';
-import { EventQuery, ID, NullableID, Query } from '../../interfaces';
+import { EventQuery, ID, NullableID } from '../../interfaces';
 import eventService from '../../services/eventService';
 
 interface EventContainerProps {
@@ -20,18 +21,21 @@ function EventContainer({
   selectedEvent,
   onEventSelect,
 }: EventContainerProps) {
-  const [query, setQuery] = useState<Query>({
-    pageNumber: 1,
-    pageSize: GRID_PAGE_SIZE,
-    application: selectedApp,
-  });
+  const { eventQuery, setEventQuery: setQuery } = useBetween(GlobalState);
+  const query = eventQuery as EventQuery;
+
+  useEffect(() => {
+    if (query.application === selectedApp) return;
+
+    setQuery((prev) => ({ ...prev, application: selectedApp, pageNumber: 1 }));
+  }, [selectedApp]);
+
+  if (!query.application) {
+    query.application = selectedApp;
+  }
 
   const { data, isLoading } = useGetAll(eventService, query);
   const totalCount = data?.total_count || 0;
-
-  useEffect(() => {
-    setQuery((prev) => ({ ...prev, application: selectedApp }));
-  }, [selectedApp]);
 
   return (
     <>
@@ -53,7 +57,7 @@ function EventContainer({
               : 'No events found. Please add a new event by clicking on the (+) button above.'}
           </Alert>
         ) : (
-          <Event query={query as EventQuery} onEventSelect={onEventSelect} />
+          <Event query={query as EventQuery} setQuery={setQuery} onEventSelect={onEventSelect} />
         )}
       </Box>
 

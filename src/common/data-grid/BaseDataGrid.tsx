@@ -83,6 +83,15 @@ function BaseDataGrid({
     apiRef.current.setColumnVisibility('description', !isTablet);
   }, [isTablet, apiRef]);
 
+  useEffect(() => {
+    const page = query.pageNumber;
+
+    if (!page) return;
+    if (page === paginationModel.page + 1) return;
+
+    setPaginationModel((prev) => ({ ...prev, page: page }));
+  }, [query]);
+
   if (delHook.error) {
     return <Alert severity='error'>An error occurred while deleting the event</Alert>;
   }
