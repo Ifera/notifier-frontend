@@ -241,7 +241,7 @@ export default function ToolBar({
           variant="h6"
           sx={{
             flex: 1,
-            fontSize: '18px',
+            fontSize: '20px',
             display: 'flex',
             alignItems: 'center',
           }}

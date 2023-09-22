@@ -9,7 +9,6 @@ function AuthPage({ authType }: AuthType) {
   return (
     <Box
       sx={{
-        backgroundColor: '#FDFAFA',
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
