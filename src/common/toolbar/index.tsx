@@ -84,8 +84,7 @@ export default function ToolBar({
       setQuery({ ...query, pageNumber: 1 });
       setSelectedSortOption(null);
     } else {
-      query.sortBy = value;
-      setQuery({ ...query, pageNumber: 1 });
+      setQuery({ ...query, pageNumber: 1, sortBy: value });
       setSelectedSortOption(value);
     }
 
@@ -98,8 +97,7 @@ export default function ToolBar({
       setQuery({ ...query, pageNumber: 1 });
       setSelectedFilterOption(null);
     } else {
-      query.isActive = value === 'active' ? true : false;
-      setQuery({ ...query, pageNumber: 1 });
+      setQuery({ ...query, pageNumber: 1, isActive: value === 'active' });
       setSelectedFilterOption(value);
     }
 
@@ -111,14 +109,13 @@ export default function ToolBar({
   };
 
   const handleSearchChange = (search: string) => {
-    if (search === '' || search.length <= 3) {
+    if (search === '' || search.length <= 2) {
       delete query.like;
       setQuery({ ...query, pageNumber: 1 });
       return;
     }
 
-    query.like = search;
-    setQuery({ ...query, pageNumber: 1 });
+    setQuery({ ...query, pageNumber: 1, like: search });
   };
 
   const handleSortDirectionChange = (newDirection: number) => {
@@ -127,8 +124,7 @@ export default function ToolBar({
       setQuery({ ...query, pageNumber: 1 });
       setSortDirection(0);
     } else {
-      query.sortOrder = newDirection;
-      setQuery({ ...query, pageNumber: 1 });
+      setQuery({ ...query, pageNumber: 1, sortOrder: newDirection });
       setSortDirection(newDirection);
     }
   };
