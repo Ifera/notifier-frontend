@@ -10,15 +10,15 @@ export interface FormSubmitOptions {
 
 export interface FormProps {
   formData: Pick<BaseFormProps, 'formData'>['formData'];
+  btnText?: Pick<BaseFormProps, 'btnText'>['btnText'];
   backBtn?: Pick<BaseFormProps, 'backBtn'>['backBtn'];
 
   onSubmit: (data: FormData, options: FormSubmitOptions) => void;
   onChange?: Pick<BaseFormProps, 'onChange'>['onChange'];
 }
 
-function Form({ formData, backBtn, onSubmit, onChange }: FormProps) {
-  const { errorMessage, handleErrorMessage, handleSuccessMessage } =
-    useBetween(snackbarState);
+function Form({ formData, btnText, backBtn, onSubmit, onChange }: FormProps) {
+  const { errorMessage, handleErrorMessage, handleSuccessMessage } = useBetween(snackbarState);
 
   const handleSubmit = (data: FormData) => {
     onSubmit(data, {
@@ -29,14 +29,11 @@ function Form({ formData, backBtn, onSubmit, onChange }: FormProps) {
 
   return (
     <>
-      <Snackbar
-        open={!!errorMessage}
-        message={errorMessage || ''}
-        severity='error'
-      />
+      <Snackbar open={!!errorMessage} message={errorMessage || ''} severity='error' />
 
       <BaseForm
         formData={formData}
+        btnText={btnText}
         backBtn={backBtn}
         onSubmit={handleSubmit}
         onChange={onChange}

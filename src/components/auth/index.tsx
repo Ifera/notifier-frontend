@@ -1,30 +1,20 @@
 import { Card, Container, Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ZodError } from 'zod';
 import Icon from '../../assets/gosaas-icon-red.webp';
+import { FormSubmitOptions } from '../../common/form';
+import { FormData } from '../../common/form/BaseForm';
 import useAuth from '../../hooks/useAuth';
+import { User } from '../../interfaces';
 import { AuthType } from '../../pages/AuthPage';
 import authService from '../../services/authService';
 import { parseError } from '../../utils';
-import { userSchema } from '../../utils/validation/schema';
-import AuthForm, { User } from './AuthForm';
+import AuthForm from './AuthForm';
 
 function Auth({ authType }: AuthType) {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<User>({
-    email: '',
-    password: '',
-  });
-  const [formErrors, setFormErrors] = useState('');
-
   const authHook = useAuth(authType === 'login' ? authService.login : authService.register);
-
-  const onInputChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
-    setFormErrors('');
-  };
 
   const isAuthenticated = () => {
     const token = localStorage.getItem('token');
@@ -45,51 +35,38 @@ function Auth({ authType }: AuthType) {
     return token !== null;
   };
 
-  const validateForm = () => {
-    try {
-      userSchema.parse(formData);
-      return true;
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const emailError = error.errors.find((e) => e.path[0] === 'email');
-        const passwordError = error.errors.find((e) => e.path[0] === 'password');
-        if (emailError) {
-          setFormErrors(emailError.message);
-        } else if (passwordError) {
-          setFormErrors(passwordError.message);
-        }
-        return false;
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      authHook.mutate(formData, {
-        onSuccess: (data) => {
-          if (!data.token) {
-            setFormErrors('Something went wrong');
-            return;
-          }
-
-          localStorage.clear();
-          localStorage.setItem('token', data.token);
-
-          setFormErrors('');
-          navigate('/', { replace: true });
-        },
-        onError: (error) => {
-          setFormErrors(parseError(error));
-        },
-      });
-    }
-  };
-
   useEffect(() => {
     if (isAuthenticated()) {
       navigate('/', { replace: true });
     }
   }, [authHook, navigate]);
+
+  const handleSubmit = (newData: FormData, { onSuccess, onError }: FormSubmitOptions) => {
+    if (!newData.auth) return;
+
+    const mutationData: User = {
+      email: newData.auth.email,
+      password: newData.auth.password,
+    };
+
+    authHook.mutate(mutationData, {
+      onSuccess: (data) => {
+        if (!data.token) {
+          onError('Something went wrong');
+          return;
+        }
+
+        localStorage.clear();
+        localStorage.setItem('token', data.token);
+
+        navigate('/', { replace: true });
+        onSuccess(authType === 'login' ? 'Logged in successfully' : 'Registered successfully');
+      },
+      onError: (error) => {
+        onError(parseError(error));
+      },
+    });
+  };
 
   return (
     <Card
@@ -105,23 +82,8 @@ function Auth({ authType }: AuthType) {
         <Grid container justifyContent='center' alignItems='center' sx={{ mb: 2 }}>
           <img src={Icon} alt='icon' style={{ maxWidth: '100%' }} />
         </Grid>
-        {authType === 'login' ? (
-          <AuthForm
-            formData={formData}
-            formErrors={formErrors}
-            onInputChange={onInputChange}
-            onSubmit={handleSubmit}
-            formType={authType}
-          />
-        ) : (
-          <AuthForm
-            formData={formData}
-            formErrors={formErrors}
-            onInputChange={onInputChange}
-            onSubmit={handleSubmit}
-            formType={authType}
-          />
-        )}
+
+        <AuthForm type={authType} onSubmit={handleSubmit} />
       </Container>
     </Card>
   );

@@ -13,6 +13,7 @@ function AuthPage({ authType }: AuthType) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#F3F7FD',
       }}
     >
       <Auth authType={authType} />

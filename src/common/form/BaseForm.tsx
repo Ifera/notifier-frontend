@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
 import { Box, Button, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -29,12 +31,13 @@ export interface FormData {
 
 export interface BaseFormProps {
   formData: FormData;
+  btnText?: string;
   backBtn?: string;
   onSubmit: (data: FormData) => void;
   onChange?: (data: FormData) => void;
 }
 
-function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
+function BaseForm({ formData, btnText, backBtn, onSubmit, onChange }: BaseFormProps) {
   const {
     register,
     handleSubmit,
@@ -53,6 +56,8 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (formData.auth !== undefined) return;
+
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
         e.preventDefault();
@@ -120,6 +125,26 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
           />
         )}
 
+        {formData.auth && (
+          <>
+            <TextInput
+              {...register('auth.email')}
+              label='Email'
+              errorMessage={errors.auth?.email?.message || null}
+              startIcon={<EmailIcon />}
+              type='email'
+            />
+
+            <TextInput
+              {...register('auth.password')}
+              label='Password'
+              errorMessage={errors.auth?.password?.message || null}
+              type='password'
+              startIcon={<LockIcon />}
+            />
+          </>
+        )}
+
         {formData.notification && (
           <>
             <TextInput
@@ -145,14 +170,14 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
         )}
 
         <Box py={2}>
-          <Grid container spacing={2}>
-            <Grid item>
-              <Button variant='contained' color='primary' type='submit' disabled={isSubmitting}>
-                Submit
-              </Button>
-            </Grid>
+          {backBtn ? (
+            <Grid container spacing={2}>
+              <Grid item>
+                <Button variant='contained' color='primary' type='submit' disabled={isSubmitting}>
+                  {btnText || 'Submit'}
+                </Button>
+              </Grid>
 
-            {backBtn ? (
               <Grid item>
                 <Button
                   variant='contained'
@@ -163,8 +188,18 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
                   Go Back
                 </Button>
               </Grid>
-            ) : null}
-          </Grid>
+            </Grid>
+          ) : (
+            <Button
+              variant='contained'
+              color='primary'
+              type='submit'
+              fullWidth
+              disabled={isSubmitting}
+            >
+              {btnText || 'Submit'}
+            </Button>
+          )}
         </Box>
       </form>
     </>

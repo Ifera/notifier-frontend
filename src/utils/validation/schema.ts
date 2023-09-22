@@ -35,11 +35,14 @@ export const formDataSchema = z.object({
       template_subject: z
         .string()
         .min(1, 'Subject is required')
-        .min(5, 'Subject must have more than 5 characters'),
+        .min(5, 'Subject must have more than 5 characters')
+        .max(50, 'Subject is too long'),
+
       template_body: z
         .string()
         .min(1, 'Body is required')
-        .min(5, 'Body must be at least 5 characters long'),
+        .min(5, 'Body must be at least 5 characters long')
+        .max(1024, 'Body is too long'),
     })
     .optional(),
 });
