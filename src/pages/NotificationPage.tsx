@@ -14,11 +14,7 @@ function NotificationPage({ operation }: NotificationPageProps) {
     navigate('/');
   }
 
-  return (
-    <div style={{ backgroundColor: 'white' }}>
-      <NotificationForm id={id as ID} operation={operation} />
-    </div>
-  );
+  return <NotificationForm id={id as ID} operation={operation} />;
 }
 
 export default NotificationPage;

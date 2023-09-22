@@ -19,8 +19,8 @@ const ApplicationCardContainer = ({
   const { selectedApp } = useBetween(dashboardState);
 
   return (
-    <Slide key={index} direction="right" in={index < cardsPerPage} mountOnEnter unmountOnExit>
-      <Grid item key={cardId === undefined ? index : cardId} xs={12} sm={4}>
+    <Slide key={index} direction='right' in={index < cardsPerPage} mountOnEnter unmountOnExit>
+      <Grid item key={cardId === undefined ? index : cardId} xs={12} sm={10} md={4}>
         <Card
           sx={{
             height: '100%',

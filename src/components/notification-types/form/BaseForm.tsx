@@ -75,9 +75,15 @@ const BaseForm = ({ id, operation, hook, formData }: BaseFormProps) => {
   };
 
   return (
-    <Grid container px={{ sm: 4, md: 8, lg: 10 }} py={4} alignItems='stretch'>
+    <Grid
+      container
+      px={{ sm: 4, md: 8, lg: 10 }}
+      py={4}
+      alignItems='stretch'
+      justifyContent='center'
+    >
       {/* form */}
-      <Grid item xs={12} md={6} px={4} py={2} component={Paper}>
+      <Grid item xs={12} md={6} px={4} py={4} component={Paper}>
         <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
           Notification
         </Typography>

@@ -253,7 +253,7 @@ function BaseDataGrid({
           />
         )}
 
-        <Paper>
+        <Paper elevation={0}>
           <StyledDataGrid
             apiRef={apiRef}
             rows={rows}
