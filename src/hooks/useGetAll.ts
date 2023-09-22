@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
 import { FetchResponse, PProperties, Properties, Query } from '../interfaces';
 import APIClient from '../services/apiClient';
 
@@ -15,7 +14,6 @@ const useGetAll = (service: APIClient<PProperties, Properties>, query: Query) =>
           ...query,
         },
       }),
-    staleTime: ms('5s'),
   });
 };
 
