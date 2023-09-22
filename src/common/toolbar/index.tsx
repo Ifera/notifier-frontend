@@ -173,7 +173,7 @@ export default function ToolBar({
         vertical: 'top',
         horizontal: 'right',
       }}
-      id="toolbar-menu-mobile"
+      id='toolbar-menu-mobile'
       keepMounted
       transformOrigin={{
         vertical: 'top',
@@ -221,7 +221,7 @@ export default function ToolBar({
       />
 
       <Toolbar
-        variant="dense"
+        variant='dense'
         sx={{
           mt: 4,
           background: '#FFFFFF',
@@ -233,8 +233,8 @@ export default function ToolBar({
         }}
       >
         <Typography
-          component="div"
-          variant="h6"
+          component='div'
+          variant='h6'
           sx={{
             flex: 1,
             fontSize: '20px',
@@ -245,7 +245,7 @@ export default function ToolBar({
           {type === 'App' ? 'Applications' : `${type}s`}
 
           <Typography
-            variant="body2"
+            variant='body2'
             sx={{
               fontSize: '13px',
               display: { md: 'inline', sm: 'none', xs: 'none' },

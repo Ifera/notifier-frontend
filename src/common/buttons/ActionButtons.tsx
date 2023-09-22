@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Hidden, IconButton, Menu, MenuItem, Switch, Tooltip } from '@mui/material';
+import { Box, Hidden, IconButton, Menu, Switch, Tooltip } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useBetween } from 'use-between';
 import { Properties, UseDeleteHookResult, UseEditHookResult } from '../../interfaces';
@@ -174,13 +174,13 @@ function ActionButtons({
         vertical: 'center',
         horizontal: 'center',
       }}
-      id="action-btns-mobile"
+      id='action-btns-mobile'
       keepMounted
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
       sx={{ display: { xs: 'block', sm: 'none' } }}
     >
-      <MenuItem>{btns()}</MenuItem>
+      <Box px={2}>{btns()}</Box>
     </Menu>
   );
 
