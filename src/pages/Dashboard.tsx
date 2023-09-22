@@ -73,14 +73,13 @@ function Dashboard() {
     setSelectedNotif(id);
     setNames((prev) => ({ ...prev, notif: name }));
 
-    navigate(`/edit-notification/${id}`);
+    navigate(`/edit-notification/${id}`, { replace: true });
   };
 
   return (
     <Box mb={5} sx={{ backgroundColor: '#F3F7FD' }}>
       <Container>
         <Snackbar open={!!successMessage} message={successMessage || ''} severity='success' />
-
         <Snackbar open={!!errorMessage} message={errorMessage || ''} severity='error' />
 
         <ApplicationContainer selectedApp={selectedApp} onAppSelect={handleAppSelect} />

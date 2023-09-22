@@ -13,12 +13,23 @@ export const formDataSchema = z.object({
     .string()
     .min(1, 'Name is required')
     .min(3, 'Name must have more than 3 characters')
-    .max(50, 'Name is too long'),
+    .max(50, 'Name is too long')
+    .optional(),
   description: z
     .string()
     .min(1, 'Description is required')
     .min(3, 'Description must have more than 3 characters')
-    .max(255, 'Description is too long'),
+    .max(255, 'Description is too long')
+    .optional(),
+  auth: z
+    .object({
+      email: z.string().email('Invalid email').min(1, 'Email is required'),
+      password: z
+        .string()
+        .min(1, 'Password is required')
+        .min(6, 'Password must have more than 6 characters'),
+    })
+    .optional(),
   notification: z
     .object({
       template_subject: z

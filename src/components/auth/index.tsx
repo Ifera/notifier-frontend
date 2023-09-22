@@ -19,9 +19,7 @@ function Auth({ authType }: AuthType) {
   });
   const [formErrors, setFormErrors] = useState('');
 
-  const authHook = useAuth(
-    authType === 'login' ? authService.login : authService.register
-  );
+  const authHook = useAuth(authType === 'login' ? authService.login : authService.register);
 
   const onInputChange = (name: string, value: string) => {
     setFormData({ ...formData, [name]: value });
@@ -54,9 +52,7 @@ function Auth({ authType }: AuthType) {
     } catch (error) {
       if (error instanceof ZodError) {
         const emailError = error.errors.find((e) => e.path[0] === 'email');
-        const passwordError = error.errors.find(
-          (e) => e.path[0] === 'password'
-        );
+        const passwordError = error.errors.find((e) => e.path[0] === 'password');
         if (emailError) {
           setFormErrors(emailError.message);
         } else if (passwordError) {
@@ -75,10 +71,12 @@ function Auth({ authType }: AuthType) {
             setFormErrors('Something went wrong');
             return;
           }
+
           localStorage.clear();
           localStorage.setItem('token', data.token);
+
           setFormErrors('');
-          navigate('/');
+          navigate('/', { replace: true });
         },
         onError: (error) => {
           setFormErrors(parseError(error));
@@ -89,7 +87,7 @@ function Auth({ authType }: AuthType) {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate('/');
+      navigate('/', { replace: true });
     }
   }, [authHook, navigate]);
 
@@ -104,12 +102,7 @@ function Auth({ authType }: AuthType) {
       }}
     >
       <Container>
-        <Grid
-          container
-          justifyContent='center'
-          alignItems='center'
-          sx={{ mb: 2 }}
-        >
+        <Grid container justifyContent='center' alignItems='center' sx={{ mb: 2 }}>
           <img src={Icon} alt='icon' style={{ maxWidth: '100%' }} />
         </Grid>
         {authType === 'login' ? (

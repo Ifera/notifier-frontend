@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Grid } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FormDataSchemaType } from '../../interfaces';
 import { formDataSchema } from '../../utils/validation/schema';
+import ConfirmDialog from '../dialog/confirm';
 import StyledMentionsInput from '../text/input/MentionsInput';
 import TextInput from '../text/input/TextInput';
 
@@ -12,10 +14,16 @@ export interface NotificationData {
   template_body: string;
 }
 
-export interface FormData {
-  name: string;
-  description: string;
+export interface AuthData {
+  email: string;
+  password: string;
+}
 
+export interface FormData {
+  name?: string;
+  description?: string;
+
+  auth?: AuthData;
   notification?: NotificationData;
 }
 
@@ -32,14 +40,32 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<FormDataSchemaType>({
     resolver: zodResolver(formDataSchema),
     mode: 'all',
     values: formData,
+    defaultValues: formData,
   });
 
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   const onFormSubmit: SubmitHandler<FormDataSchemaType> = (data) => {
     onSubmit(data); // submit data
@@ -49,31 +75,57 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
     if (onChange) onChange(getValues());
   };
 
+  const handleConfirmDialogSubmit = () => {
+    if (backBtn) navigate(backBtn);
+  };
+
+  const handleClickBackBtn = () => {
+    if (isDirty) {
+      setOpenConfirmDialog(true);
+      return;
+    }
+
+    if (backBtn) navigate(backBtn);
+  };
+
+  const handleClickConfirmDialogCloseBtn = () => {
+    setOpenConfirmDialog(false);
+  };
+
   return (
     <>
+      <ConfirmDialog
+        open={openConfirmDialog}
+        text='Are you sure you want to go back? All unsaved changes will be lost.'
+        onSubmit={handleConfirmDialogSubmit}
+        onClose={handleClickConfirmDialogCloseBtn}
+      />
+
       <form onSubmit={handleSubmit(onFormSubmit)} onChange={handleFormChange}>
-        <TextInput
-          {...register('name')}
-          label='Name'
-          errorMessage={errors.name?.message || null}
-        />
+        {formData.name !== undefined && (
+          <TextInput
+            {...register('name')}
+            label='Name'
+            errorMessage={errors.name?.message || null}
+          />
+        )}
 
-        <TextInput
-          {...register('description')}
-          label='Description'
-          rows={3}
-          multiline
-          errorMessage={errors.description?.message || null}
-        />
+        {formData.description !== undefined && (
+          <TextInput
+            {...register('description')}
+            label='Description'
+            rows={3}
+            multiline
+            errorMessage={errors.description?.message || null}
+          />
+        )}
 
-        {formData.notification ? (
+        {formData.notification && (
           <>
             <TextInput
               {...register('notification.template_subject')}
               label='Subject'
-              errorMessage={
-                errors.notification?.template_subject?.message || null
-              }
+              errorMessage={errors.notification?.template_subject?.message || null}
             />
 
             {/* mentions input doesn"t work properly with refs so have to manually set values */}
@@ -84,22 +136,18 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
               onChange={(e) => {
                 setValue('notification.template_body', e.target.value, {
                   shouldValidate: true,
+                  shouldDirty: true,
                 });
               }}
               errorMessage={errors.notification?.template_body?.message || null}
             />
           </>
-        ) : null}
+        )}
 
         <Box py={2}>
           <Grid container spacing={2}>
             <Grid item>
-              <Button
-                variant='contained'
-                color='primary'
-                type='submit'
-                disabled={isSubmitting}
-              >
+              <Button variant='contained' color='primary' type='submit' disabled={isSubmitting}>
                 Submit
               </Button>
             </Grid>
@@ -110,7 +158,7 @@ function BaseForm({ formData, backBtn, onSubmit, onChange }: BaseFormProps) {
                   variant='contained'
                   color='warning'
                   type='button'
-                  onClick={() => navigate(backBtn)}
+                  onClick={handleClickBackBtn}
                 >
                   Go Back
                 </Button>
