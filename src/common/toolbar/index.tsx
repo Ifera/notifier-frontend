@@ -179,7 +179,9 @@ export default function ToolBar({
       onClose={handleMobileMenuClose}
       sx={{ display: { xs: 'block', sm: 'none' } }}
     >
-      <MenuItem>{renderToolbarOptions()}</MenuItem>
+      <MenuItem disableRipple disableTouchRipple>
+        {renderToolbarOptions()}
+      </MenuItem>
     </Menu>
   );
 
@@ -188,7 +190,9 @@ export default function ToolBar({
 
   let parentText = '';
   if (type === 'Event') {
-    parentText = 'App: ' + parentName + ', ';
+    if (!parentName) return null;
+    parentText =
+      'App: ' + parentName?.slice(0, 20).trim() + (parentName?.length > 20 ? '...' : '') + ', ';
   } else if (type === 'Notification') {
     parentText = 'Event: ' + parentName + ', ';
   }

@@ -34,17 +34,20 @@ const ToolbarOptions = ({
   return (
     <>
       <SearchBar onSearchChange={onSearchChange} />
+
       <Filter
         filterOptions={filterOptions}
         selectedFilterOption={selectedFilterOption || ''}
         setFilterAnchorEl={setFilterAnchorEl}
       />
+
       <Sort
         sortOptions={sortOptions}
         selectedSortOption={selectedSortOption || ''}
         sortDirection={sortDirection}
         setSortAnchorEl={setSortAnchorEl}
       />
+
       <Tooltip title={`Add new ${type}`}>
         <Box
           sx={{
@@ -55,8 +58,8 @@ const ToolbarOptions = ({
         >
           <IconButton
             onClick={onClickAddBtn}
-            color="primary"
-            sx={{ borderRadius: 2, color: 'white', px: 1.5 }}
+            color='primary'
+            sx={{ borderRadius: 2, color: 'white', px: 1 }}
           >
             <AddCircleIcon />
             <Typography sx={{ display: { xs: 'none', sm: 'block', ml: 1 } }} ml={1}>

@@ -1,5 +1,5 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
 interface FilterProps {
   filterOptions: { label: string; value: string }[];
@@ -17,21 +17,23 @@ function Filter({ filterOptions, selectedFilterOption, setFilterAnchorEl }: Filt
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: '#0060B9',
-        color: 'white',
-        borderRadius: 3,
-        mr: 1,
-      }}
-    >
-      <IconButton onClick={handleFilterClick} sx={{ borderRadius: 2, color: 'white', px: 1.5 }}>
-        <FilterListIcon />
-        <Typography sx={{ display: { xs: 'none', sm: 'block', color: 'white' } }} ml={1}>
-          {selectedOptionLabel}
-        </Typography>
-      </IconButton>
-    </Box>
+    <Tooltip title={`Filter`}>
+      <Box
+        sx={{
+          backgroundColor: '#0060B9',
+          color: 'white',
+          borderRadius: 3,
+          mr: 1,
+        }}
+      >
+        <IconButton onClick={handleFilterClick} sx={{ borderRadius: 2, color: 'white', px: 1 }}>
+          <FilterListIcon />
+          <Typography sx={{ display: { xs: 'none', sm: 'block', color: 'white' } }} ml={1}>
+            {selectedOptionLabel}
+          </Typography>
+        </IconButton>
+      </Box>
+    </Tooltip>
   );
 }
 
