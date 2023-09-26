@@ -12,6 +12,7 @@ function NotificationPage({ operation }: NotificationPageProps) {
 
   if (!id) {
     navigate('/');
+    return null;
   }
 
   return <NotificationForm id={id as ID} operation={operation} />;
